@@ -44,6 +44,10 @@
     @media (max-width: 1024px) {
       #ada-app .main-grid { grid-template-columns: 1fr; }
     }
+    @media (max-width: 640px) {
+      #ada-app { padding: 16px; }
+      #ada-app .main-grid { padding: 1rem; gap: 1rem; }
+    }
     #ada-app .controls { display: flex; flex-direction: column; gap: 1.5rem; }
     #ada-app .control-block {
       background: rgba(0,0,0,0.2);
@@ -141,7 +145,8 @@
     #ada-app .ratio-value { text-align: center; font-size: 2.5rem; font-weight: 700; line-height: 1; transition: color 0.3s; }
     #ada-app .badges { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
     #ada-app .badge {
-      display: flex; justify-content: space-between; padding: 0.4rem 0.6rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 4px;
+      padding: 0.4rem 0.6rem; white-space: nowrap;
       border-radius: 6px; font-size: 0.8rem; font-weight: 600;
       background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1);
     }
@@ -172,8 +177,28 @@
       width: 100%; color: inherit; transition: opacity 0.2s;
     }
     #ada-app .preview-btn:hover { opacity: 0.8; }
-    #ada-app .two-col-results { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    @media (max-width: 640px) { #ada-app .two-col-results { grid-template-columns: 1fr; } }
+    #ada-app .ada-info-footer {
+      margin-top: 1rem; background: rgba(0,0,0,0.2);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px; padding: 1.5rem; color: #94a3b8;
+    }
+    #ada-app .ada-info-footer h3 {
+      font-size: 1rem; color: #e2e8f0; margin-bottom: 0.75rem; font-weight: 600;
+    }
+    #ada-app .ada-info-footer ul {
+      list-style: none; display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem;
+    }
+    #ada-app .ada-info-footer li {
+      font-size: 0.85rem; background: rgba(255,255,255,0.03);
+      padding: 0.5rem 0.75rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.02);
+    }
+    #ada-app .ada-info-footer li strong {
+      color: #cbd5e1; display: block; margin-bottom: 0.25rem;
+    }
+    #ada-app .ada-info-footer p {
+      font-size: 0.8rem; opacity: 0.7; margin-top: 1rem;
+    }
   `;
 
   const html = `
@@ -249,6 +274,17 @@
             </div>
           </div>
         </div>
+      </div>
+      
+      <div class="ada-info-footer">
+        <h3>WCAG 2.2 對比度標準 (Contrast Ratio)</h3>
+        <ul>
+          <li><strong>AA Nrm (一般文字)</strong>最少 4.5 : 1</li>
+          <li><strong>AA Lrg (大字體 / UI 元件)</strong>最少 3.0 : 1</li>
+          <li><strong>AAA Nrm (高標準 一般文字)</strong>最少 7.0 : 1</li>
+          <li><strong>AAA Lrg (高標準 大字體)</strong>最少 4.5 : 1</li>
+        </ul>
+        <p>* 大字體定義：至少 18pt（約 24px）或 14pt 粗體（約 18.5px）。UI 元件泛指按鈕邊界、輸入框等操作物件。</p>
       </div>
     </div>
   `;
