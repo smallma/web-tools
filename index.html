@@ -31,6 +31,11 @@
           <span class="nav-item__label">Gradient Gen</span>
           <span class="nav-item__badge">CSS</span>
         </button>
+        <button class="nav-item" data-tool="color-format" role="tab" aria-selected="false">
+          <span class="nav-item__icon">◈</span>
+          <span class="nav-item__label">Color Format</span>
+          <span class="nav-item__badge">HEX/RGB/HSL</span>
+        </button>
       </nav>
 
       <div class="sidebar__footer">
@@ -53,11 +58,17 @@
       <section class="tool-panel hidden" id="panel-linear-gradient" role="tabpanel">
         <div id="gradient-app"></div>
       </section>
+
+      <!-- Color Format Tool -->
+      <section class="tool-panel hidden" id="panel-color-format" role="tabpanel">
+        <div id="color-app"></div>
+      </section>
     </main>
   </div>
 
   <script src="tools/ada-contrast.js"></script>
   <script src="tools/linear-gradient.js"></script>
+  <script src="tools/color-format.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
