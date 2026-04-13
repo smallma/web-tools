@@ -205,8 +205,12 @@
 
   function drawPicker() {
     const W = canvas.width, H = canvas.height;
-    // Draw saturation-value gradient (horizontal = sat, vertical = value)
-    const {h} = S;
+    if (W === 0 || H === 0) {
+      // Canvas not sized yet — wait for next frame
+      requestAnimationFrame(drawPicker);
+      return;
+    }
+    const {h, s, v} = S;
     // Left=white, right=hue color
     const gradH = ctx.createLinearGradient(0, 0, W, 0);
     gradH.addColorStop(0, '#fff');
@@ -551,7 +555,10 @@
   // ── Init ──────────────────────────────────────────────
   window.addEventListener('resize', resizeCanvas);
   loadFromHash();
-  resizeCanvas();
-  updateAll();
-  renderHist(loadHist());
+  // Wait for layout before sizing canvas
+  requestAnimationFrame(() => {
+    resizeCanvas();
+    updateAll();
+    renderHist(loadHist());
+  });
 })();
