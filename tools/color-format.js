@@ -11,8 +11,10 @@
 .cf-preview{width:100%;height:110px;border-radius:14px;border:1px solid var(--c-border);position:relative;overflow:hidden;transition:background-color 0.12s}
 .cf-preview__ checker{position:absolute;inset:0;background-image:linear-gradient(45deg,#1a1a2e 25%,transparent 25%),linear-gradient(-45deg,#1a1a2e 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#1a1a2e 75%),linear-gradient(-45deg,transparent 75%,#1a1a2e 75%);background-size:12px 12px;background-position:0 0,0 6px,6px -6px,-6px 0;background-color:#12121e}
 .cf-preview__color{position:absolute;inset:0;transition:background-color 0.12s}
-#cf-picker-canvas-wrap{position:relative;width:100%;aspect-ratio:1;max-height:220px;border-radius:12px;overflow:hidden;cursor:crosshair;border:1px solid var(--c-border);background:#000}
-#cf-sat-bg,#cf-val-bg{position:absolute;inset:0}
+#cf-picker-canvas-wrap{position:relative;width:100%;aspect-ratio:1;max-height:220px;border-radius:12px;overflow:hidden;cursor:crosshair;border:1px solid var(--c-border)}
+#cf-picker-inner{position:absolute;inset:0;background:#fff;overflow:hidden;border-radius:12px}
+#cf-sat-bg{position:absolute;inset:0;width:100%;height:100%;mix-blend-mode:multiply}
+#cf-val-bg{position:absolute;inset:0;width:100%;height:100%;background:linear-gradient(to bottom,rgba(0,0,0,0) 0%,rgba(0,0,0,1) 100%)}
 #cf-picker-cursor{position:absolute;border:2.5px solid #fff;border-radius:50%;box-shadow:0 0 0 1px rgba(0,0,0,0.5),inset 0 0 0 1px rgba(0,0,0,0.3);width:16px;height:16px;margin-left:-8px;margin-top:-8px;pointer-events:none;top:50%;left:50%;transform:translate(-50%,-50%)}
 #cf-hue-row{display:flex;align-items:center;gap:10px}
 #cf-hue-label{font-size:0.7rem;color:var(--c-text-sec);font-weight:600;width:14px;flex-shrink:0}
@@ -62,8 +64,7 @@
     <div class="cf-col">
       <div class="cf-preview" id="cf-preview"><div class="cf-preview__color" id="cf-preview-color"></div></div>
       <div id="cf-picker-canvas-wrap">
-        <div id="cf-sat-bg"></div>
-        <div id="cf-val-bg"></div>
+        <div id="cf-picker-inner"></div>
         <div id="cf-picker-cursor"></div>
       </div>
       <div id="cf-hue-row">
