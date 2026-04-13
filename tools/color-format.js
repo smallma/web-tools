@@ -547,9 +547,32 @@
     }
   }
 
-  // ── Init ──────────────────────────────────────────────
-  window.addEventListener('resize', () => { updateCursorPos(); });
-  loadFromHash();
-  updateAll();
-  renderHist(loadHist());
+  // ── Init — defer until panel is visible ─────────────
+  let initialized = false;
+
+  function tryInit() {
+    // Only run when #panel-color-format is visible (not hidden)
+    var panel = document.getElementById('panel-color-format');
+    if (!panel || panel.classList.contains('hidden')) return;
+    if (initialized) return;
+    initialized = true;
+
+    // Resize canvas and run full update
+    window.addEventListener('resize', function() { updateCursorPos(); });
+    loadFromHash();
+    updateAll();
+    renderHist(loadHist());
+
+    // Observe visibility changes as a safety net
+    var observer = new MutationObserver(function() {
+      if (!initialized) { tryInit(); }
+    });
+    observer.observe(panel, { attributes: true, attributeFilter: ['class'] });
+  }
+
+  // Try immediately (in case it loads when already visible)
+  tryInit();
+
+  // Also try on tab click (in case loaded when hidden)
+  document.addEventListener('click', tryInit);
 })();
