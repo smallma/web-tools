@@ -11,8 +11,8 @@
 .cf-preview{width:100%;height:110px;border-radius:14px;border:1px solid var(--c-border);position:relative;overflow:hidden;transition:background-color 0.12s}
 .cf-preview__ checker{position:absolute;inset:0;background-image:linear-gradient(45deg,#1a1a2e 25%,transparent 25%),linear-gradient(-45deg,#1a1a2e 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#1a1a2e 75%),linear-gradient(-45deg,transparent 75%,#1a1a2e 75%);background-size:12px 12px;background-position:0 0,0 6px,6px -6px,-6px 0;background-color:#12121e}
 .cf-preview__color{position:absolute;inset:0;transition:background-color 0.12s}
-#cf-picker-canvas-wrap{position:relative;width:100%;aspect-ratio:1;max-height:220px;border-radius:12px;overflow:hidden;cursor:crosshair;border:1px solid var(--c-border)}
-#cf-picker-canvas{display:block;width:100%;height:100%}
+#cf-picker-canvas-wrap{position:relative;width:100%;aspect-ratio:1;max-height:220px;border-radius:12px;overflow:hidden;cursor:crosshair;border:1px solid var(--c-border);background:#000}
+#cf-sat-bg,#cf-val-bg{position:absolute;inset:0}
 #cf-picker-cursor{position:absolute;border:2.5px solid #fff;border-radius:50%;box-shadow:0 0 0 1px rgba(0,0,0,0.5),inset 0 0 0 1px rgba(0,0,0,0.3);width:16px;height:16px;margin-left:-8px;margin-top:-8px;pointer-events:none;top:50%;left:50%;transform:translate(-50%,-50%)}
 #cf-hue-row{display:flex;align-items:center;gap:10px}
 #cf-hue-label{font-size:0.7rem;color:var(--c-text-sec);font-weight:600;width:14px;flex-shrink:0}
@@ -62,7 +62,8 @@
     <div class="cf-col">
       <div class="cf-preview" id="cf-preview"><div class="cf-preview__color" id="cf-preview-color"></div></div>
       <div id="cf-picker-canvas-wrap">
-        <canvas id="cf-picker-canvas"></canvas>
+        <div id="cf-sat-bg"></div>
+        <div id="cf-val-bg"></div>
         <div id="cf-picker-cursor"></div>
       </div>
       <div id="cf-hue-row">
@@ -194,48 +195,43 @@
   const fieldsEl = $('cf-fields');
   const historyEl = $('cf-history');
 
-  // ── Canvas Picker ─────────────────────────────────────
-  function resizeCanvas() {
-    const wrap = $('cf-picker-canvas-wrap');
-    const rect = wrap.getBoundingClientRect();
-    canvas.width = rect.width;
-    canvas.height = rect.height;
-    drawPicker();
-  }
+  // ── DOM Gradient Picker ────────────────────────────────
+  const satBg = $('cf-sat-bg');
+  const valBg = $('cf-val-bg');
 
-  function drawPicker() {
-    const W = canvas.width, H = canvas.height;
-    if (W === 0 || H === 0) {
-      // Canvas not sized yet — wait for next frame
-      requestAnimationFrame(drawPicker);
-      return;
-    }
-    const {h, s, v} = S;
-    // Left=white, right=hue color
-    const gradH = ctx.createLinearGradient(0, 0, W, 0);
-    gradH.addColorStop(0, '#fff');
-    gradH.addColorStop(1, `hsl(${h},100%,50%)`);
-    ctx.fillStyle = gradH;
-    ctx.fillRect(0, 0, W, H);
-    // Top=transparent, bottom=black
-    const gradV = ctx.createLinearGradient(0, 0, 0, H);
-    gradV.addColorStop(0, 'rgba(0,0,0,0)');
-    gradV.addColorStop(1, 'rgba(0,0,0,1)');
-    ctx.fillStyle = gradV;
-    ctx.fillRect(0, 0, W, H);
+  function updatePickerGradient() {
+    const {h} = S;
+    // Saturation gradient: white → hue color
+    satBg.style.background = `linear-gradient(to right, #fff 0%, hsl(${h},100%,50%) 100%)`;
+    // Value gradient: transparent → black (on top of sat)
+    valBg.style.background = 'linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%)';
   }
 
   function updateCursorPos() {
-    const W = canvas.width, H = canvas.height;
-    const x = (S.s / 100) * W;
-    const y = (1 - S.v / 100) * H;
+    const wrap = $('cf-picker-canvas-wrap');
+    const rect = wrap.getBoundingClientRect();
+    const x = (S.s / 100) * rect.width;
+    const y = (1 - S.v / 100) * rect.height;
     cursor.style.left = x + 'px';
     cursor.style.top = y + 'px';
-    // Cursor color = the color at that point
+    // Cursor border color based on brightness
     const rgb = hsv2rgb(S.h, S.s, S.v);
     const brightness = (rgb.r*0.299 + rgb.g*0.587 + rgb.b*0.114) > 140 ? '#000' : '#fff';
     cursor.style.borderColor = brightness;
-    cursor.style.boxShadow = `0 0 0 1px rgba(0,0,0,0.5),inset 0 0 0 1px rgba(0,0,0,0.3),0 0 4px rgba(0,0,0,0.3)`;
+    cursor.style.boxShadow = `0 0 0 1px rgba(0,0,0,0.5),inset 0 0 0 1px rgba(0,0,0,0.3)`;
+  }
+
+  function updateCursorPosPicker(e) {
+    const rect = $('cf-picker-canvas-wrap').getBoundingClientRect();
+    const x = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    const y = Math.max(0, Math.min(1, (e.clientY - rect.top) / rect.height));
+    S.s = Math.round(x * 100);
+    S.v = Math.round((1 - y) * 100);
+    updateCursorPos();
+    updatePreview();
+    updateNativePicker();
+    renderFields();
+    updateContrast();
   }
 
   function updatePreview() {
@@ -254,7 +250,7 @@
   }
 
   function updateAll() {
-    drawPicker();
+    updatePickerGradient();
     updateCursorPos();
     updatePreview();
     updateHueSlider();
@@ -264,10 +260,11 @@
     updateUrlHash();
   }
 
-  // ── Canvas Interaction ─────────────────────────────────
+  // ── Picker Interaction ─────────────────────────────────
+  const pickerWrap = $('cf-picker-canvas-wrap');
   let dragging = false;
   function pickerFromEvent(e) {
-    const rect = canvas.getBoundingClientRect();
+    const rect = pickerWrap.getBoundingClientRect();
     const x = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
     const y = Math.max(0, Math.min(1, (e.clientY - rect.top) / rect.height));
     S.s = Math.round(x * 100);
@@ -278,19 +275,17 @@
     renderFields();
     updateContrast();
   }
-  canvas.addEventListener('mousedown', e => { dragging = true; pickerFromEvent(e); });
+  pickerWrap.addEventListener('mousedown', e => { dragging = true; pickerFromEvent(e); });
   document.addEventListener('mousemove', e => { if (dragging) pickerFromEvent(e); });
-  document.addEventListener('mouseup', () => {
-    if (dragging) { dragging = false; saveHistory(); }
-  });
-  canvas.addEventListener('touchstart', e => { e.preventDefault(); dragging = true; pickerFromEvent(e.touches[0]); }, {passive:false});
+  document.addEventListener('mouseup', () => { if (dragging) { dragging = false; saveHistory(); } });
+  pickerWrap.addEventListener('touchstart', e => { e.preventDefault(); dragging = true; pickerFromEvent(e.touches[0]); }, {passive:false});
   document.addEventListener('touchmove', e => { if(dragging) pickerFromEvent(e.touches[0]); }, {passive:false});
   document.addEventListener('touchend', () => { if(dragging) { dragging = false; saveHistory(); }});
 
   // ── Hue Slider ────────────────────────────────────────
   hueSlider.addEventListener('input', e => {
     S.h = parseInt(e.target.value);
-    drawPicker();
+    updatePickerGradient();
     updateCursorPos();
     updatePreview();
     updateNativePicker();
@@ -304,7 +299,7 @@
     const rgb = hex2rgb(e.target.value);
     const hsv = rgb2hsv(rgb.r, rgb.g, rgb.b);
     S.h = hsv.h; S.s = hsv.s; S.v = hsv.v;
-    drawPicker();
+    updatePickerGradient();
     updateCursorPos();
     updatePreview();
     renderFields();
@@ -422,7 +417,7 @@
             const rgb = hex2rgb(v);
             const hsv = rgb2hsv(rgb.r, rgb.g, rgb.b);
             S.h = hsv.h; S.s = hsv.s; S.v = hsv.v;
-            drawPicker(); updateCursorPos(); updatePreview(); updateNativePicker(); updateContrast();
+            updatePickerGradient(); updateCursorPos(); updatePreview(); updateNativePicker(); updateContrast();
           }
         });
       }
@@ -454,7 +449,7 @@
           const rgb = hsl2rgb(hh, ss, ll);
           const hsv = rgb2hsv(rgb.r, rgb.g, rgb.b);
           S.h = hsv.h; S.s = hsv.s; S.v = hsv.v;
-          drawPicker(); updateCursorPos(); updatePreview(); updateNativePicker(); updateContrast();
+          updatePickerGradient(); updateCursorPos(); updatePreview(); updateNativePicker(); updateContrast();
         };
         fh.addEventListener('input', upd);
         fs.addEventListener('input', upd);
@@ -469,7 +464,7 @@
           fs.nextElementSibling.textContent = ss + '%';
           fv.nextElementSibling.textContent = vv + '%';
           S.h = hh; S.s = ss; S.v = vv;
-          drawPicker(); updateCursorPos(); updatePreview(); updateNativePicker(); updateContrast();
+          updatePickerGradient(); updateCursorPos(); updatePreview(); updateNativePicker(); updateContrast();
         };
         fh.addEventListener('input', upd);
         fs.addEventListener('input', upd);
@@ -553,12 +548,8 @@
   }
 
   // ── Init ──────────────────────────────────────────────
-  window.addEventListener('resize', resizeCanvas);
+  window.addEventListener('resize', () => { updateCursorPos(); });
   loadFromHash();
-  // Wait for layout before sizing canvas
-  requestAnimationFrame(() => {
-    resizeCanvas();
-    updateAll();
-    renderHist(loadHist());
-  });
+  updateAll();
+  renderHist(loadHist());
 })();
