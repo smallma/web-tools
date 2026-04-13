@@ -262,7 +262,6 @@
   }
 
   // ── Picker Interaction ─────────────────────────────────
-  const pickerWrap = $('cf-picker-canvas-wrap');
   let dragging = false;
   function pickerFromEvent(e) {
     const rect = pickerWrap.getBoundingClientRect();
