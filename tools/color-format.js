@@ -12,9 +12,8 @@
 .cf-preview__ checker{position:absolute;inset:0;background-image:linear-gradient(45deg,#1a1a2e 25%,transparent 25%),linear-gradient(-45deg,#1a1a2e 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#1a1a2e 75%),linear-gradient(-45deg,transparent 75%,#1a1a2e 75%);background-size:12px 12px;background-position:0 0,0 6px,6px -6px,-6px 0;background-color:#12121e}
 .cf-preview__color{position:absolute;inset:0;transition:background-color 0.12s}
 #cf-picker-canvas-wrap{position:relative;width:100%;aspect-ratio:1;max-height:220px;border-radius:12px;overflow:hidden;cursor:crosshair;border:1px solid var(--c-border)}
-#cf-picker-inner{position:absolute;inset:0;background:#fff;overflow:hidden;border-radius:12px}
-#cf-sat-bg{position:absolute;inset:0;width:100%;height:100%;mix-blend-mode:multiply}
-#cf-val-bg{position:absolute;inset:0;width:100%;height:100%;background:linear-gradient(to bottom,rgba(0,0,0,0) 0%,rgba(0,0,0,1) 100%)}
+#cf-sat-bg{position:absolute;inset:0;width:100%;height:100%;background:linear-gradient(to right,#fff 0%,hsl(var(--hue),100%,50%) 100%)}
+#cf-val-bg{position:absolute;inset:0;width:100%;height:100%;background:linear-gradient(to bottom,rgba(0,0,0,0) 0%,rgba(0,0,0,1) 100%);pointer-events:none}
 #cf-picker-cursor{position:absolute;border:2.5px solid #fff;border-radius:50%;box-shadow:0 0 0 1px rgba(0,0,0,0.5),inset 0 0 0 1px rgba(0,0,0,0.3);width:16px;height:16px;margin-left:-8px;margin-top:-8px;pointer-events:none;top:50%;left:50%;transform:translate(-50%,-50%)}
 #cf-hue-row{display:flex;align-items:center;gap:10px}
 #cf-hue-label{font-size:0.7rem;color:var(--c-text-sec);font-weight:600;width:14px;flex-shrink:0}
@@ -64,7 +63,8 @@
     <div class="cf-col">
       <div class="cf-preview" id="cf-preview"><div class="cf-preview__color" id="cf-preview-color"></div></div>
       <div id="cf-picker-canvas-wrap">
-        <div id="cf-picker-inner"></div>
+        <div id="cf-sat-bg"></div>
+        <div id="cf-val-bg"></div>
         <div id="cf-picker-cursor"></div>
       </div>
       <div id="cf-hue-row">
@@ -197,15 +197,15 @@
   const historyEl = $('cf-history');
 
   // ── DOM Gradient Picker ────────────────────────────────
+  const pickerWrap = $('cf-picker-canvas-wrap');
   const satBg = $('cf-sat-bg');
-  const valBg = $('cf-val-bg');
 
   function updatePickerGradient() {
     const {h} = S;
+    // Use CSS custom property for instant hue update
+    pickerWrap.style.setProperty('--hue', h);
     // Saturation gradient: white → hue color
     satBg.style.background = `linear-gradient(to right, #fff 0%, hsl(${h},100%,50%) 100%)`;
-    // Value gradient: transparent → black (on top of sat)
-    valBg.style.background = 'linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%)';
   }
 
   function updateCursorPos() {
