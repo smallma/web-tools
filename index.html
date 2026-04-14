@@ -36,6 +36,11 @@
           <span class="nav-item__label">Color Format</span>
           <span class="nav-item__badge">HEX/RGB/HSL</span>
         </button>
+        <button class="nav-item" data-tool="border-radius" role="tab" aria-selected="false">
+          <span class="nav-item__icon">◔</span>
+          <span class="nav-item__label">Border Radius</span>
+          <span class="nav-item__badge">CSS</span>
+        </button>
       </nav>
 
       <div class="sidebar__footer">
@@ -63,12 +68,18 @@
       <section class="tool-panel hidden" id="panel-color-format" role="tabpanel">
         <div id="color-app"></div>
       </section>
+
+      <!-- Border Radius Tool -->
+      <section class="tool-panel hidden" id="panel-border-radius" role="tabpanel">
+        <div id="border-radius-app"></div>
+      </section>
     </main>
   </div>
 
   <script src="tools/ada-contrast.js"></script>
   <script src="tools/linear-gradient.js"></script>
   <script src="tools/color-format.js?v=20260414"></script>
+  <script src="tools/border-radius.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
