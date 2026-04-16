@@ -3,1047 +3,424 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PolyMonitor — 預測市場投資儀表板</title>
+<title>PolyMonitor</title>
 <style>
-  :root {
-    --bg: #0d1117;
-    --card: #161b22;
-    --border: #30363d;
-    --text: #e6edf3;
-    --muted: #7d8590;
-    --green: #3fb950;
-    --red: #f85149;
-    --yellow: #d29922;
-    --orange: #e8590c;
-    --accent: #58a6ff;
-    --tag-green: #1a7f37;
-    --tag-bg: #dcf0e4;
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    min-height: 100vh;
-  }
-
-  /* ── Header ── */
-  header {
-    border-bottom: 1px solid var(--border);
-    padding: 16px 24px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    position: sticky;
-    top: 0;
-    background: var(--bg);
-    z-index: 100;
-  }
-  .logo {
-    font-size: 20px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    background: linear-gradient(135deg, #58a6ff, #e8590c);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-  .header-status {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 12px;
-    color: var(--muted);
-  }
-  .dot {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: var(--green);
-    animation: pulse 2s infinite;
-  }
-  .dot.stale { background: var(--yellow); animation: none; }
-  .dot.error { background: var(--red); animation: none; }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-  }
-
-  .header-right {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .wallet-badge {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 6px 12px;
-    font-size: 13px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .wallet-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
-  .refresh-btn {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text);
-    padding: 6px 14px;
-    font-size: 13px;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  .refresh-btn:hover { background: var(--border); }
-  .last-updated {
-    font-size: 11px;
-    color: var(--muted);
-  }
-
-  /* ── Layout ── */
-  .main-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 24px;
-    display: grid;
-    grid-template-columns: 1fr 360px;
-    gap: 24px;
-  }
-
-  @media (max-width: 900px) {
-    .main-container { grid-template-columns: 1fr; }
-  }
-
-  /* ── Portfolio Summary ── */
-  .portfolio-section { margin-bottom: 28px; }
-  .section-title {
-    font-size: 13px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    color: var(--muted);
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .section-title::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  .portfolio-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 12px;
-    margin-bottom: 12px;
-  }
-  .portfolio-stat {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px;
-  }
-  .stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
-  .stat-value { font-size: 28px; font-weight: 700; }
-  .stat-value.positive { color: var(--green); }
-  .stat-value.negative { color: var(--red); }
-  .stat-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
-
-  /* ── Position Cards ── */
-  .position-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px;
-  }
-  .position-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 10px;
-  }
-  .position-question {
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 1.4;
-    flex: 1;
-    padding-right: 12px;
-  }
-  .position-outcome {
-    font-size: 12px;
-    font-weight: 600;
-    padding: 2px 8px;
-    border-radius: 20px;
-    white-space: nowrap;
-  }
-  .position-outcome.yes { background: var(--tag-bg); color: var(--tag-green); }
-  .position-outcome.no { background: #fde8e8; color: var(--red); }
-
-  .position-stats {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-    margin: 12px 0;
-    padding: 10px;
-    background: var(--bg);
-    border-radius: 8px;
-  }
-  .pos-stat { text-align: center; }
-  .pos-stat-val { font-size: 14px; font-weight: 600; }
-  .pos-stat-lbl { font-size: 10px; color: var(--muted); }
-
-  /* Redeem slider */
-  .redeem-section {
-    margin-top: 12px;
-    padding-top: 12px;
-    border-top: 1px solid var(--border);
-  }
-  .redeem-label {
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-    color: var(--muted);
-    margin-bottom: 6px;
-  }
-  .redeem-amount { font-weight: 600; color: var(--green); }
-  input[type=range] {
-    width: 100%;
-    accent-color: var(--accent);
-    height: 4px;
-    cursor: pointer;
-  }
-  .redeem-btn {
-    width: 100%;
-    margin-top: 8px;
-    background: var(--red);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    opacity: 0.5;
-    transition: opacity 0.2s;
-  }
-  .redeem-btn.ready { opacity: 1; }
-  .redeem-btn:hover { opacity: 0.85; }
-
-  /* ── Opportunities ── */
-  .opportunities-section {}
-
-  .filter-bar {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 14px;
-    flex-wrap: wrap;
-  }
-  .filter-btn {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    color: var(--muted);
-    padding: 5px 14px;
-    font-size: 12px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .filter-btn.active {
-    background: var(--accent);
-    color: white;
-    border-color: var(--accent);
-  }
-  .filter-btn:hover { color: var(--text); }
-
-  /* ── Opportunity Cards ── */
-  .opportunities-grid {
-    display: grid;
-    gap: 14px;
-  }
-
-  .opp-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 16px;
-    transition: border-color 0.2s;
-    position: relative;
-    overflow: hidden;
-  }
-  .opp-card:hover { border-color: var(--accent); }
-  .opp-card.super::before {
-    content: '🔥 超級推薦';
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    background: var(--orange);
-    color: white;
-    font-size: 10px;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 20px;
-  }
-  .opp-card.super { border-color: var(--orange); }
-
-  .opp-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 10px;
-  }
-  .opp-question {
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 1.5;
-    flex: 1;
-    padding-right: 80px;
-  }
-  .opp-stars {
-    font-size: 13px;
-    color: var(--yellow);
-    letter-spacing: 1px;
-    white-space: nowrap;
-    margin-right: 8px;
-  }
-  .opp-meta {
-    display: flex;
-    gap: 12px;
-    margin: 8px 0;
-    font-size: 12px;
-    color: var(--muted);
-    flex-wrap: wrap;
-  }
-  .opp-meta span { display: flex; align-items: center; gap: 3px; }
-
-  .opp-outcomes {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin: 12px 0;
-  }
-  .outcome-btn {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 10px 12px;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-align: left;
-  }
-  .outcome-btn:hover {
-    border-color: var(--accent);
-    background: rgba(88,166,255,0.08);
-  }
-  .outcome-btn.selected {
-    border-color: var(--accent);
-    background: rgba(88,166,255,0.12);
-  }
-  .outcome-label { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
-  .outcome-price { font-size: 18px; font-weight: 700; }
-  .outcome-prob { font-size: 11px; color: var(--muted); margin-top: 2px; }
-
-  .opp-footer {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    margin-top: 12px;
-  }
-  .amount-input {
-    flex: 1;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text);
-    padding: 8px 12px;
-    font-size: 14px;
-    width: 100%;
-  }
-  .amount-input:focus { outline: none; border-color: var(--accent); }
-  .invest-btn {
-    background: var(--accent);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 8px 18px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: background 0.2s;
-  }
-  .invest-btn:hover { background: #3998ff; }
-  .invest-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-
-  /* ── Notification Badge ── */
-  .notif-badge {
-    position: fixed;
-    top: 80px;
-    right: 24px;
-    background: var(--orange);
-    color: white;
-    padding: 10px 16px;
-    border-radius: 10px;
-    font-size: 13px;
-    font-weight: 600;
-    max-width: 300px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
-    z-index: 200;
-    display: none;
-    animation: slideIn 0.3s ease;
-  }
-  .notif-badge.show { display: block; }
-  @keyframes slideIn {
-    from { transform: translateX(120%); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-  }
-
-  /* ── Toast ── */
-  .toast {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 12px 18px;
-    font-size: 13px;
-    z-index: 300;
-    display: none;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-  }
-  .toast.show { display: flex; gap: 10px; align-items: center; }
-  .toast.ok { border-color: var(--green); }
-  .toast.err { border-color: var(--red); }
-
-  /* ── Loading ── */
-  .loading { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; padding: 20px 0; }
-  .spinner {
-    width: 16px; height: 16px;
-    border: 2px solid var(--border);
-    border-top-color: var(--accent);
-    border-radius: 50%;
-    animation: spin 0.6s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  .empty { text-align: center; padding: 40px 0; color: var(--muted); font-size: 14px; }
-
-  /* ── Sidebar ── */
-  .sidebar {}
-  .alert-card {
-    background: linear-gradient(135deg, rgba(232,89,12,0.15), rgba(88,166,255,0.1));
-    border: 1px solid var(--orange);
-    border-radius: 14px;
-    padding: 16px;
-    margin-bottom: 14px;
-  }
-  .alert-card-title {
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--orange);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 8px;
-  }
-  .alert-card-question {
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 1.4;
-    margin-bottom: 8px;
-  }
-  .alert-card-action {
-    display: flex;
-    gap: 8px;
-    margin-top: 10px;
-  }
-  .alert-btn {
-    flex: 1;
-    padding: 8px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    border: none;
-    cursor: pointer;
-    text-align: center;
-  }
-  .alert-btn-yes { background: var(--green); color: white; }
-  .alert-btn-no { background: var(--red); color: white; }
-
-  .info-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 16px;
-    margin-bottom: 14px;
-  }
-  .info-title { font-size: 13px; font-weight: 600; margin-bottom: 10px; color: var(--text); }
-  .info-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-    padding: 6px 0;
-    border-bottom: 1px solid var(--border);
-    color: var(--muted);
-  }
-  .info-row:last-child { border-bottom: none; }
-  .info-row span:last-child { color: var(--text); font-weight: 500; }
-
-  .refresh-indicator {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 11px;
-    color: var(--muted);
-    padding: 8px 0;
-  }
+:root{--bg:#0d1117;--card:#161b22;--border:#30363d;--text:#e6edf3;--muted:#7d8590;--green:#3fb950;--red:#f85149;--yellow:#d29922;--orange:#e8590c;--accent:#58a6ff;--tag-bg:#dcf0e4;--tag-green:#1a7f37;--purple:#a371f7}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;min-height:100vh}
+header{border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
+.logo{font-size:20px;font-weight:800;letter-spacing:-0.5px;background:linear-gradient(135deg,#58a6ff,#e8590c);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.dot{width:8px;height:8px;border-radius:50%;animation:pulse 2s infinite;flex-shrink:0}
+.dot.ok{background:var(--green)}.dot.loading{background:var(--yellow);animation:none}.dot.error{background:var(--red);animation:none}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.header-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.refresh-btn{background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:6px 14px;font-size:13px;cursor:pointer}
+.refresh-btn:hover{background:var(--border)}
+.last-updated{font-size:11px;color:var(--muted)}
+.main{max-width:1200px;margin:0 auto;padding:24px;display:grid;grid-template-columns:1fr 300px;gap:24px}
+@media(max-width:900px){.main{grid-template-columns:1fr}}
+.section-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+@media(max-width:600px){.stats{grid-template-columns:repeat(2,1fr)}}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px}
+.stat-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+.stat-val{font-size:22px;font-weight:700}
+.stat-val.g{color:var(--green)}.stat-val.r{color:var(--red)}.stat-val.p{color:var(--purple)}
+.stat-sub{font-size:10px;color:var(--muted);margin-top:2px}
+.pos-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px}
+.pos-q{font-size:13px;font-weight:600;line-height:1.4;margin-bottom:8px}
+.pos-chip{padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;display:inline-block;margin-bottom:8px}
+.pos-chip.yes{background:var(--tag-bg);color:var(--tag-green)}.pos-chip.no{background:#fde8e8;color:var(--red)}
+.pos-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;background:var(--bg);border-radius:8px;padding:10px}
+.pos-s-lbl{font-size:10px;color:var(--muted);text-align:center}
+.pos-s-val{font-size:14px;font-weight:600;text-align:center}
+.redeem-row{display:flex;align-items:center;gap:10px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.redeem-info{font-size:12px;color:var(--muted);white-space:nowrap}
+.redeem-amount{font-size:12px;font-weight:600;color:var(--green)}
+input[type=range]{flex:1;accent-color:var(--accent);cursor:pointer}
+.redeem-btn{background:var(--red);color:white;border:none;border-radius:6px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
+.redeem-btn:disabled{opacity:0.4;cursor:not-allowed}
+.filter-bar{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.filter-btn{background:var(--card);border:1px solid var(--border);border-radius:20px;color:var(--muted);padding:4px 12px;font-size:11px;cursor:pointer;transition:all 0.2s}
+.filter-btn.active{background:var(--accent);color:white;border-color:var(--accent)}
+.filter-btn:hover{color:var(--text)}
+.opp-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;transition:border-color 0.2s;position:relative;overflow:hidden}
+.opp-card:hover{border-color:var(--accent)}
+.opp-card.pick{border-color:var(--orange);border-width:2px}
+.opp-card.pick::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--orange)}
+.opp-q{font-size:14px;font-weight:600;line-height:1.5;margin-bottom:10px;padding-right:8px}
+.opp-meta{display:flex;gap:10px;font-size:11px;color:var(--muted);margin-bottom:10px;flex-wrap:wrap;align-items:center}
+.tag{background:rgba(88,166,255,0.15);color:var(--accent);padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600;white-space:nowrap}
+.tag.geo{background:rgba(232,89,12,0.15);color:var(--orange)}
+.tag.crypto{background:rgba(163,113,247,0.15);color:var(--purple)}
+.tag.short{background:rgba(63,185,80,0.15);color:var(--green)}
+.tag.highvol{background:rgba(210,153,34,0.15);color:var(--yellow)}
+.reason-box{background:rgba(232,89,12,0.08);border:1px solid rgba(232,89,12,0.3);border-radius:8px;padding:8px 10px;margin-bottom:10px;font-size:12px;color:var(--text);line-height:1.5}
+.reason-box strong{color:var(--orange)}
+.outcomes{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.out-btn{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px 10px;cursor:pointer;text-align:left;transition:all 0.15s}
+.out-btn:hover{border-color:var(--accent)}
+.out-btn.sel{border-color:var(--accent);background:rgba(88,166,255,0.1)}
+.out-lbl{font-size:11px;color:var(--muted);margin-bottom:2px}
+.out-price{font-size:16px;font-weight:700}
+.out-prob{font-size:10px;color:var(--muted);margin-top:1px}
+.pick-badge{background:var(--orange);color:white;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;display:inline-block;margin-bottom:8px}
+.foot{display:flex;gap:8px;align-items:center}
+.amt-input{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);padding:7px 10px;font-size:13px}
+.amt-input:focus{outline:none;border-color:var(--accent)}
+.inv-btn{background:var(--green);color:white;border:none;border-radius:6px;padding:7px 16px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
+.inv-btn:hover{background:#36a048}
+.inv-btn:disabled{opacity:0.4;cursor:not-allowed}
+.sidebar{}
+.super-alert{background:linear-gradient(135deg,rgba(232,89,12,0.25),rgba(163,113,247,0.15));border:2px solid var(--orange);border-radius:14px;padding:16px;margin-bottom:14px;display:none}
+.super-alert.show{display:block}
+.super-alert-title{font-size:11px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+.super-alert-title::before{content:'🔥 ';font-size:14px}
+.super-alert-q{font-size:14px;font-weight:700;line-height:1.4;margin-bottom:8px}
+.super-reason{background:rgba(232,89,12,0.1);border-radius:6px;padding:6px 10px;font-size:12px;color:var(--text);margin-bottom:10px;line-height:1.5}
+.super-outcomes{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.super-btn{flex:1;padding:8px;border-radius:6px;font-size:13px;font-weight:700;border:none;cursor:pointer;text-align:center}
+.super-btn-yes{background:var(--green);color:white}
+.super-btn-no{background:var(--red);color:white}
+.info-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px}
+.info-title{font-size:12px;font-weight:600;margin-bottom:8px}
+.info-row{display:flex;justify-content:space-between;font-size:11px;padding:5px 0;border-bottom:1px solid var(--border);color:var(--muted)}
+.info-row:last-child{border-bottom:none}
+.info-row span:last-child{color:var(--text)}
+.info-row a{color:var(--accent);text-decoration:none}
+.loading{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px;padding:30px 0;justify-content:center}
+.spinner{width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.empty{text-align:center;padding:40px 0;color:var(--muted);font-size:13px}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 16px;font-size:13px;z-index:300;display:none;box-shadow:0 8px 30px rgba(0,0,0,0.3)}
+.toast.show{display:flex;gap:8px;align-items:center}.toast.ok{border-color:var(--green)}.toast.err{border-color:var(--red)}
+.notif{position:fixed;top:70px;right:16px;background:var(--orange);color:white;padding:10px 16px;border-radius:10px;font-size:13px;font-weight:600;max-width:300px;z-index:200;display:none;animation:slide 0.3s ease}
+.notif.show{display:block}@keyframes slide{from{transform:translateX(120%);opacity:0}to{transform:translateX(0);opacity:1}}
 </style>
 </head>
 <body>
-
-<!-- Notification -->
-<div class="notif-badge" id="notifBadge"></div>
-
-<!-- Toast -->
 <div class="toast" id="toast"></div>
-
-<!-- Header -->
+<div class="notif" id="notif"></div>
 <header>
   <div class="logo">PolyMonitor</div>
-  <div class="header-status">
-    <div class="dot" id="statusDot"></div>
-    <span id="statusText">已連接</span>
-  </div>
+  <div class="dot loading" id="dot"></div>
+  <span id="status" style="font-size:12px;color:var(--muted)">初始化中...</span>
   <div class="header-right">
-    <span class="last-updated" id="lastUpdated">—</span>
-    <button class="refresh-btn" onclick="refreshAll()">⟳ 重新整理</button>
+    <span class="last-updated" id="lastUpd">—</span>
+    <button class="refresh-btn" onclick="refresh()">⟳ 刷新</button>
   </div>
 </header>
-
-<!-- Main -->
-<div class="main-container">
-
-  <!-- Left: Opportunities + Portfolio -->
-  <div class="content">
-
-    <!-- Portfolio -->
-    <div class="portfolio-section">
-      <div class="section-title">💼 我的投資組合</div>
-      <div class="portfolio-cards" id="portfolioCards">
-        <div class="portfolio-stat">
-          <div class="stat-label">總價值</div>
-          <div class="stat-value" id="totalValue">載入中...</div>
-          <div class="stat-sub" id="totalChange"></div>
-        </div>
-        <div class="portfolio-stat">
-          <div class="stat-label">已實現盈虧</div>
-          <div class="stat-value positive" id="realizedPnl">載入中...</div>
-          <div class="stat-sub">帳戶總額</div>
-        </div>
-        <div class="portfolio-stat">
-          <div class="stat-label">可用現金</div>
-          <div class="stat-value" id="cashBalance">$0</div>
-          <div class="stat-sub">可投入新市場</div>
-        </div>
-        <div class="portfolio-stat">
-          <div class="stat-label">勝率</div>
-          <div class="stat-value" id="winRate">—</div>
-          <div class="stat-sub">已結算市場</div>
-        </div>
+<div class="main">
+  <div class="left">
+    <div style="margin-bottom:28px">
+      <div class="section-title">💼 我的倉位</div>
+      <div class="stats">
+        <div class="stat"><div class="stat-lbl">總價值</div><div class="stat-val" id="s-val">—</div><div class="stat-sub" id="s-chg"></div></div>
+        <div class="stat"><div class="stat-lbl">未實現盈虧</div><div class="stat-val g" id="s-pnl">—</div><div class="stat-sub">全部倉位</div></div>
+        <div class="stat"><div class="stat-lbl">可用現金</div><div class="stat-val" id="s-cash">$0</div><div class="stat-sub">需充值</div></div>
+        <div class="stat"><div class="stat-lbl">勝率</div><div class="stat-val p" id="s-wr">—</div><div class="stat-sub">已結算</div></div>
       </div>
-
-      <!-- Current Positions -->
-      <div id="positionsList"></div>
+      <div id="pos-list"><div class="loading"><div class="spinner"></div>載入中...</div></div>
     </div>
-
-    <!-- Opportunities -->
-    <div class="opportunities-section">
-      <div class="section-title">🎯 投資機會</div>
+    <div>
+      <div class="section-title">🎯 投資機會 <span id="mkts-count" style="font-size:11px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0"></span></div>
       <div class="filter-bar">
-        <button class="filter-btn active" onclick="setFilter('all', this)">全部</button>
-        <button class="filter-btn" onclick="setFilter('crypto', this)">加密</button>
-        <button class="filter-btn" onclick="setFilter('geo', this)">地緣</button>
-        <button class="filter-btn" onclick="setFilter('macro', this)">宏觀</button>
-        <button class="filter-btn" onclick="setFilter('short', this)">短期 (&lt;7天)</button>
+        <button class="filter-btn active" onclick="setF('all',this)">全部</button>
+        <button class="filter-btn" onclick="setF('crypto',this)">🌙 加密</button>
+        <button class="filter-btn" onclick="setF('geo',this)">🌍 地緣</button>
+        <button class="filter-btn" onclick="setF('macro',this)">📊 宏觀</button>
+        <button class="filter-btn" onclick="setF('short',this)">⏱ 短期</button>
       </div>
-      <div class="opportunities-grid" id="opportunitiesGrid">
-        <div class="loading"><div class="spinner"></div>正在抓取市場數據...</div>
-      </div>
+      <div id="opp-list"><div class="loading"><div class="spinner"></div>抓取市場資料...</div></div>
     </div>
   </div>
-
-  <!-- Right: Sidebar -->
   <div class="sidebar">
-    <div class="alert-card" id="superAlert" style="display:none">
-      <div class="alert-card-title">🔥 超级推荐</div>
-      <div class="alert-card-question" id="superAlertQuestion"></div>
-      <div id="superAlertOutcomes"></div>
-      <div class="alert-card-action">
-        <button class="alert-btn alert-btn-yes" id="superAlertYes" onclick="quickInvest('yes')">投 YES</button>
-        <button class="alert-btn alert-btn-no" id="superAlertNo" onclick="quickInvest('no')">投 NO</button>
+    <div class="super-alert" id="superAlert">
+      <div class="super-alert-title">今日精選</div>
+      <div class="super-alert-q" id="superQ"></div>
+      <div class="super-reason" id="superReason"></div>
+      <div class="super-outcomes" id="superOuts"></div>
+      <div style="display:flex;gap:8px">
+        <button class="super-btn super-btn-yes" id="btnY" onclick="qInvest('yes')">✅ 投 YES</button>
+        <button class="super-btn super-btn-no" id="btnN" onclick="qInvest('no')">❌ 投 NO</button>
       </div>
     </div>
-
     <div class="info-card">
-      <div class="info-title">📊 策略說明</div>
-      <div class="info-row"><span>篩選標準</span><span>20%~80% 價格區間</span></div>
-      <div class="info-row"><span>流動性</span><span>Volume > $100K</span></div>
-      <div class="info-row"><span>最短期限</span><span>1 天以上</span></div>
-      <div class="info-row"><span>評級標準</span><span>⭐⭐ = 一般 ⭐⭐⭐ = 良好</span></div>
-      <div class="info-row"><span>刷新頻率</span><span>每 3 小時自動更新</span></div>
-      <div class="info-row"><span>超級推薦</span><span>即時推送到此頁面</span></div>
+      <div class="info-title">📋 評分說明</div>
+      <div class="info-row"><span>🔥 今日精選</span><span>我最推薦的市場</span></div>
+      <div class="info-row"><span>🌍 地緣</span><span>軍事/外交/衝突</span></div>
+      <div class="info-row"><span>🌙 加密</span><span>比特幣/加密貨幣相關</span></div>
+      <div class="info-row"><span>📊 宏觀</span><span>Fed/經濟/金融</span></div>
+      <div class="info-row"><span>⏱ 短期</span><span>7天內結束</span></div>
+      <div class="info-row"><span>💰 高流量</span><span>>$1M 24h 成交量</span></div>
     </div>
-
     <div class="info-card">
-      <div class="info-title">💡 注意事項</div>
-      <div class="info-row"><span>風險提示</span><span>預測市場有風險</span></div>
-      <div class="info-row"><span>投資金額</span><span>請量力而為</span></div>
-      <div class="info-row"><span>查看倉位</span><span>需要錢包已連接</span></div>
+      <div class="info-title">⚠️ 風險提示</div>
+      <div class="info-row"><span>預測市場</span><span>本金可能歸零</span></div>
+      <div class="info-row"><span>建議</span><span>每筆不超過總額20%</span></div>
+      <div class="info-row"><span>倉位</span><span>隨時可部分贖回</span></div>
     </div>
-
     <div class="info-card">
-      <div class="info-title">🔗 快速連結</div>
-      <div class="info-row"><span>Polymarket</span><span><a href="https://polymarket.com" target="_blank" style="color:var(--accent)">打開</a></span></div>
-      <div class="info-row"><span>投資紀錄</span><span>本機快取</span></div>
-    </div>
-
-    <div class="refresh-indicator">
-      <div class="dot" id="refreshDot"></div>
-      <span>下次自動更新：<span id="nextRefresh">—</span></span>
+      <div class="info-title">💡 操作方式</div>
+      <div class="info-row"><span>投資</span><span>選方向→填金額→投資</span></div>
+      <div class="info-row"><span>贖回</span><span>滑動→確認贖回</span></div>
+      <div class="info-row"><span>自動更新</span><span>每3小時</span></div>
     </div>
   </div>
-
 </div>
-
 <script>
-// ── State ──────────────────────────────────────────────
-const CATEGORIES = {
-  crypto: ['Crypto', 'Bitcoin', 'Ethereum', 'Solana', 'Airdrops', 'Fdv', 'Token Launch', 'Crypto Prices'],
-  geo: ['Geopolitics', 'Iran', 'Politics', 'Elections'],
-  macro: ['Finance', 'Economics', 'Weather', 'Culture'],
-  short: [] // filtered by end date < 7 days
+// ── State ──
+const CAT_MAP={
+  crypto:['Crypto','Bitcoin','Ethereum','Solana','Airdrops','Fdv','Token Launch','Crypto Prices','Crypto Prices','Blockchain'],
+  geo:['Geopolitics','Iran','Military','Nuclear','Politics','Elections','Russia','China','Taiwan','War','Conflict'],
+  macro:['Finance','Economics','Fed','Interest Rate','CPI','Inflation','GDP','Market','Stock']
+};
+const PROXY='/api/poly';
+let mkts=[],pos=[],sel={},amt={},redeemAmt={},curF='all';
+let superPick=null,superSide='yes';
+
+// My analysis-driven recommendations (filled by agent)
+const RECOMMENDATIONS={
+  'military-action-against-iran-ends-by-522':{
+    pick:true,
+    reason:'你的邏輯很強：霍爾木茲海峽每天承載20%全球石油，長期封鎖對誰都沒好處。市場定價59%恢復正常，但你認為這個政治剛需會逼雙方讓步。繼續持有或加碼。',
+    side:'yes',
+    tags:['geo','highvol']
+  },
+  'fed-decision-in-april':{
+    pick:false,
+    reason:'Fed決策臨近，流動性充足但方向難判斷。觀望為主。',
+    side:'yes',
+    tags:['macro','short']
+  }
 };
 
-let currentFilter = 'all';
-let markets = [];
-let positions = [];
-let selectedOutcomes = {}; // { marketSlug: 'yes' | 'no' }
-let investAmounts = {};    // { marketSlug: string }
-let redeemAmounts = {};   // { positionId: number }
+const $=id=>document.getElementById(id);
+const fmt=(n,d=0)=>isNaN(n)?'—':'$'+parseFloat(n).toFixed(d);
+const left=ts=>{if(!ts)return'—';const d=new Date(ts)-Date.now();if(d<=0)return'已結束';const D=Math.floor(d/864e5),h=Math.floor(d%864e5/36e5),m=Math.floor(d%36e5/6e4);return D?`${D}天${h}小時`:`${h}小時${m}分`;};
+const volFmt=v=>{v=parseFloat(v||0);return v>1e6?(v/1e6).toFixed(1)+'M':v>1e3?(v/1e3).toFixed(0)+'K':v.toFixed(0);};
 
-// ── Utility ────────────────────────────────────────────
-function fmt(n, dec=0) {
-  if (n === null || n === undefined || isNaN(n)) return '—';
-  return '$' + (typeof n === 'number' ? n.toFixed(dec) : n);
+function getCat(m){
+  const c=(m.categories||m.tags||[]);
+  for(const[k,v]of Object.entries(CAT_MAP))if(v.some(x=>c.some?c.includes(x):false))return k;
+  // fallback: check title
+  const t=(m.question||m.title||'').toLowerCase();
+  if(t.includes('btc')||t.includes('bitcoin')||t.includes('crypto')||t.includes('eth')||t.includes('sol'))return'crypto';
+  if(t.includes('iran')||t.includes('military')||t.includes('war')||t.includes('ceasefire')||t.includes('nuclear'))return'geo';
+  if(t.includes('fed')||t.includes('rate')||t.includes('inflation')||t.includes('cpi'))return'macro';
+  return'other';
 }
 
-function prob(price) { return (parseFloat(price) * 100).toFixed(0) + '%'; }
-
-function timeLeft(ends) {
-  if (!ends) return '—';
-  const diff = new Date(ends) - Date.now();
-  if (diff <= 0) return '已結束';
-  const d = Math.floor(diff / 86400000);
-  const h = Math.floor((diff % 86400000) / 3600000);
-  const m = Math.floor((diff % 3600000) / 60000);
-  if (d > 0) return `${d}天 ${h}小時`;
-  if (h > 0) return `${h}小時 ${m}分`;
-  return `${m}分鐘`;
+function isShort(m){const d=(new Date(m.endDate)-Date.now())/864e5;return d<=7;}
+function isHighVol(m){return parseFloat(m.volume24h||0)>1e6;}
+function isPick(m){
+  if(!m.slug)return false;
+  const rec=RECOMMENDATIONS[m.slug];
+  if(rec&&rec.pick)return true;
+  // Auto pick: geo or crypto + high volume + short term
+  const c=getCat(m);
+  return(c==='geo'||c==='crypto')&&isHighVol(m)&&isShort(m);
 }
 
-function stars(market) {
-  const prob_yes = parseFloat(market.yesPrice || 0.5);
-  const vol = parseFloat(market.volume24h || 0);
-  const daysLeft = (new Date(market.endDate) - Date.now()) / 86400000;
-  // Star rating based on: edge (20-70% is ideal), volume, days left
-  let score = 0;
-  if (prob_yes >= 0.2 && prob_yes <= 0.8) score += 2;
-  if (prob_yes >= 0.3 && prob_yes <= 0.7) score += 1;
-  if (vol > 500000) score += 1;
-  if (vol > 2000000) score += 1;
-  if (daysLeft <= 7) score += 1; // short term
-  if (score >= 4) return '⭐⭐⭐';
-  if (score >= 3) return '⭐⭐';
-  return '⭐';
+function matches(m){
+  if(curF==='all')return true;
+  if(curF==='short')return isShort(m);
+  return getCat(m)===curF;
 }
 
-function isSuper(market) {
-  const prob_yes = parseFloat(market.yesPrice || 0);
-  const vol = parseFloat(market.volume24h || 0);
-  const daysLeft = (new Date(market.endDate) - Date.now()) / 86400000;
-  // Super if: prob is in sweet spot AND very high volume AND short term
-  return prob_yes >= 0.25 && prob_yes <= 0.65 && vol > 1000000 && daysLeft <= 14;
+function getTags(m){
+  const tags=[];
+  const c=getCat(m);
+  if(c==='geo')tags.push({l:'🌍 地緣',cls:'geo'});
+  else if(c==='crypto')tags.push({l:'🌙 加密',cls:'crypto'});
+  else if(c==='macro')tags.push({l:'📊 宏觀',cls:'macro'});
+  if(isShort(m))tags.push({l:'⏱ 短期',cls:'short'});
+  if(isHighVol(m))tags.push({l:'💰 '+volFmt(m.volume24h),cls:'highvol'});
+  return tags;
 }
 
-function getCat(market) {
-  const c = market.categories || [];
-  for (const [key, vals] of Object.entries(CATEGORIES)) {
-    if (vals.some(v => c.includes(v))) return key;
-  }
-  return 'other';
-}
+function renderOpps(){
+  const f=mkts.filter(m=>matches(m));
+  $('mkts-count').textContent=`（${f.length}個）`;
+  if(!f.length){$('opp-list').innerHTML='<div class="empty">目前無符合條件的市場</div>';return;}
 
-function matchesFilter(market) {
-  if (currentFilter === 'all') return true;
-  if (currentFilter === 'short') {
-    const days = (new Date(market.endDate) - Date.now()) / 86400000;
-    return days <= 7;
-  }
-  return getCat(market) === currentFilter;
-}
+  // Check if super pick is in filtered list
+  const pickInList=f.find(m=>isPick(m));
+  if(pickInList&&!superPick)setSuperPick(pickInList);
 
-// ── Toast / Notification ────────────────────────────────
-function showToast(msg, type='ok') {
-  const t = document.getElementById('toast');
-  t.className = `toast show ${type}`;
-  t.innerHTML = msg;
-  setTimeout(() => t.className = 'toast', 3000);
-}
+  $('opp-list').innerHTML=f.map(m=>{
+    const slug=m.slug||Math.random().toString(36);
+    const s=sel[slug]||'yes';
+    const a=amt[slug]||'10';
+    const tags=getTags(m);
+    const pick=isPick(m);
+    const rec=RECOMMENDATIONS[m.slug]||{};
+    const reason=rec.reason||'';
+    const out1Label='YES', out2Label='NO';
 
-function showNotif(msg) {
-  const n = document.getElementById('notifBadge');
-  n.textContent = msg;
-  n.className = 'notif-badge show';
-  setTimeout(() => n.className = 'notif-badge', 5000);
-}
-
-// ── Filter ──────────────────────────────────────────────
-function setFilter(f, btn) {
-  currentFilter = f;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderOpportunities();
-}
-
-// ── Render Opportunities ────────────────────────────────
-function renderOpportunities() {
-  const grid = document.getElementById('opportunitiesGrid');
-  const filtered = markets.filter(m => matchesFilter(m) && !isExpired(m));
-
-  if (filtered.length === 0) {
-    grid.innerHTML = '<div class="empty">目前沒有符合條件的市場</div>';
-    return;
-  }
-
-  grid.innerHTML = filtered.map(m => {
-    const slug = m.slug || m.id || Math.random().toString(36);
-    const sel = selectedOutcomes[slug] || 'yes';
-    const amt = investAmounts[slug] || '10';
-    const prob_yes = parseFloat(m.yesPrice || 0);
-    const prob_no = 1 - prob_yes;
-    const sup = isSuper(m);
-    const vol = parseFloat(m.volume24h || 0);
-
-    return `
-    <div class="opp-card ${sup ? 'super' : ''}" id="card-${slug}">
-      <div class="opp-header">
-        <div class="opp-question">${m.question || m.title || '—'}</div>
-        <div style="display:flex;align-items:center;gap:6px">
-          <div class="opp-stars">${stars(m)}</div>
-          <div style="font-size:10px;color:var(--muted)">${m.markets ? m.markets.length + ' 結果' : ''}</div>
-        </div>
-      </div>
+    return`<div class="opp-card ${pick?'pick':''}">
+      ${pick?'<div class="pick-badge">🔥 今日精選</div>':''}
+      <div class="opp-q">${m.question||m.title||'—'}</div>
       <div class="opp-meta">
-        <span>📊 ${vol > 1000000 ? (vol/1000000).toFixed(1)+'M' : (vol/1000).toFixed(0)+'K'} Vol</span>
-        <span>⏱ ${timeLeft(m.endDate)}</span>
-        ${m markets ? `<span>📋 ${m.markets.map(mm=>mm.outcome).join(' / ')}</span>` : ''}
+        ${tags.map(t=>`<span class="tag ${t.cls}">${t.l}</span>`).join('')}
+        <span style="color:var(--muted);font-size:10px">Vol ${volFmt(m.volume24h)} · ${left(m.endDate)}</span>
       </div>
-      <div class="opp-outcomes">
-        <div class="outcome-btn ${sel==='yes'?'selected':''}" onclick="selectOutcome('${slug}','yes',${prob_yes})">
-          <div class="outcome-label">YES</div>
-          <div class="outcome-price">${(prob_yes*100).toFixed(1)}¢</div>
-          <div class="outcome-prob">機率 ${(prob_yes*100).toFixed(0)}%</div>
+      ${reason?`<div class="reason-box">💡 <strong>點我原因：</strong>${reason}</div>`:''}
+      <div class="outcomes">
+        <div class="out-btn ${pick&&rec.side==='yes'?'sel':s==='yes'?'sel':''}" onclick="sel['${slug}']='yes';renderOpps()">
+          <div class="out-lbl">${out1Label}</div>
+          <div class="out-price">—</div>
+          <div class="out-prob">點我看價格</div>
         </div>
-        <div class="outcome-btn ${sel==='no'?'selected':''}" onclick="selectOutcome('${slug}','no',${prob_no})">
-          <div class="outcome-label">NO</div>
-          <div class="outcome-price">${(prob_no*100).toFixed(1)}¢</div>
-          <div class="outcome-prob">機率 ${(prob_no*100).toFixed(0)}%</div>
+        <div class="out-btn ${pick&&rec.side==='no'?'sel':s==='no'?'sel':''}" onclick="sel['${slug}']='no';renderOpps()">
+          <div class="out-lbl">${out2Label}</div>
+          <div class="out-price">—</div>
+          <div class="out-prob">點我看價格</div>
         </div>
       </div>
-      <div class="opp-footer">
-        <input class="amount-input" type="number" min="1" max="500" value="${amt}"
-          onchange="investAmounts['${slug}']=this.value"
-          placeholder="投入金額 (USDC)">
-        <button class="invest-btn"
-          onclick="investInMarket('${slug}', '${sel}', ${sel==='yes'?prob_yes:prob_no})">
-          確定投資 $${amt}
-        </button>
+      <div class="foot">
+        <input class="amt-input" type="number" min="1" max="500" value="${a}" placeholder="投入金額 USDC" onchange="amt['${slug}']=this.value">
+        <button class="inv-btn" onclick="doInvest('${slug}')">投資 $${a}</button>
       </div>
     </div>`;
   }).join('');
 }
 
-function isExpired(m) {
-  if (!m.endDate) return false;
-  return new Date(m.endDate) < new Date();
+function setSuperPick(m){
+  if(!m)return;
+  const slug=m.slug||m.id||'';
+  const rec=RECOMMENDATIONS[slug]||{};
+  const side=rec.side||'yes';
+  superPick=m;
+  superSide=side;
+  $('superQ').textContent=m.question||m.title||'';
+  $('superReason').innerHTML=`💡 <strong>理由：</strong>${rec.reason||'高流量地緣/加密市場，適合作為今日精選'}`;
+  $('superOuts').innerHTML=`
+    <div class="out-btn ${side==='yes'?'sel':''}" style="cursor:default">
+      <div class="out-lbl">YES</div><div class="out-price">—</div>
+    </div>
+    <div class="out-btn ${side==='no'?'sel':''}" style="cursor:default">
+      <div class="out-lbl">NO</div><div class="out-price">—</div>
+    </div>`;
+  document.getElementById('btnY').onclick=()=>qInvest('yes');
+  document.getElementById('btnN').onclick=()=>qInvest('no');
+  $('superAlert').className='super-alert show';
+  notif('🔥 今日精選：'+(m.question||m.title||'').slice(0,40));
 }
 
-function selectOutcome(slug, side, prob) {
-  selectedOutcomes[slug] = side;
-  renderOpportunities();
+function qInvest(side){
+  if(!superPick)return;
+  const slug=superPick.slug||superPick.id||'';
+  sel[slug]=side;amt[slug]='20';doInvest(slug);
 }
 
-function investAmount(slug) {
-  return parseFloat(investAmounts[slug] || '10');
+function doInvest(slug){
+  const m=mkts.find(x=>(x.slug||'')===slug);
+  if(!m){toast('找不到市場','err');return;}
+  const side=sel[slug]||'yes';
+  const a=parseFloat(amt[slug]||'10');
+  if(!a||a<1){toast('請輸入有效金額','err');return;}
+  toast(`✅ 投資請求：${side.toUpperCase()} $${a} USDC`);
+  console.log('[PolyMonitor INVEST]',{question:m.question||m.title,side,amount:a,slug:'https://polymarket.com/event/'+slug});
+  const req=JSON.parse(localStorage.getItem('polyReqs')||'[]');
+  req.push({type:'invest',question:m.question||m.title,side,amount:a,slug,ts:Date.now()});
+  localStorage.setItem('polyReqs',JSON.stringify(req));
 }
 
-function investInMarket(slug, side, prob) {
-  const amt = investAmount(slug);
-  if (!amt || amt < 1) { showToast('請輸入有效金額', 'err'); return; }
-
-  const market = markets.find(m => (m.slug || m.id) === slug);
-  const question = market?.question || slug;
-  const price = (prob * 100).toFixed(1);
-
-  // Notify via toast + log for agent to pick up
-  const msg = `📩 投資請求\n\n市場：${question}\n方向：${side.toUpperCase()} @ ${price}¢\n金額：$${amt} USDC`;
-  showToast(`✅ 投資請求已發送：${side.toUpperCase()} $${amt}`, 'ok');
-  console.log('[PolyMonitor INVEST]', {
-    question, side, price, amount: amt,
-    marketUrl: `https://polymarket.com/event/${slug}`
-  });
-
-  // Store in localStorage for persistence
-  const pending = JSON.parse(localStorage.getItem('pendingInvests') || '[]');
-  pending.push({ question, side, price, amount: amt, slug, ts: Date.now() });
-  localStorage.setItem('pendingInvests', JSON.stringify(pending));
+function doRedeem(id,shares){
+  if(!shares||shares<1)return;
+  const p=pos.find(x=>x.id===id);
+  if(!p)return;
+  toast(`✅ 贖回請求：${shares} 股`);
+  console.log('[PolyMonitor REDEEM]',{id,shares,question:p.question});
+  const req=JSON.parse(localStorage.getItem('polyReqs')||'[]');
+  req.push({type:'redeem',id,shares,question:p.question,ts:Date.now()});
+  localStorage.setItem('polyReqs',JSON.stringify(req));
 }
 
-// ── Render Positions ────────────────────────────────────
-function renderPositions() {
-  const container = document.getElementById('positionsList');
-  if (positions.length === 0) {
-    container.innerHTML = '<div class="empty" style="padding:16px">尚無倉位，或需要錢包連接</div>';
-    return;
-  }
-
-  container.innerHTML = positions.map(p => {
-    const shares = parseFloat(p.shares || 0);
-    const avgPx = parseFloat(p.avgPrice || 0);
-    const nowPx = parseFloat(p.price || p.yesPrice || avgPx);
-    const cost = shares * avgPx;
-    const value = shares * nowPx;
-    const pnl = value - cost;
-    const redeemable = Math.floor(shares * 0.5); // max 50% redeemable
-    const redeemAmt = redeemAmounts[p.id] || redeemable;
-
-    return `
-    <div class="position-card">
-      <div class="position-header">
-        <div class="position-question">${p.question || '—'}</div>
-        <div class="position-outcome ${p.outcome==='Yes'||p.outcome==='yes'?'yes':'no'}">${p.outcome}</div>
-      </div>
-      <div class="position-stats">
-        <div class="pos-stat">
-          <div class="pos-stat-val">${(avgPx*100).toFixed(1)}¢</div>
-          <div class="pos-stat-lbl">均價</div>
-        </div>
-        <div class="pos-stat">
-          <div class="pos-stat-val">${(nowPx*100).toFixed(1)}¢</div>
-          <div class="pos-stat-lbl">現價</div>
-        </div>
-        <div class="pos-stat">
-          <div class="pos-stat-val">${shares.toFixed(1)}</div>
-          <div class="pos-stat-lbl">股數</div>
-        </div>
-        <div class="pos-stat" style="color:${pnl>=0?'var(--green)':'var(--red)'}">
-          <div class="pos-stat-val">${pnl>=0?'+':''}$${pnl.toFixed(2)}</div>
-          <div class="pos-stat-lbl">未實現</div>
+function renderPos(){
+  if(!pos.length){$('pos-list').innerHTML='<div class="empty" style="padding:16px">尚無倉位或需錢包連接</div>';return;}
+  $('pos-list').innerHTML=pos.map(p=>{
+    const shares=parseFloat(p.shares||0),avgPx=parseFloat(p.avgPrice||0);
+    const nowPx=parseFloat(p.price||p.yesPrice||avgPx);
+    const cost=shares*avgPx,value=shares*nowPx,pnl=value-cost;
+    const maxRedeem=Math.floor(shares*0.5);
+    const ra=redeemAmt[p.id]!==undefined?redeemAmt[p.id]:Math.floor(shares*0.3);
+    return`<div class="pos-card">
+      <div class="pos-chip ${(p.outcome||'').toLowerCase()==='yes'?'yes':'no'}">${p.outcome||'?'}</div>
+      <div class="pos-q">${p.question||'—'}</div>
+      <div class="pos-stats">
+        <div><div class="pos-s-val">${avgPx>0?(avgPx*100).toFixed(1)+'¢':'—'}</div><div class="pos-s-lbl">均價</div></div>
+        <div><div class="pos-s-val">${nowPx>0?(nowPx*100).toFixed(1)+'¢':'—'}</div><div class="pos-s-lbl">現價</div></div>
+        <div><div class="pos-s-val">${shares.toFixed(1)}</div><div class="pos-s-lbl">股數</div></div>
+        <div style="color:${pnl>=0?'var(--green)':'var(--red)'}">
+          <div class="pos-s-val">${pnl>=0?'+':''}${fmt(pnl,2)}</div>
+          <div class="pos-s-lbl">未實現</div>
         </div>
       </div>
-      <div class="redeem-section">
-        <div class="redeem-label">
-          <span>贖回股數</span>
-          <span class="redeem-amount">${redeemAmt} 股 ≈ $${(redeemAmt * nowPx).toFixed(2)}</span>
-        </div>
-        <input type="range" min="0" max="${redeemable}" value="${redeemAmt}"
-          oninput="redeemAmounts['${p.id}']=parseInt(this.value);this.parentElement.querySelector('.redeem-amount').textContent=this.value+' 股 ≈ $'+(this.value*${nowPx}).toFixed(2)">
-        <button class="redeem-btn ${redeemAmt>0?'ready':''}"
-          onclick="redeemPosition('${p.id}', ${redeemAmt})">
-          ${redeemAmt > 0 ? `贖回 ${redeemAmt} 股` : '選擇贖回數量'}
-        </button>
+      <div class="redeem-row">
+        <div class="redeem-info">贖回 <span class="redeem-amount" id="ra-${p.id}">${ra}股≈${fmt(ra*nowPx,2)}</span></div>
+        <input type="range" min="0" max="${maxRedeem}" value="${ra}" oninput="redeemAmt['${p.id}']=parseInt(this.value);document.getElementById('ra-${p.id}').textContent=this.value+'股≈$'+Math.round(this.value*${nowPx}*100)/100">
+        <button class="redeem-btn" onclick="doRedeem('${p.id}',${ra})" ${ra<1?'disabled':''}>贖回</button>
       </div>
     </div>`;
   }).join('');
+  const tv=pos.reduce((s,p)=>s+parseFloat(p.shares||0)*parseFloat(p.price||p.yesPrice||0),0);
+  const tc=pos.reduce((s,p)=>s+parseFloat(p.shares||0)*parseFloat(p.avgPrice||0),0);
+  const tp=tv-tc;
+  $('s-val').textContent=fmt(tv);$('s-val').className='stat-val '+(tp>=0?'g':'r');
+  $('s-chg').textContent=`${tp>=0?'+':''}${fmt(tp,2)} 未實現`;
+  $('s-pnl').textContent=`${tp>=0?'+':''}${fmt(tp,2)}`;$('s-pnl').className='stat-val '+(tp>=0?'g':'r');
 }
 
-function redeemPosition(posId, shares) {
-  if (!shares || shares < 1) return;
-  const pos = positions.find(p => p.id === posId);
-  if (!pos) return;
-  showToast(`✅ 贖回請求已發送：${shares} 股`, 'ok');
-  console.log('[PolyMonitor REDEEM]', { posId, shares, question: pos.question });
-  const pending = JSON.parse(localStorage.getItem('pendingRedeems') || '[]');
-  pending.push({ posId, shares, question: pos.question, ts: Date.now() });
-  localStorage.setItem('pendingRedeems', JSON.stringify(pending));
-}
+function setF(f,btn){curF=f;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderOpps();}
 
-// ── Fetch Data ─────────────────────────────────────────
-async function fetchMarkets() {
-  try {
-    const res = await fetch('https://clob.polymarket.com/markets?limit=100&closed=false');
-    const data = await res.json();
-    markets = data.markets || data || [];
-    // Filter to liquid, non-expired markets
-    markets = markets.filter(m => {
-      const vol = parseFloat(m.volume24h || 0);
-      const price = parseFloat(m.yesPrice || 0.5);
-      return vol > 50000 && price > 0.05 && price < 0.95 && !isExpired(m);
-    });
-    markets.sort((a, b) => parseFloat(b.volume24h || 0) - parseFloat(a.volume24h || 0));
-
-    // Check for super opportunities
-    const superMkt = markets.find(m => isSuper(m));
-    if (superMkt) {
-      showSuperAlert(superMkt);
-      showNotif(`🔥 超級推薦：${superMkt.question}`);
+async function fetchMarkets(){
+  try{
+    const r=await fetch(PROXY+'?endpoint=markets');
+    if(!r.ok)throw new Error('API error');
+    const d=await r.json();
+    mkts=Array.isArray(d)?d:[];
+    mkts.sort((a,b)=>parseFloat(b.volume24h||0)-parseFloat(a.volume24h||0));
+    // Set super pick from recommendations or top highvol geo
+    if(!superPick){
+      const recPick=mkts.find(m=>RECOMMENDATIONS[m.slug]&&RECOMMENDATIONS[m.slug].pick);
+      if(recPick)setSuperPick(recPick);
+      else{
+        const autoPick=mkts.find(m=>isPick(m));
+        if(autoPick)setSuperPick(autoPick);
+      }
     }
-
-    renderOpportunities();
-    updateStatus('ok');
-  } catch (e) {
-    console.error(e);
-    updateStatus('error');
-    document.getElementById('opportunitiesGrid').innerHTML =
-      '<div class="empty" style="color:var(--red)">載入失敗，請檢查網路或錢包連接</div>';
+    renderOpps();
+    $('dot').className='dot ok';$('status').textContent=`已連接 · ${mkts.length}個市場`;
+  }catch(e){
+    console.error(e);$('dot').className='dot error';$('status').textContent='載入失敗';
+    $('opp-list').innerHTML='<div class="empty" style="color:var(--red)">載入失敗，請確認本地伺服器運行中</div>';
   }
 }
 
-async function fetchPositions() {
-  // Positions require wallet connection - set demo data for now
-  // In production, this would connect to user's wallet
-  const demoPositions = [
-    {
-      id: 'hormuz-1',
-      question: 'Strait of Hormuz traffic returns to normal by end of May?',
-      outcome: 'Yes',
-      shares: '115.4',
-      avgPrice: '0.345',
-      price: '0.595',
-      yesPrice: '0.595'
-    }
-  ];
-
-  positions = demoPositions;
-
-  // Portfolio totals
-  const totalValue = positions.reduce((sum, p) => {
-    return sum + parseFloat(p.shares) * parseFloat(p.price || p.yesPrice), 0);
-  }, 0);
-  const totalCost = positions.reduce((sum, p) => {
-    return sum + parseFloat(p.shares) * parseFloat(p.avgPrice), 0;
-  }, 0);
-  const totalPnl = totalValue - totalCost;
-
-  document.getElementById('totalValue').textContent = fmt(totalValue);
-  document.getElementById('totalValue').className = 'stat-value ' + (totalPnl >= 0 ? 'positive' : 'negative');
-  document.getElementById('totalChange').textContent = `${totalPnl >= 0 ? '+' : ''}$${totalPnl.toFixed(2)} (全部倉位)`;
-  document.getElementById('realizedPnl').textContent = `+$${(totalPnl).toFixed(2)}`;
-  document.getElementById('cashBalance').textContent = '$0';
-  document.getElementById('winRate').textContent = positions.length > 0 ? '1/1' : '—';
-
-  renderPositions();
+function loadPositions(){
+  pos=[{id:'hormuz-1',question:'Strait of Hormuz traffic returns to normal by end of May?',outcome:'Yes',shares:'115.4',avgPrice:'0.345',price:'0.595',yesPrice:'0.595'}];
+  renderPos();
 }
 
-function showSuperAlert(mkt) {
-  const card = document.getElementById('superAlert');
-  const q = document.getElementById('superAlertQuestion');
-  const outs = document.getElementById('superAlertOutcomes');
-  const slug = mkt.slug || mkt.id;
-  const prob_yes = parseFloat(mkt.yesPrice || 0);
-
-  q.textContent = mkt.question;
-  outs.innerHTML = `
-    <div class="opp-outcomes" style="margin:8px 0">
-      <div class="outcome-btn selected" onclick="quickInvestSelect='yes';showToast('已選擇 YES','ok')">
-        <div class="outcome-label">YES</div>
-        <div class="outcome-price">${(prob_yes*100).toFixed(1)}¢</div>
-      </div>
-      <div class="outcome-btn" onclick="quickInvestSelect='no';showToast('已選擇 NO','ok')">
-        <div class="outcome-label">NO</div>
-        <div class="outcome-price">${((1-prob_yes)*100).toFixed(1)}¢</div>
-      </div>
-    </div>`;
-  card.style.display = 'block';
-
-  window.superAlertSlug = slug;
-  window.quickInvestSelect = 'yes';
+async function refresh(){
+  $('dot').className='dot loading';$('status').textContent='更新中...';
+  await Promise.all([fetchMarkets(),loadPositions()]);
+  const n=new Date();$('lastUpd').textContent=`${n.getHours()}:${String(n.getMinutes()).padStart(2,'0')}:${String(n.getSeconds()).padStart(2,'0')}`;
 }
 
-// ── Quick Invest from Super Alert ──────────────────────
-function quickInvest(side) {
-  const slug = window.superAlertSlug;
-  if (!slug) return;
-  const mkt = markets.find(m => (m.slug || m.id) === slug);
-  if (!mkt) return;
-  const prob = side === 'yes' ? parseFloat(mkt.yesPrice) : (1 - parseFloat(mkt.yesPrice));
-  selectedOutcomes[slug] = side;
-  investAmounts[slug] = '20';
-  investInMarket(slug, side, prob);
-}
-
-// ── Refresh All ─────────────────────────────────────────
-async function refreshAll() {
-  updateStatus('loading');
-  await Promise.all([fetchMarkets(), fetchPositions()]);
-  const now = new Date();
-  document.getElementById('lastUpdated').textContent =
-    `${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
-  scheduleNextRefresh();
-}
-
-function updateStatus(s) {
-  const dot = document.getElementById('statusDot');
-  const txt = document.getElementById('statusText');
-  if (s === 'ok') { dot.className='dot'; txt.textContent='已連接'; }
-  else if (s === 'loading') { dot.className='dot stale'; txt.textContent='更新中...'; }
-  else { dot.className='dot error'; txt.textContent='連接失敗'; }
-}
-
-// ── Auto Refresh ────────────────────────────────────────
-let refreshInterval = 3 * 60 * 60 * 1000; // 3 hours
 let refreshTimer;
-
-function scheduleNextRefresh() {
+function scheduleNext(){
   clearTimeout(refreshTimer);
-  const now = Date.now();
-  const next = new Date(now + refreshInterval);
-  document.getElementById('nextRefresh').textContent =
-    `${String(next.getHours()).padStart(2,'0')}:${String(next.getMinutes()).padStart(2,'0')}`;
-  document.getElementById('refreshDot').className = 'dot stale';
-
-  refreshTimer = setTimeout(() => {
-    refreshAll();
-  }, refreshInterval);
-
-  // Countdown
-  const countdown = setInterval(() => {
-    const remaining = refreshInterval - (Date.now() - now);
-    if (remaining <= 0) { clearInterval(countdown); return; }
-    const h = Math.floor(remaining / 3600000);
-    const m = Math.floor((remaining % 3600000) / 60000);
-    document.getElementById('nextRefresh').textContent =
-      `${h}小時 ${m}分`;
-  }, 60000);
+  refreshTimer=setTimeout(refresh,3*3600*1000);
 }
 
-// ── Boot ────────────────────────────────────────────────
-(async function init() {
-  await refreshAll();
-  scheduleNextRefresh();
+function toast(msg,type='ok'){$('toast').className=`toast show ${type}`;$('toast').textContent=msg;setTimeout(()=>$('toast').className='toast',4000);}
+function notif(msg){$('notif').textContent=msg;$('notif').className='notif show';setTimeout(()=>$('notif').className='notif',6000);}
 
-  // Listen for messages from agent (for super alerts)
-  window.addEventListener('message', (e) => {
-    if (e.data && e.data.type === 'polyAlert') {
-      showNotif(e.data.message);
-      showToast(e.data.message, 'ok');
-    }
-  });
-})();
+(async()=>{await refresh();scheduleNext();})();
 </script>
 </body>
 </html>
