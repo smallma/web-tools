@@ -45,7 +45,7 @@ input[type=range]{flex:1;accent-color:var(--accent);cursor:pointer}
 .filter-btn{background:var(--card);border:1px solid var(--border);border-radius:20px;color:var(--muted);padding:4px 12px;font-size:11px;cursor:pointer;transition:all 0.2s}
 .filter-btn.active{background:var(--accent);color:white;border-color:var(--accent)}
 .filter-btn:hover{color:var(--text)}
-.opp-card{background:var(--card);border:2px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px;transition:border-color 0.2s}
+.opp-card{background:var(--card);border:2px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px}
 .opp-card:hover{border-color:#30363d}
 .opp-card.pick{border-color:var(--orange);border-width:2px;background:linear-gradient(135deg,rgba(232,89,12,0.06),transparent)}
 .opp-q{font-size:14px;font-weight:600;line-height:1.5;margin-bottom:8px;padding-right:8px}
@@ -55,30 +55,26 @@ input[type=range]{flex:1;accent-color:var(--accent);cursor:pointer}
 .tag.crypto{background:rgba(163,113,247,0.15);color:var(--purple)}
 .tag.macro{background:rgba(88,166,255,0.15);color:var(--accent)}
 .tag.short{background:rgba(63,185,80,0.15);color:var(--green)}
-.tag.resolved{background:rgba(248,81,73,0.15);color:var(--red)}
-.price-screenshot{width:100%;border-radius:8px;border:1px solid var(--border);margin-bottom:10px;display:block}
+.tag.resolved{background:rgba(248,81,73,0.15);color:#f85149}
+.img-screenshot{width:100%;border-radius:8px;border:1px solid var(--border);margin-bottom:10px;display:block;cursor:pointer}
 .price-box{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px;margin-bottom:10px}
-.price-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:13px}
-.price-row.highlight{background:rgba(63,185,80,0.1);border-radius:6px;padding:6px 8px;margin:4px -4px}
-.price-label{font-weight:600}
-.price-value.yes{color:var(--green);font-weight:700;font-size:16px}
-.price-value.no{color:#f85149;font-weight:700;font-size:16px}
-.price-value.neutral{color:var(--muted)}
-.prob{font-size:11px;color:var(--muted);margin-left:6px}
+.price-row{display:flex;justify-content:space-between;align-items:center;padding:5px 8px;border-radius:6px;font-size:13px}
+.price-row:nth-child(odd){background:rgba(255,255,255,0.02)}
+.price-row:hover{background:rgba(255,255,255,0.05)}
+.price-row.sel-yes{background:rgba(63,185,80,0.12);border:1px solid rgba(63,185,80,0.3)}
+.price-row.sel-no{background:rgba(248,81,73,0.12);border:1px solid rgba(248,81,73,0.3)}
+.price-label{font-weight:600;font-size:12px}
+.price-label.yes{color:var(--green)}.price-label.no{color:#f85149}
+.price-value.yes{color:var(--green);font-weight:700;font-size:15px}
+.price-value.no{color:#f85149;font-weight:700;font-size:15px}
+.price-value.neutral{color:var(--muted);font-size:13px}
+.price-sub{font-size:10px;color:var(--muted);margin-left:6px}
+.price-note{font-size:10px;color:var(--muted);margin-top:4px;text-align:center}
+.rec-badge{background:var(--orange);color:white;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;display:inline-block;margin-bottom:6px}
 .reason-box{background:rgba(232,89,12,0.08);border:1px solid rgba(232,89,12,0.25);border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:12px;color:var(--text);line-height:1.6}
 .reason-box strong{color:var(--orange)}
-.rec-badge{background:var(--orange);color:white;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;display:inline-block;margin-bottom:6px}
-.outcomes{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
-.out-btn{background:var(--bg);border:2px solid var(--border);border-radius:10px;padding:10px 12px;cursor:pointer;text-align:left;transition:all 0.15s;position:relative}
-.out-btn:hover{border-color:#4a5568}
-.out-btn.sel-yes{border-color:var(--green);background:rgba(63,185,80,0.1)}
-.out-btn.sel-no{border-color:#f85149;background:rgba(248,81,73,0.1)}
-.out-lbl{font-size:12px;font-weight:700;margin-bottom:4px}
-.out-lbl.yes{color:var(--green)}.out-lbl.no{color:#f85149}
-.out-price{font-size:20px;font-weight:800}
-.out-price.yes{color:var(--green)}.out-price.no{color:#f85149}
-.out-hint{font-size:10px;color:var(--muted);margin-top:2px}
-.foot{display:flex;gap:8px;align-items:center}
+.alert-box{background:rgba(248,81,73,0.1);border:1px solid rgba(248,81,73,0.3);border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:12px;color:#f85149;line-height:1.5}
+.foot{display:flex;gap:8px;align-items:center;margin-top:4px}
 .amt-input{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);padding:7px 10px;font-size:13px}
 .amt-input:focus{outline:none;border-color:var(--accent)}
 .inv-btn{background:var(--green);color:white;border:none;border-radius:6px;padding:7px 16px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
@@ -92,7 +88,7 @@ input[type=range]{flex:1;accent-color:var(--accent);cursor:pointer}
 .super-alert-q{font-size:15px;font-weight:700;line-height:1.4;margin-bottom:8px}
 .super-reason{background:rgba(232,89,12,0.1);border-radius:8px;padding:8px 12px;font-size:12px;color:var(--text);margin-bottom:12px;line-height:1.6}
 .super-reason strong{color:var(--orange)}
-.super-img{width:100%;border-radius:8px;border:1px solid rgba(232,89,12,0.3);margin-bottom:10px;display:block}
+.super-img{width:100%;border-radius:8px;border:1px solid rgba(232,89,12,0.3);margin-bottom:10px;display:block;cursor:pointer}
 .info-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px}
 .info-title{font-size:12px;font-weight:600;margin-bottom:8px}
 .info-row{display:flex;justify-content:space-between;font-size:11px;padding:5px 0;border-bottom:1px solid var(--border);color:var(--muted)}
@@ -107,8 +103,6 @@ input[type=range]{flex:1;accent-color:var(--accent);cursor:pointer}
 .toast.show{display:flex;gap:8px;align-items:center}.toast.ok{border-color:var(--green)}.toast.err{border-color:#f85149}
 .notif{position:fixed;top:70px;right:16px;background:var(--orange);color:white;padding:10px 16px;border-radius:10px;font-size:13px;font-weight:600;max-width:300px;z-index:200;display:none;animation:slide 0.3s ease}
 .notif.show{display:block}@keyframes slide{from{transform:translateX(120%);opacity:0}to{transform:translateX(0);opacity:1}}
-.alert-box{background:rgba(248,81,73,0.15);border:1px solid rgba(248,81,73,0.4);border-radius:8px;padding:10px 12px;margin-bottom:10px;font-size:12px;color:#f85149;line-height:1.5}
-.alert-box strong{display:block;margin-bottom:4px}
 </style>
 </head>
 <body>
@@ -136,7 +130,7 @@ input[type=range]{flex:1;accent-color:var(--accent);cursor:pointer}
       <div id="pos-list"></div>
     </div>
     <div>
-      <div class="section-title">🎯 市場快照 <span id="mkts-count" style="font-size:11px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0"></span></div>
+      <div class="section-title">🎯 市場快照</div>
       <div id="opp-list"><div class="loading"><div class="spinner"></div>載入中...</div></div>
     </div>
   </div>
@@ -145,22 +139,23 @@ input[type=range]{flex:1;accent-color:var(--accent);cursor:pointer}
       <div class="super-alert-title">🔥 今日精選</div>
       <div class="super-alert-q" id="superQ"></div>
       <div class="super-reason" id="superReason"></div>
-      <img class="super-img" id="superImg" src="iran-action.png" alt="market">
+      <img class="super-img" id="superImg" src="hezbollah.png" alt="market">
       <div style="display:flex;gap:8px">
-        <button class="inv-btn" style="flex:1;background:var(--green)" id="btnY" onclick="qInvest('yes')">✅ 投 YES</button>
-        <button class="inv-btn" style="flex:1;background:#f85149" id="btnN" onclick="qInvest('no')">❌ 投 NO</button>
+        <button class="inv-btn" id="btnY" style="flex:1;background:var(--green)" onclick="qInvest('yes')">✅ 投 YES</button>
+        <button class="inv-btn" id="btnN" style="flex:1;background:#f85149" onclick="qInvest('no')">❌ 投 NO</button>
       </div>
     </div>
     <div class="info-card">
-      <div class="info-title">📊 市場價格（截圖）</div>
-      <div class="info-row"><span>Iran 軍事行動</span><span style="color:var(--orange)">⚠️ 已結算</span></div>
-      <div class="info-row"><span>Fed 4月決策</span><span>No change 99.1¢</span></div>
-      <div class="info-row"><span>說明</span><span>圖片為即時截圖</span></div>
+      <div class="info-title">📊 即時價格（Ada CDP抓取）</div>
+      <div class="info-row"><span>🇺🇸 Fed 四月</span><span>No change: 99.1¢</span></div>
+      <div class="info-row"><span>🟠 Hezbollah 停火</span><span>Apr21: 92¢ Apr30: 99¢</span></div>
+      <div class="info-row"><span>⚽ 世界盃</span><span>Brazil 91.2¢ 最高</span></div>
+      <div class="info-row"><span>🇮🇷 Iran軍事</span><span style="color:#f85149">已結算</span></div>
     </div>
     <div class="info-card">
-      <div class="info-title">⚠️ 重要提醒</div>
-      <div class="info-row"><span>Iran market</span><span style="color:#f85149">已結算！</span></div>
-      <div class="info-row"><span>你的倉位</span><span>是不同市場</span></div>
+      <div class="info-title">⚠️ 提醒</div>
+      <div class="info-row"><span>Fed市場</span><span>有多個子結果</span></div>
+      <div class="info-row"><span>主要結果</span><span>No change 99.1¢</span></div>
     </div>
     <div class="info-card">
       <div class="info-title">⚠️ 風險提示</div>
@@ -169,50 +164,86 @@ input[type=range]{flex:1;accent-color:var(--accent);cursor:pointer}
     </div>
     <div class="info-card">
       <div class="info-title">🔗 連結</div>
-      <div class="info-row"><span>Polymarket</span><span><a href="https://polymarket.com" target="_blank" rel="noopener">polymarket.com</a></span></div>
-      <div class="info-row"><span>我的倉位</span><span><a href="https://polymarket.com/portfolio" target="_blank" style="color:var(--accent)">查看倉位</a></span></div>
+      <div class="info-row"><span>Polymarket</span><span><a href="https://polymarket.com" target="_blank">polymarket.com</a></span></div>
+      <div class="info-row"><span>我的倉位</span><span><a href="https://polymarket.com/portfolio" target="_blank">portfolio</a></span></div>
     </div>
   </div>
 </div>
 <script>
-// Market data with real prices from screenshots
+// 市場數據（Ada CDP 即時抓取）
 const MARKET_DATA = [
   {
-    slug: 'military-action-against-iran-ends-by-522',
-    title: '美伊軍事行動四月底前結束？',
-    question: 'Military action against Iran ends by April 30?',
-    category: 'geo',
-    yesPrice: null, noPrice: null,
-    resolved: true,
-    resolutionOutcome: 'YES (已結算→爭議中)',
-    volume24h: 30744957,
-    endDate: '2026-04-30T00:00:00Z',
-    tags: ['geo','resolved'],
-    screenshot: 'iran-action.png',
-    recYes: false, recNo: false,
-    recReason: null,
-    statusNote: '⚠️ 此市場已結算提議YES，但有爭議。你的倉位在「霍爾木茲海峽」是不同市場。'
+    slug: 'fed-decision-in-april',
+    title: '🏦 Fed 四月利率決策？（2026/04/29）',
+    outcomes: [
+      { label: 'No change（不變）', yesPrice: 0.991, noPrice: 0.010, prob: '99.1%', selected: false },
+      { label: '25 bps decrease（降25點）', yesPrice: 0.005, noPrice: 0.996, prob: '<1%', selected: false },
+      { label: '25+ bps increase（升25+點）', yesPrice: 0.004, noPrice: 0.997, prob: '<1%', selected: false },
+      { label: '50+ bps decrease（大降50+點）', yesPrice: 0.003, noPrice: 0.998, prob: '<1%', selected: false },
+    ],
+    endDate: '2026-04-29T00:00:00Z',
+    volume24h: 97272979,
+    category: 'macro',
+    tags: ['macro', 'short'],
+    screenshot: 'fed-april.png',
+    recSide: null,
+    recReason: 'Fed No change 99.1%——方向太明確，沒有投機價值，觀望。'
   },
   {
-    slug: 'fed-decision-in-april',
-    title: 'Fed 四月利率決策？',
-    question: 'Fed decision in April? (No change 99.1%)',
-    category: 'macro',
-    yesPrice: 0.991, noPrice: 0.010,
-    resolved: false,
-    volume24h: 97272979,
-    endDate: '2026-04-29T00:00:00Z',
-    tags: ['macro','short'],
-    screenshot: 'fed-april.png',
-    recYes: false, recNo: false,
-    recReason: 'Fed No change 99.1%——市場幾乎確定不變。方向太明確，沒有投機價值。觀望。'
+    slug: 'israel-x-hezbollah-ceasefire-by',
+    title: '🟠 Lebanon/以色列停火談判（2026）',
+    outcomes: [
+      { label: 'April 21 停火 → YES', yesPrice: 0.92, noPrice: 0.08, prob: '92%', selected: false },
+      { label: 'April 30 停火 → YES', yesPrice: 0.99, noPrice: 0.01, prob: '99%', selected: false },
+      { label: 'June 30 停火 → YES', yesPrice: 0.872, noPrice: 0.128, prob: '87.2%', selected: false },
+    ],
+    endDate: '2026-06-30T00:00:00Z',
+    volume24h: 5735397,
+    category: 'geo',
+    tags: ['geo', 'short'],
+    screenshot: 'hezbollah.png',
+    recSide: 'yes',
+    recReason: '停火談判所有日期的 YES 價格都在87¢以上，市場高度確定停火會發生。April 30 達到99¢。可在 April 21 結果上操作。'
+  },
+  {
+    slug: '2026-fifa-world-cup-winner-595',
+    title: '⚽ 2026 世界盃冠軍誰拿？',
+    outcomes: [
+      { label: 'France（法國）→ YES', yesPrice: 0.172, noPrice: 0.829, prob: '17.2%', selected: false },
+      { label: 'England（英格蘭）→ YES', yesPrice: 0.164, noPrice: 0.837, prob: '16.4%', selected: false },
+      { label: 'Argentina（阿根廷）→ YES', yesPrice: 0.111, noPrice: 0.890, prob: '11.1%', selected: false },
+      { label: 'Brazil（巴西）→ YES', yesPrice: 0.089, noPrice: 0.912, prob: '8.9%', selected: false },
+      { label: 'Spain（西班牙）→ YES', yesPrice: 0.050, noPrice: 0.950, prob: '5%', selected: false },
+    ],
+    endDate: '2026-07-20T00:00:00Z',
+    volume24h: 10630010,
+    category: 'other',
+    tags: ['other'],
+    screenshot: 'worldcup.png',
+    recSide: null,
+    recReason: '世界盃冠軍極難預測，多個國家有機會。Brazil 市場定價最高（8.9¢），但風險高。觀望。'
+  },
+  {
+    slug: 'military-action-against-iran-ends-by-522',
+    title: '🇮🇷 美伊軍事行動四月前結束？（已結算）',
+    outcomes: [
+      { label: '結果：YES（已提議）', yesPrice: 0.0, noPrice: 0.001, prob: '已結算', selected: false },
+    ],
+    endDate: '2026-04-30T00:00:00Z',
+    volume24h: 30744957,
+    category: 'geo',
+    tags: ['geo', 'resolved'],
+    screenshot: 'iran-action.png',
+    recSide: null,
+    recReason: null,
+    resolvedNote: '⚠️ 此市場已結算提議 YES（爭議中），但與你的 Hormuz 倉位是不同市場。'
   }
 ];
 
 let sel = {}, amt = {}, redeemAmt = {};
 const $ = id => document.getElementById(id);
 const fmt = (n, d = 0) => isNaN(n) ? '—' : '$' + parseFloat(n).toFixed(d);
-const pct = p => p ? (parseFloat(p) * 100).toFixed(1) + '¢' : '—';
+const pct = p => p !== undefined && p !== null ? (parseFloat(p) * 100).toFixed(1) + '¢' : '—';
 const left = ts => {
   if (!ts) return '—';
   const d = new Date(ts) - Date.now();
@@ -226,12 +257,7 @@ function getCat(m) { return m.category || 'other'; }
 
 function renderOpps() {
   const container = $('opp-list');
-  $('mkts-count').textContent = `（${MARKET_DATA.length}個）`;
-
-  container.innerHTML = MARKET_DATA.map(m => {
-    const slug = m.slug;
-    const s = sel[slug] || 'yes';
-    const a = amt[slug] || '10';
+  container.innerHTML = MARKET_DATA.map((m, idx) => {
     const tags = m.tags.map(t => {
       if (t === 'geo') return '<span class="tag geo">🌍 地緣</span>';
       if (t === 'crypto') return '<span class="tag crypto">🌙 加密</span>';
@@ -241,67 +267,56 @@ function renderOpps() {
       return '';
     }).join('');
 
-    const yesSelected = m.recYes ? 'sel-yes' : (m.recNo ? '' : (s === 'yes' ? 'sel-yes' : ''));
-    const noSelected = m.recNo ? 'sel-no' : (m.recYes ? '' : (s === 'no' ? 'sel-no' : ''));
-    const yesLabel = m.recYes ? '✅ YES（Ada推薦）' : 'YES';
-    const noLabel = m.recNo ? '✅ NO（Ada推薦）' : 'NO';
+    const isRec = m.recSide !== null;
+    const marketSel = sel[m.slug] || (m.outcomes[0] ? m.outcomes[0].label : '');
+    const a = amt[m.slug] || '10';
 
-    return `<div class="opp-card ${m.recYes||m.recNo?'pick':''}">
-      ${(m.recYes||m.recNo)?'<div class="rec-badge">'+(m.recYes?'🔥 Ada推薦':'⚠️ 注意')+'</div>':''}
+    return `<div class="opp-card ${isRec ? 'pick' : ''}">
+      ${isRec ? '<div class="rec-badge">🔥 Ada 推薦</div>' : ''}
       <div class="opp-q">${m.title}</div>
       <div class="meta">
         ${tags}
         <span style="color:var(--muted);font-size:10px">💰 ${volFmt(m.volume24h)} · ⏱ ${left(m.endDate)}</span>
       </div>
-      ${m.statusNote ? `<div class="alert-box"><strong>⚠️ 重要：</strong>${m.statusNote}</div>` : ''}
-      ${m.screenshot ? `<img class="price-screenshot" src="${m.screenshot}" alt="${m.title}" loading="lazy">` : ''}
-      ${m.recReason ? `<div class="reason-box">💡 <strong>Ada 分析：</strong>${m.recReason}</div>` : ''}
+      ${m.resolvedNote ? `<div class="alert-box">${m.resolvedNote}</div>` : ''}
+      ${m.screenshot ? `<img class="img-screenshot" src="${m.screenshot}" alt="${m.title}" onclick="window.open('https://polymarket.com/event/${m.slug}','_blank')" title="點擊查看Polymarket">` : ''}
+      ${m.recReason && isRec ? `<div class="reason-box">💡 <strong>Ada 分析：</strong>${m.recReason}</div>` : ''}
       <div class="price-box">
-        <div class="price-row ${m.recYes?'highlight':''}">
-          <span class="price-label yes">YES</span>
-          <span class="price-value ${m.yesPrice?'yes':'neutral'}">${pct(m.yesPrice)}${m.yesPrice?' → ':''}${m.yesPrice&&m.recYes?' ✅':' → 需至Polymarket查看'}</span>
-        </div>
-        <div class="price-row ${m.recNo?'highlight':''}">
-          <span class="price-label no">NO</span>
-          <span class="price-value ${m.noPrice?'no':'neutral'}">${pct(m.noPrice)}${m.noPrice&&m.recNo?' ✅':' → 需至Polymarket查看'}</span>
-        </div>
+        ${m.outcomes.map(o => {
+          const isSelected = o.label === marketSel;
+          const isYesRec = isRec && m.recSide === 'yes' && o.label.includes('YES');
+          const isNoRec = isRec && m.recSide === 'no' && o.label.includes('NO');
+          const rowClass = isYesRec ? 'sel-yes' : (isNoRec ? 'sel-no' : '');
+          const isYes = o.label.includes('YES') || o.yesPrice > 0.5;
+          return `<div class="price-row ${rowClass}" onclick="sel['${m.slug}']='${o.label}'">
+            <span class="price-label ${isYes?'yes':'no'}">${o.label} ${isYesRec||isNoRec?'✅':''}</span>
+            <span>
+              <span class="price-value ${isYes?'yes':'no'}">${o.yesPrice !== undefined ? pct(o.yesPrice) : '—'}</span>
+              <span class="price-sub">${o.prob}</span>
+            </span>
+          </div>`;
+        }).join('')}
+        <div class="price-note">💡 點擊任一結果選擇投資方向</div>
       </div>
-      <div class="outcomes">
-        <div class="out-btn ${yesSelected}" onclick="sel['${slug}']='yes';renderOpps()">
-          <div class="out-lbl yes">${yesLabel}</div>
-          <div class="out-price yes">${pct(m.yesPrice)||'—'}</div>
-          <div class="out-hint"><a href="https://polymarket.com/event/${slug}" target="_blank" style="color:var(--accent);font-size:10px;text-decoration:none">→ 前往Polymarket</a></div>
-        </div>
-        <div class="out-btn ${noSelected}" onclick="sel['${slug}']='no';renderOpps()">
-          <div class="out-lbl no">${noLabel}</div>
-          <div class="out-price no">${pct(m.noPrice)||'—'}</div>
-          <div class="out-hint"><a href="https://polymarket.com/event/${slug}" target="_blank" style="color:var(--accent);font-size:10px;text-decoration:none">→ 前往Polymarket</a></div>
-        </div>
-      </div>
-      ${!m.resolved?`<div class="foot">
-        <input class="amt-input" type="number" min="1" max="500" value="${a}" placeholder="投入 USDC" onchange="amt['${slug}']=this.value">
-        <button class="inv-btn" onclick="doInvest('${slug}')">📩 通知 Ada</button>
-      </div>`:`<div style="font-size:12px;color:var(--muted);text-align:center;padding:6px 0">市場已結算，無需投資</div>`}
+      ${!m.tags.includes('resolved') ? `<div class="foot">
+        <input class="amt-input" type="number" min="1" max="500" value="${a}" placeholder="投入 USDC" onchange="amt['${m.slug}']=this.value">
+        <button class="inv-btn" onclick="doInvest('${m.slug}')">📩 通知 Ada</button>
+      </div>` : ''}
     </div>`;
   }).join('');
 
   // Set super alert
-  const recMkt = MARKET_DATA.find(m => m.recYes || m.recNo);
+  const recMkt = MARKET_DATA.find(m => m.recSide !== null);
   if (recMkt) {
     $('superQ').textContent = recMkt.title;
-    $('superReason').innerHTML = `💡 <strong>分析：</strong>${recMkt.recReason || '—'}`;
+    $('superReason').innerHTML = `💡 <strong>Ada 分析：</strong>${recMkt.recReason || ''}`;
     if (recMkt.screenshot) $('superImg').src = recMkt.screenshot;
     $('superAlert').className = 'super-alert show';
-    const btnY = $('btnY');
-    const btnN = $('btnN');
-    btnY.onclick = () => qInvest('yes');
-    btnN.onclick = () => qInvest('no');
     notif('🔥 ' + recMkt.title);
   }
 }
 
 function renderPos() {
-  // User's real position
   const pos = [{
     id: 'hormuz-1',
     question: 'Strait of Hormuz traffic returns to normal by end of May?',
@@ -341,9 +356,10 @@ function renderPos() {
 }
 
 function qInvest(side) {
-  const m = MARKET_DATA.find(x => x.recYes || x.recNo);
+  const m = MARKET_DATA.find(x => x.recSide !== null);
   if (!m) return;
-  sel[m.slug] = side;
+  const outcome = side === 'yes' ? (m.outcomes.find(o => o.label.includes('YES') && o.yesPrice > 0.5) || m.outcomes[0]) : m.outcomes.find(o => o.label.includes('NO') || o.yesPrice < 0.5) || m.outcomes[0];
+  sel[m.slug] = outcome.label;
   amt[m.slug] = '20';
   doInvest(m.slug);
 }
@@ -351,23 +367,26 @@ function qInvest(side) {
 function doInvest(slug) {
   const m = MARKET_DATA.find(x => x.slug === slug);
   if (!m) { toast('找不到市場', 'err'); return; }
-  const side = sel[slug] || 'yes';
+  const outcomeLabel = sel[slug] || m.outcomes[0].label;
+  const outcome = m.outcomes.find(o => o.label === outcomeLabel) || m.outcomes[0];
   const a = parseFloat(amt[slug] || '10');
   if (!a || a < 1) { toast('請輸入有效金額', 'err'); return; }
-  const isRec = (m.recYes && side === 'yes') || (m.recNo && side === 'no');
-  toast(`📩 已通知 Ada：${side.toUpperCase()} $${a} USDC${isRec?'（推薦）':''}`);
+  const isRec = m.recSide !== null && (
+    (m.recSide === 'yes' && (outcome.label.includes('YES') && outcome.yesPrice > 0.5)) ||
+    (m.recSide === 'no' && (outcome.label.includes('NO') || outcome.yesPrice < 0.5))
+  );
+  toast(`📩 已通知 Ada：${outcome.label} $${a} USDC${isRec?'（推薦）':''}`);
+  console.log('[PolyMonitor INVEST]', { question: m.title, outcome: outcome.label, yesPrice: outcome.yesPrice, amount: a, slug: 'https://polymarket.com/event/' + slug });
   const req = JSON.parse(localStorage.getItem('polyReqs') || '[]');
-  req.push({ type: 'invest', question: m.question, side, amount: a, slug: 'https://polymarket.com/event/' + slug, ts: Date.now() });
+  req.push({ type: 'invest', question: m.title, outcome: outcome.label, yesPrice: outcome.yesPrice, amount: a, slug: 'https://polymarket.com/event/' + slug, ts: Date.now() });
   localStorage.setItem('polyReqs', JSON.stringify(req));
 }
 
 function doRedeem(id, shares) {
   if (!shares || shares < 1) return;
-  const p = [{ id: 'hormuz-1', question: 'Strait of Hormuz traffic returns to normal by end of May?' }].find(x => x.id === id);
-  if (!p) return;
   toast(`✅ 贖回請求：${shares} 股`);
   const req = JSON.parse(localStorage.getItem('polyReqs') || '[]');
-  req.push({ type: 'redeem', id, shares, question: p.question, ts: Date.now() });
+  req.push({ type: 'redeem', id, shares, question: 'Strait of Hormuz traffic returns to normal by end of May?', ts: Date.now() });
   localStorage.setItem('polyReqs', JSON.stringify(req));
 }
 
