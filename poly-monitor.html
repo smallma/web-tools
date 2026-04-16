@@ -5,28 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PolyMonitor</title>
 <style>
-:root{--bg:#0d1117;--card:#161b22;--border:#30363d;--text:#e6edf3;--muted:#7d8590;--green:#3fb950;--red:#f85149;--yellow:#d29922;--orange:#e8590c;--accent:#58a6ff;--purple:#a371f7}
+:root{--bg:#0d1117;--card:#161b22;--border:#30363d;--text:#e6edf3;--muted:#7d8590;--green:#3fb950;--red:#f85149;--orange:#e8590c;--accent:#58a6ff}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;min-height:100vh}
 header{border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;background:var(--bg);z-index:100}
-.logo{font-size:20px;font-weight:800;letter-spacing:-0.5px;background:linear-gradient(135deg,#58a6ff,#e8590c);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.logo{font-size:20px;font-weight:800;background:linear-gradient(135deg,#58a6ff,#e8590c);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .dot{width:8px;height:8px;border-radius:50%;animation:pulse 2s infinite;flex-shrink:0}
-.dot.ok{background:var(--green)}.dot.loading{background:var(--yellow);animation:none}.dot.error{background:var(--red);animation:none}
+.dot.ok{background:var(--green)}.dot.loading{background:var(--orange);animation:none}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
 .header-right{margin-left:auto;display:flex;align-items:center;gap:12px}
 .refresh-btn{background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:6px 14px;font-size:13px;cursor:pointer}
-.refresh-btn:hover{background:var(--border)}
 .last-updated{font-size:11px;color:var(--muted)}
 .main{max-width:1200px;margin:0 auto;padding:24px;display:grid;grid-template-columns:1fr 280px;gap:24px}
 @media(max-width:900px){.main{grid-template-columns:1fr}}
-.section-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.section-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);margin-bottom:12px}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
 @media(max-width:600px){.stats{grid-template-columns:repeat(2,1fr)}}
 .stat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px}
-.stat-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+.stat-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;margin-bottom:4px}
 .stat-val{font-size:22px;font-weight:700}
-.stat-val.g{color:var(--green)}.stat-val.r{color:var(--red)}.stat-val.p{color:var(--purple)}
+.stat-val.g{color:var(--green)}.stat-val.r{color:var(--red)}
 .stat-sub{font-size:10px;color:var(--muted);margin-top:2px}
 .pos-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px}
 .pos-chip{padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;display:inline-block;margin-bottom:8px}
@@ -36,59 +34,61 @@ header{border-bottom:1px solid var(--border);padding:14px 24px;display:flex;alig
 .pos-s-lbl{font-size:10px;color:var(--muted);text-align:center}
 .pos-s-val{font-size:14px;font-weight:600;text-align:center}
 .redeem-row{display:flex;align-items:center;gap:10px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
-.redeem-info{font-size:12px;color:var(--muted);white-space:nowrap}
+.redeem-info{font-size:12px;color:var(--muted)}
 .redeem-amount{font-size:12px;font-weight:600;color:var(--green)}
 input[type=range]{flex:1;accent-color:var(--accent);cursor:pointer}
 .redeem-btn{background:#f85149;color:white;border:none;border-radius:6px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
-.redeem-btn:disabled{opacity:0.4;cursor:not-allowed}
-.filter-bar{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
-.filter-btn{background:var(--card);border:1px solid var(--border);border-radius:20px;color:var(--muted);padding:4px 12px;font-size:11px;cursor:pointer;transition:all 0.2s}
-.filter-btn.active{background:var(--accent);color:white;border-color:var(--accent)}
-.filter-btn:hover{color:var(--text)}
-.opp-card{background:var(--card);border:2px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px}
-.opp-card:hover{border-color:#30363d}
-.opp-card.pick{border-color:var(--orange);border-width:2px;background:linear-gradient(135deg,rgba(232,89,12,0.06),transparent)}
-.opp-q{font-size:14px;font-weight:600;line-height:1.5;margin-bottom:8px;padding-right:8px}
-.meta{display:flex;gap:8px;font-size:11px;color:var(--muted);margin-bottom:10px;flex-wrap:wrap;align-items:center}
+.redeem-btn:disabled{opacity:0.4}
+/* Market cards */
+.market-card{background:var(--card);border:2px solid var(--border);border-radius:14px;padding:16px;margin-bottom:14px}
+.market-card:hover{border-color:#30363d}
+.market-card.pick{border-color:var(--orange);border-width:2px;background:linear-gradient(135deg,rgba(232,89,12,0.06),transparent)}
+.market-title{font-size:15px;font-weight:700;line-height:1.5;margin-bottom:8px;padding-right:8px}
+.market-meta{display:flex;gap:8px;font-size:11px;color:var(--muted);margin-bottom:10px;flex-wrap:wrap;align-items:center}
 .tag{padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600}
 .tag.geo{background:rgba(232,89,12,0.15);color:var(--orange)}
-.tag.crypto{background:rgba(163,113,247,0.15);color:var(--purple)}
 .tag.macro{background:rgba(88,166,255,0.15);color:var(--accent)}
 .tag.short{background:rgba(63,185,80,0.15);color:var(--green)}
 .tag.resolved{background:rgba(248,81,73,0.15);color:#f85149}
-.img-screenshot{width:100%;border-radius:8px;border:1px solid var(--border);margin-bottom:10px;display:block;cursor:pointer}
-.price-box{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px;margin-bottom:10px}
-.price-row{display:flex;justify-content:space-between;align-items:center;padding:5px 8px;border-radius:6px;font-size:13px}
-.price-row:nth-child(odd){background:rgba(255,255,255,0.02)}
-.price-row:hover{background:rgba(255,255,255,0.05)}
-.price-row.sel-yes{background:rgba(63,185,80,0.12);border:1px solid rgba(63,185,80,0.3)}
-.price-row.sel-no{background:rgba(248,81,73,0.12);border:1px solid rgba(248,81,73,0.3)}
-.price-label{font-weight:600;font-size:12px}
-.price-label.yes{color:var(--green)}.price-label.no{color:#f85149}
-.price-value.yes{color:var(--green);font-weight:700;font-size:15px}
-.price-value.no{color:#f85149;font-weight:700;font-size:15px}
-.price-value.neutral{color:var(--muted);font-size:13px}
-.price-sub{font-size:10px;color:var(--muted);margin-left:6px}
-.price-note{font-size:10px;color:var(--muted);margin-top:4px;text-align:center}
-.rec-badge{background:var(--orange);color:white;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;display:inline-block;margin-bottom:6px}
-.reason-box{background:rgba(232,89,12,0.08);border:1px solid rgba(232,89,12,0.25);border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:12px;color:var(--text);line-height:1.6}
-.reason-box strong{color:var(--orange)}
-.alert-box{background:rgba(248,81,73,0.1);border:1px solid rgba(248,81,73,0.3);border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:12px;color:#f85149;line-height:1.5}
-.foot{display:flex;gap:8px;align-items:center;margin-top:4px}
-.amt-input{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);padding:7px 10px;font-size:13px}
+/* Outcome buttons - THE CORE */
+.outcome-btn{display:block;width:100%;background:var(--bg);border:2px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;cursor:pointer;text-align:left;transition:all 0.15s;text-decoration:none;color:var(--text)}
+.outcome-btn:hover{border-color:#4a5568;text-decoration:none}
+.outcome-btn.rec-yes{border-color:var(--green);background:rgba(63,185,80,0.1)}
+.outcome-btn.rec-no{border-color:#f85149;background:rgba(248,81,73,0.1)}
+.outcome-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.outcome-name{font-size:13px;font-weight:600}
+.outcome-prob{font-size:11px;color:var(--muted);background:rgba(255,255,255,0.05);padding:2px 6px;border-radius:10px}
+.outcome-prices{display:flex;gap:12px;align-items:center}
+.outcome-price{font-size:20px;font-weight:800;font-family:ui-monospace,monospace}
+.outcome-price.yes{color:var(--green)}.outcome-price.no{color:#f85149}
+.outcome-hint{font-size:10px;color:var(--muted)}
+.rec-arrow{font-size:11px;font-weight:700;padding:2px 6px;border-radius:6px;display:inline-block;margin-left:6px}
+.rec-arrow.yes{background:var(--green);color:white}.rec-arrow.no{background:#f85149;color:white}
+/* Recommendation box */
+.rec-box{background:linear-gradient(135deg,rgba(232,89,12,0.15),rgba(63,185,80,0.05));border:1px solid rgba(232,89,12,0.3);border-radius:10px;padding:12px;margin:12px 0}
+.rec-title{font-size:12px;font-weight:700;color:var(--orange);margin-bottom:6px}
+.rec-title::before{content:'🔥 '}
+.rec-text{font-size:12px;color:var(--text);line-height:1.6;margin-bottom:6px}
+.rec-action{display:flex;gap:8px;flex-wrap:wrap}
+.rec-action-item{background:rgba(63,185,80,0.15);border:1px solid rgba(63,185,80,0.3);border-radius:8px;padding:8px 12px;font-size:12px}
+.rec-action-item strong{color:var(--green)}
+/* Alert */
+.alert-box{background:rgba(248,81,73,0.1);border:1px solid rgba(248,81,73,0.3);border-radius:8px;padding:10px 12px;margin-bottom:10px;font-size:12px;color:#f85149;line-height:1.5}
+/* Image */
+.market-screenshot{width:100%;border-radius:8px;border:1px solid var(--border);margin:10px 0;display:block;cursor:pointer}
+/* Invest row */
+.invest-row{display:flex;gap:8px;align-items:center;margin-top:8px}
+.amt-input{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);padding:8px 10px;font-size:14px}
 .amt-input:focus{outline:none;border-color:var(--accent)}
-.inv-btn{background:var(--green);color:white;border:none;border-radius:6px;padding:7px 16px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
+.inv-btn{background:var(--green);color:white;border:none;border-radius:6px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
 .inv-btn:hover{background:#36a048}
-.inv-btn:disabled{opacity:0.4;cursor:not-allowed}
+/* Sidebar */
 .sidebar{}
 .super-alert{display:none;margin-bottom:14px}
-.super-alert.show{display:block;background:linear-gradient(135deg,rgba(232,89,12,0.2),rgba(163,113,247,0.1));border:2px solid var(--orange);border-radius:14px;padding:16px}
-.super-alert-title{font-size:11px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
-.super-alert-title::before{content:'🔥 '}
-.super-alert-q{font-size:15px;font-weight:700;line-height:1.4;margin-bottom:8px}
-.super-reason{background:rgba(232,89,12,0.1);border-radius:8px;padding:8px 12px;font-size:12px;color:var(--text);margin-bottom:12px;line-height:1.6}
-.super-reason strong{color:var(--orange)}
-.super-img{width:100%;border-radius:8px;border:1px solid rgba(232,89,12,0.3);margin-bottom:10px;display:block;cursor:pointer}
+.super-alert.show{display:block;background:linear-gradient(135deg,rgba(232,89,12,0.2),rgba(63,185,80,0.05));border:2px solid var(--orange);border-radius:14px;padding:16px}
+.super-title{font-size:12px;font-weight:700;color:var(--orange);margin-bottom:8px}
+.super-title::before{content:'🔥 '}
+.super-q{font-size:14px;font-weight:700;line-height:1.4;margin-bottom:8px}
 .info-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px}
 .info-title{font-size:12px;font-weight:600;margin-bottom:8px}
 .info-row{display:flex;justify-content:space-between;font-size:11px;padding:5px 0;border-bottom:1px solid var(--border);color:var(--muted)}
@@ -98,8 +98,7 @@ input[type=range]{flex:1;accent-color:var(--accent);cursor:pointer}
 .loading{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px;padding:30px 0;justify-content:center}
 .spinner{width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.6s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.empty{text-align:center;padding:40px 0;color:var(--muted);font-size:13px}
-.toast{position:fixed;bottom:20px;right:20px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 16px;font-size:13px;z-index:300;display:none;box-shadow:0 8px 30px rgba(0,0,0,0.3)}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 16px;font-size:13px;z-index:300;display:none}
 .toast.show{display:flex;gap:8px;align-items:center}.toast.ok{border-color:var(--green)}.toast.err{border-color:#f85149}
 .notif{position:fixed;top:70px;right:16px;background:var(--orange);color:white;padding:10px 16px;border-radius:10px;font-size:13px;font-weight:600;max-width:300px;z-index:200;display:none;animation:slide 0.3s ease}
 .notif.show{display:block}@keyframes slide{from{transform:translateX(120%);opacity:0}to{transform:translateX(0);opacity:1}}
@@ -110,11 +109,11 @@ input[type=range]{flex:1;accent-color:var(--accent);cursor:pointer}
 <div class="notif" id="notif"></div>
 <header>
   <div class="logo">PolyMonitor</div>
-  <div class="dot ok" id="dot"></div>
-  <span id="status" style="font-size:12px;color:var(--muted)">已連接</span>
+  <div class="dot ok"></div>
+  <span style="font-size:12px;color:var(--muted)">Ada 即時抓取</span>
   <div class="header-right">
     <span class="last-updated" id="lastUpd">—</span>
-    <button class="refresh-btn" onclick="refresh()">⟳ 刷新</button>
+    <button class="refresh-btn" onclick="location.reload()">⟳ 刷新</button>
   </div>
 </header>
 <div class="main">
@@ -122,45 +121,35 @@ input[type=range]{flex:1;accent-color:var(--accent);cursor:pointer}
     <div style="margin-bottom:28px">
       <div class="section-title">💼 我的倉位</div>
       <div class="stats">
-        <div class="stat"><div class="stat-lbl">總價值</div><div class="stat-val" id="s-val">$68.68</div><div class="stat-sub" id="s-chg">+72.56%</div></div>
-        <div class="stat"><div class="stat-lbl">未實現盈虧</div><div class="stat-val g" id="s-pnl">+$28.88</div><div class="stat-sub">帳戶總額</div></div>
-        <div class="stat"><div class="stat-lbl">可用現金</div><div class="stat-val" id="s-cash">$0</div><div class="stat-sub">需充值</div></div>
-        <div class="stat"><div class="stat-lbl">勝率</div><div class="stat-val p" id="s-wr">—</div><div class="stat-sub">待結算</div></div>
+        <div class="stat"><div class="stat-lbl">總價值</div><div class="stat-val">$68.68</div><div class="stat-sub">+72.56%</div></div>
+        <div class="stat"><div class="stat-lbl">未實現</div><div class="stat-val g">+$28.88</div><div class="stat-sub">帳戶總額</div></div>
+        <div class="stat"><div class="stat-lbl">可用現金</div><div class="stat-val">$0</div><div class="stat-sub">需充值</div></div>
+        <div class="stat"><div class="stat-lbl">勝率</div><div class="stat-val">—</div><div class="stat-sub">待結算</div></div>
       </div>
       <div id="pos-list"></div>
     </div>
     <div>
-      <div class="section-title">🎯 市場快照</div>
-      <div id="opp-list"><div class="loading"><div class="spinner"></div>載入中...</div></div>
+      <div class="section-title">🎯 市場快照（Ada 即時 CDP 抓取）</div>
+      <div id="markets"></div>
     </div>
   </div>
   <div class="sidebar">
     <div class="super-alert" id="superAlert">
-      <div class="super-alert-title">🔥 今日精選</div>
-      <div class="super-alert-q" id="superQ"></div>
-      <div class="super-reason" id="superReason"></div>
-      <img class="super-img" id="superImg" src="hezbollah.png" alt="market">
-      <div style="display:flex;gap:8px">
-        <button class="inv-btn" id="btnY" style="flex:1;background:var(--green)" onclick="qInvest('yes')">✅ 投 YES</button>
-        <button class="inv-btn" id="btnN" style="flex:1;background:#f85149" onclick="qInvest('no')">❌ 投 NO</button>
-      </div>
+      <div class="super-title">🔥 今日精選</div>
+      <div class="super-q" id="superQ"></div>
+      <div id="superRec"></div>
     </div>
     <div class="info-card">
-      <div class="info-title">📊 即時價格（Ada CDP抓取）</div>
-      <div class="info-row"><span>🇺🇸 Fed 四月</span><span>No change: 99.1¢</span></div>
-      <div class="info-row"><span>🟠 Hezbollah 停火</span><span>Apr21: 92¢ Apr30: 99¢</span></div>
-      <div class="info-row"><span>⚽ 世界盃</span><span>Brazil 91.2¢ 最高</span></div>
-      <div class="info-row"><span>🇮🇷 Iran軍事</span><span style="color:#f85149">已結算</span></div>
-    </div>
-    <div class="info-card">
-      <div class="info-title">⚠️ 提醒</div>
-      <div class="info-row"><span>Fed市場</span><span>有多個子結果</span></div>
-      <div class="info-row"><span>主要結果</span><span>No change 99.1¢</span></div>
+      <div class="info-title">📊 即時按鈕價格</div>
+      <div class="info-row"><span>🟠 Hezbollah Apr18</span><span style="color:var(--green)">YES 92¢ / NO 9¢</span></div>
+      <div class="info-row"><span>🏦 Fed No change</span><span style="color:var(--green)">YES 99.1¢</span></div>
+      <div class="info-row"><span>⚽ 世界盃 Brazil</span><span>YES 17.2¢</span></div>
     </div>
     <div class="info-card">
       <div class="info-title">⚠️ 風險提示</div>
       <div class="info-row"><span>本金</span><span>可能歸零</span></div>
-      <div class="info-row"><span>建議</span><span>每筆≤20%總額</span></div>
+      <div class="info-row"><span>每筆</span><span>≤20%總額</span></div>
+      <div class="info-row"><span>按鈕價格</span><span>USDC 計價</span></div>
     </div>
     <div class="info-card">
       <div class="info-title">🔗 連結</div>
@@ -170,80 +159,150 @@ input[type=range]{flex:1;accent-color:var(--accent);cursor:pointer}
   </div>
 </div>
 <script>
-// 市場數據（Ada CDP 即時抓取）
-const MARKET_DATA = [
+// 市場數據（Ada CDP 即時抓取，所有價格都是按鈕上的 USDC 價格）
+const MARKETS = [
+  {
+    slug: 'israel-x-hezbollah-ceasefire-by',
+    title: '🟠 Israel x Hezbollah 停火協議？',
+    endDate: '2026-06-30',
+    volume24h: '$12.08M',
+    category: 'geo',
+    resolved: false,
+    screenshot: 'hezbollah.png',
+    rec: {
+      yes: true,
+      reason: '停火談判正在進行，4/14 美以黎談判已開始。April 18 結果 YES=92¢，市場高度確定會有停火協議。April 18 截止日期最近，風險/回報最佳。'
+    },
+    outcomes: [
+      {
+        date: 'April 18（主要）',
+        outcome: 'April 18 停火 → YES',
+        yesPrice: 0.92,
+        noPrice: 0.09,
+        prob: '92%',
+        yesRec: true,
+        polyUrl: 'https://polymarket.com/event/israel-x-hezbollah-ceasefire-by'
+      },
+      {
+        date: 'April 21',
+        outcome: 'April 21 停火 → YES',
+        yesPrice: 0.96,
+        noPrice: 0.09,
+        prob: '94%',
+        yesRec: false,
+        polyUrl: 'https://polymarket.com/event/israel-x-hezbollah-ceasefire-by'
+      },
+      {
+        date: 'April 30',
+        outcome: 'April 30 停火 → YES',
+        yesPrice: 0.982,
+        noPrice: 0.021,
+        prob: '98%',
+        yesRec: false,
+        polyUrl: 'https://polymarket.com/event/israel-x-hezbollah-ceasefire-by'
+      },
+      {
+        date: 'June 30',
+        outcome: 'June 30 停火 → YES',
+        yesPrice: 0.991,
+        noPrice: 0.010,
+        prob: '99%',
+        yesRec: false,
+        polyUrl: 'https://polymarket.com/event/israel-x-hezbollah-ceasefire-by'
+      }
+    ]
+  },
   {
     slug: 'fed-decision-in-april',
     title: '🏦 Fed 四月利率決策？（2026/04/29）',
-    outcomes: [
-      { label: 'No change（不變）', yesPrice: 0.991, noPrice: 0.010, prob: '99.1%', selected: false },
-      { label: '25 bps decrease（降25點）', yesPrice: 0.005, noPrice: 0.996, prob: '<1%', selected: false },
-      { label: '25+ bps increase（升25+點）', yesPrice: 0.004, noPrice: 0.997, prob: '<1%', selected: false },
-      { label: '50+ bps decrease（大降50+點）', yesPrice: 0.003, noPrice: 0.998, prob: '<1%', selected: false },
-    ],
-    endDate: '2026-04-29T00:00:00Z',
-    volume24h: 97272979,
+    endDate: '2026-04-29',
+    volume24h: '$97.27M',
     category: 'macro',
-    tags: ['macro', 'short'],
+    resolved: false,
     screenshot: 'fed-april.png',
-    recSide: null,
-    recReason: 'Fed No change 99.1%——方向太明確，沒有投機價值，觀望。'
-  },
-  {
-    slug: 'israel-x-hezbollah-ceasefire-by',
-    title: '🟠 Lebanon/以色列停火談判（2026）',
+    rec: {
+      yes: null,
+      reason: 'Fed No change 99.1¢——市場幾乎確定不變，方向太明確沒有投機價值。觀望。'
+    },
     outcomes: [
-      { label: 'April 21 停火 → YES', yesPrice: 0.92, noPrice: 0.08, prob: '92%', selected: false },
-      { label: 'April 30 停火 → YES', yesPrice: 0.99, noPrice: 0.01, prob: '99%', selected: false },
-      { label: 'June 30 停火 → YES', yesPrice: 0.872, noPrice: 0.128, prob: '87.2%', selected: false },
-    ],
-    endDate: '2026-06-30T00:00:00Z',
-    volume24h: 5735397,
-    category: 'geo',
-    tags: ['geo', 'short'],
-    screenshot: 'hezbollah.png',
-    recSide: 'yes',
-    recReason: '停火談判所有日期的 YES 價格都在87¢以上，市場高度確定停火會發生。April 30 達到99¢。可在 April 21 結果上操作。'
+      {
+        date: '主要結果',
+        outcome: 'No change（利率不變）→ YES',
+        yesPrice: 0.991,
+        noPrice: 0.010,
+        prob: '99.1%',
+        yesRec: false,
+        polyUrl: 'https://polymarket.com/event/fed-decision-in-april'
+      },
+      {
+        date: '其他結果',
+        outcome: '25 bps decrease → YES',
+        yesPrice: 0.005,
+        noPrice: 0.996,
+        prob: '<1%',
+        yesRec: false,
+        polyUrl: 'https://polymarket.com/event/fed-decision-in-april'
+      },
+      {
+        date: '其他結果',
+        outcome: '25+ bps increase → YES',
+        yesPrice: 0.004,
+        noPrice: 0.997,
+        prob: '<1%',
+        yesRec: false,
+        polyUrl: 'https://polymarket.com/event/fed-decision-in-april'
+      },
+      {
+        date: '其他結果',
+        outcome: '50+ bps decrease → YES',
+        yesPrice: 0.003,
+        noPrice: 0.998,
+        prob: '<1%',
+        yesRec: false,
+        polyUrl: 'https://polymarket.com/event/fed-decision-in-april'
+      }
+    ]
   },
   {
     slug: '2026-fifa-world-cup-winner-595',
-    title: '⚽ 2026 世界盃冠軍誰拿？',
-    outcomes: [
-      { label: 'France（法國）→ YES', yesPrice: 0.172, noPrice: 0.829, prob: '17.2%', selected: false },
-      { label: 'England（英格蘭）→ YES', yesPrice: 0.164, noPrice: 0.837, prob: '16.4%', selected: false },
-      { label: 'Argentina（阿根廷）→ YES', yesPrice: 0.111, noPrice: 0.890, prob: '11.1%', selected: false },
-      { label: 'Brazil（巴西）→ YES', yesPrice: 0.089, noPrice: 0.912, prob: '8.9%', selected: false },
-      { label: 'Spain（西班牙）→ YES', yesPrice: 0.050, noPrice: 0.950, prob: '5%', selected: false },
-    ],
-    endDate: '2026-07-20T00:00:00Z',
-    volume24h: 10630010,
+    title: '⚽ 2026 世界盃冠軍',
+    endDate: '2026-07-20',
+    volume24h: '$10.63M',
     category: 'other',
-    tags: ['other'],
+    resolved: false,
     screenshot: 'worldcup.png',
-    recSide: null,
-    recReason: '世界盃冠軍極難預測，多個國家有機會。Brazil 市場定價最高（8.9¢），但風險高。觀望。'
+    rec: {
+      yes: null,
+      reason: '世界盃冠軍極難預測，多個國家有機會。Brazil 市場定價 17.2¢，但實際變數多。觀望。'
+    },
+    outcomes: [
+      { date: 'Brazil', outcome: 'Brazil（巴西）→ YES', yesPrice: 0.172, noPrice: 0.829, prob: '17.2%', yesRec: false, polyUrl: 'https://polymarket.com/event/2026-fifa-world-cup-winner-595' },
+      { date: 'France', outcome: 'France（法國）→ YES', yesPrice: 0.164, noPrice: 0.837, prob: '16.4%', yesRec: false, polyUrl: 'https://polymarket.com/event/2026-fifa-world-cup-winner-595' },
+      { date: 'Argentina', outcome: 'Argentina（阿根廷）→ YES', yesPrice: 0.111, noPrice: 0.890, prob: '11.1%', yesRec: false, polyUrl: 'https://polymarket.com/event/2026-fifa-world-cup-winner-595' },
+      { date: 'Spain', outcome: 'Spain（西班牙）→ YES', yesPrice: 0.089, noPrice: 0.912, prob: '8.9%', yesRec: false, polyUrl: 'https://polymarket.com/event/2026-fifa-world-cup-winner-595' },
+      { date: 'England', outcome: 'England（英格蘭）→ YES', yesPrice: 0.050, noPrice: 0.950, prob: '5%', yesRec: false, polyUrl: 'https://polymarket.com/event/2026-fifa-world-cup-winner-595' },
+    ]
   },
   {
     slug: 'military-action-against-iran-ends-by-522',
     title: '🇮🇷 美伊軍事行動四月前結束？（已結算）',
-    outcomes: [
-      { label: '結果：YES（已提議）', yesPrice: 0.0, noPrice: 0.001, prob: '已結算', selected: false },
-    ],
-    endDate: '2026-04-30T00:00:00Z',
-    volume24h: 30744957,
+    endDate: '2026-04-30',
+    volume24h: '$30.74M',
     category: 'geo',
-    tags: ['geo', 'resolved'],
+    resolved: true,
     screenshot: 'iran-action.png',
-    recSide: null,
-    recReason: null,
-    resolvedNote: '⚠️ 此市場已結算提議 YES（爭議中），但與你的 Hormuz 倉位是不同市場。'
+    rec: { yes: null, reason: null },
+    outcomes: [
+      { date: '結果', outcome: '結算提議：YES（爭議中）', yesPrice: 0.0, noPrice: 0.001, prob: '—', yesRec: false, polyUrl: 'https://polymarket.com/event/military-action-against-iran-ends-by-522' }
+    ]
   }
 ];
 
-let sel = {}, amt = {}, redeemAmt = {};
+let investAmounts = {};
+
 const $ = id => document.getElementById(id);
-const fmt = (n, d = 0) => isNaN(n) ? '—' : '$' + parseFloat(n).toFixed(d);
-const pct = p => p !== undefined && p !== null ? (parseFloat(p) * 100).toFixed(1) + '¢' : '—';
+const fmt = n => isNaN(n) ? '—' : '$' + parseFloat(n).toFixed(2);
+const pct = p => p !== undefined && p !== null ? (parseFloat(p) * 100).toFixed(2) + '¢' : '—';
 const left = ts => {
   if (!ts) return '—';
   const d = new Date(ts) - Date.now();
@@ -251,156 +310,119 @@ const left = ts => {
   const D = Math.floor(d / 864e5), h = Math.floor(d % 864e5 / 36e5);
   return D ? `${D}天${h}小時` : `${h}小時`;
 };
-const volFmt = v => { v = parseFloat(v || 0); return v > 1e6 ? (v / 1e6).toFixed(1) + 'M' : v > 1e3 ? (v / 1e3).toFixed(0) + 'K' : v.toFixed(0); };
 
-function getCat(m) { return m.category || 'other'; }
-
-function renderOpps() {
-  const container = $('opp-list');
-  container.innerHTML = MARKET_DATA.map((m, idx) => {
-    const tags = m.tags.map(t => {
-      if (t === 'geo') return '<span class="tag geo">🌍 地緣</span>';
-      if (t === 'crypto') return '<span class="tag crypto">🌙 加密</span>';
-      if (t === 'macro') return '<span class="tag macro">📊 宏觀</span>';
-      if (t === 'short') return '<span class="tag short">⏱ 短期</span>';
-      if (t === 'resolved') return '<span class="tag resolved">⚠️ 已結算</span>';
-      return '';
-    }).join('');
-
-    const isRec = m.recSide !== null;
-    const marketSel = sel[m.slug] || (m.outcomes[0] ? m.outcomes[0].label : '');
-    const a = amt[m.slug] || '10';
-
-    return `<div class="opp-card ${isRec ? 'pick' : ''}">
-      ${isRec ? '<div class="rec-badge">🔥 Ada 推薦</div>' : ''}
-      <div class="opp-q">${m.title}</div>
-      <div class="meta">
-        ${tags}
-        <span style="color:var(--muted);font-size:10px">💰 ${volFmt(m.volume24h)} · ⏱ ${left(m.endDate)}</span>
-      </div>
-      ${m.resolvedNote ? `<div class="alert-box">${m.resolvedNote}</div>` : ''}
-      ${m.screenshot ? `<img class="img-screenshot" src="${m.screenshot}" alt="${m.title}" onclick="window.open('https://polymarket.com/event/${m.slug}','_blank')" title="點擊查看Polymarket">` : ''}
-      ${m.recReason && isRec ? `<div class="reason-box">💡 <strong>Ada 分析：</strong>${m.recReason}</div>` : ''}
-      <div class="price-box">
-        ${m.outcomes.map(o => {
-          const isSelected = o.label === marketSel;
-          const isYesRec = isRec && m.recSide === 'yes' && o.label.includes('YES');
-          const isNoRec = isRec && m.recSide === 'no' && o.label.includes('NO');
-          const rowClass = isYesRec ? 'sel-yes' : (isNoRec ? 'sel-no' : '');
-          const isYes = o.label.includes('YES') || o.yesPrice > 0.5;
-          return `<div class="price-row ${rowClass}" onclick="sel['${m.slug}']='${o.label}'">
-            <span class="price-label ${isYes?'yes':'no'}">${o.label} ${isYesRec||isNoRec?'✅':''}</span>
-            <span>
-              <span class="price-value ${isYes?'yes':'no'}">${o.yesPrice !== undefined ? pct(o.yesPrice) : '—'}</span>
-              <span class="price-sub">${o.prob}</span>
-            </span>
-          </div>`;
-        }).join('')}
-        <div class="price-note">💡 點擊任一結果選擇投資方向</div>
-      </div>
-      ${!m.tags.includes('resolved') ? `<div class="foot">
-        <input class="amt-input" type="number" min="1" max="500" value="${a}" placeholder="投入 USDC" onchange="amt['${m.slug}']=this.value">
-        <button class="inv-btn" onclick="doInvest('${m.slug}')">📩 通知 Ada</button>
-      </div>` : ''}
-    </div>`;
-  }).join('');
-
-  // Set super alert
-  const recMkt = MARKET_DATA.find(m => m.recSide !== null);
-  if (recMkt) {
-    $('superQ').textContent = recMkt.title;
-    $('superReason').innerHTML = `💡 <strong>Ada 分析：</strong>${recMkt.recReason || ''}`;
-    if (recMkt.screenshot) $('superImg').src = recMkt.screenshot;
-    $('superAlert').className = 'super-alert show';
-    notif('🔥 ' + recMkt.title);
-  }
-}
-
-function renderPos() {
-  const pos = [{
-    id: 'hormuz-1',
-    question: 'Strait of Hormuz traffic returns to normal by end of May?',
-    outcome: 'Yes',
-    shares: '115.4',
-    avgPrice: '0.345',
-    price: '0.595',
-    yesPrice: '0.595'
-  }];
-  const container = $('pos-list');
-  if (!pos.length) { container.innerHTML = '<div class="empty" style="padding:16px">尚無倉位</div>'; return; }
-  container.innerHTML = pos.map(p => {
-    const shares = parseFloat(p.shares), avgPx = parseFloat(p.avgPrice);
-    const nowPx = parseFloat(p.price);
-    const cost = shares * avgPx, value = shares * nowPx, pnl = value - cost;
-    const maxRedeem = Math.floor(shares * 0.5);
-    const ra = redeemAmt[p.id] !== undefined ? redeemAmt[p.id] : Math.floor(shares * 0.3);
+function render() {
+  // Portfolio
+  const pos = [{ id: 'hormuz-1', question: 'Strait of Hormuz traffic returns to normal by end of May?', outcome: 'Yes', shares: 115.4, avgPx: 0.345, nowPx: 0.595 }];
+  const totalValue = pos.reduce((s, p) => s + p.shares * p.nowPx, 0);
+  const totalCost = pos.reduce((s, p) => s + p.shares * p.avgPx, 0);
+  const pnl = totalValue - totalCost;
+  $('pos-list').innerHTML = pos.map(p => {
+    const pnl = p.shares * (p.nowPx - p.avgPx);
     return `<div class="pos-card">
       <div class="pos-chip yes">${p.outcome}</div>
       <div class="pos-q">${p.question}</div>
       <div class="pos-stats">
-        <div><div class="pos-s-val">${(avgPx*100).toFixed(1)}¢</div><div class="pos-s-lbl">均價</div></div>
-        <div><div class="pos-s-val">${(nowPx*100).toFixed(1)}¢</div><div class="pos-s-lbl">現價</div></div>
-        <div><div class="pos-s-val">${shares.toFixed(1)}</div><div class="pos-s-lbl">股數</div></div>
-        <div style="color:${pnl>=0?'var(--green)':'#f85149'}">
-          <div class="pos-s-val">${pnl>=0?'+':''}$${pnl.toFixed(2)}</div>
-          <div class="pos-s-lbl">未實現</div>
-        </div>
-      </div>
-      <div class="redeem-row">
-        <div class="redeem-info">贖回 <span class="redeem-amount" id="ra-${p.id}">${ra}股≈$${(ra*nowPx).toFixed(2)}</span></div>
-        <input type="range" min="0" max="${maxRedeem}" value="${ra}" oninput="redeemAmt['${p.id}']=parseInt(this.value);document.getElementById('ra-${p.id}').textContent=this.value+'股≈$'+Math.round(this.value*${nowPx}*100)/100">
-        <button class="redeem-btn" onclick="doRedeem('${p.id}',${ra})" ${ra<1?'disabled':''}>贖回</button>
+        <div><div class="pos-s-val">${(p.avgPx*100).toFixed(1)}¢</div><div class="pos-s-lbl">均價</div></div>
+        <div><div class="pos-s-val">${(p.nowPx*100).toFixed(1)}¢</div><div class="pos-s-lbl">現價</div></div>
+        <div><div class="pos-s-val">${p.shares.toFixed(1)}</div><div class="pos-s-lbl">股數</div></div>
+        <div style="color:${pnl>=0?'var(--green)':'#f85149'}"><div class="pos-s-val">${pnl>=0?'+':''}${fmt(pnl)}</div><div class="pos-s-lbl">未實現</div></div>
       </div>
     </div>`;
   }).join('');
+
+  // Markets
+  $('markets').innerHTML = MARKETS.map(m => {
+    const tag = m.category === 'geo' ? '🌍 地緣' : m.category === 'macro' ? '📊 宏觀' : '⚽ 其他';
+    const isPick = m.rec.yes !== null;
+    const recBtn = m.outcomes.find(o => o.yesRec) || m.outcomes[0];
+    
+    return `<div class="market-card ${isPick?'pick':''}">
+      <div class="market-title">${m.title}</div>
+      <div class="market-meta">
+        <span class="tag ${m.category==='geo'?'geo':m.category==='macro'?'macro':''}">${tag}</span>
+        <span>💰 ${m.volume24h}</span>
+        <span>⏱ ${left(m.endDate)}</span>
+        ${m.resolved?'<span class="tag resolved">⚠️ 已結算</span>':''}
+      </div>
+      
+      ${m.resolved ? `<div class="alert-box"><strong>⚠️ 注意：</strong>此市場已結算提議 YES，與你的霍爾木茲海峽倉位是不同市場。</div>` : ''}
+      
+      ${m.screenshot ? `<img class="market-screenshot" src="${m.screenshot}" alt="${m.title}" onclick="window.open('${recBtn.polyUrl}','_blank')" title="點擊查看 Polymarket">` : ''}
+      
+      ${isPick && m.rec.reason ? `<div class="rec-box">
+        <div class="rec-title">Ada 推薦</div>
+        <div class="rec-text">${m.rec.reason}</div>
+        <div class="rec-action">
+          <div class="rec-action-item">
+            <strong>✅ 點這個按鈕：</strong><br>
+            ${recBtn.outcome}<br>
+            <strong style="color:var(--green);font-size:16px">YES 按鈕：${pct(recBtn.yesPrice)}</strong>
+          </div>
+        </div>
+      </div>` : ''}
+      
+      ${m.outcomes.map(o => {
+        const isYesRec = o.yesRec;
+        const btnClass = isYesRec ? 'rec-yes' : '';
+        return `<a class="outcome-btn ${btnClass}" href="${o.polyUrl}" target="_blank">
+          <div class="outcome-header">
+            <span class="outcome-name">${o.outcome}</span>
+            <span class="outcome-prob">${o.prob}</span>
+          </div>
+          <div class="outcome-prices">
+            <span class="outcome-price yes">YES ${pct(o.yesPrice)}</span>
+            <span style="color:var(--muted);font-size:12px">NO ${pct(o.noPrice)}</span>
+            ${isYesRec ? '<span class="rec-arrow yes">🔥 Ada推薦</span>' : ''}
+          </div>
+        </a>`;
+      }).join('')}
+      
+      ${!m.resolved ? `<div class="invest-row">
+        <input class="amt-input" type="number" min="1" max="500" value="${investAmounts[m.slug]||'20'}" placeholder="投入 USDC" onchange="investAmounts['${m.slug}']=this.value">
+        <button class="inv-btn" onclick="invest('${m.slug}')">📩 通知 Ada</button>
+      </div>` : ''}
+    </div>`;
+  }).join('');
+
+  // Super alert
+  const pickMkt = MARKETS.find(m => m.rec.yes !== null);
+  if (pickMkt) {
+    const recBtn = pickMkt.outcomes.find(o => o.yesRec) || pickMkt.outcomes[0];
+    $('superQ').textContent = pickMkt.title;
+    $('superRec').innerHTML = `
+      <div class="rec-text" style="margin-bottom:8px">${pickMkt.rec.reason}</div>
+      <div style="background:rgba(63,185,80,0.15);border:1px solid rgba(63,185,80,0.3);border-radius:8px;padding:10px;font-size:13px;margin-bottom:10px">
+        <strong style="color:var(--green)">✅ Ada 推薦按鈕：</strong><br>
+        ${recBtn.outcome}<br>
+        <span style="font-size:20px;font-weight:800;color:var(--green)">YES 按鈕：${pct(recBtn.yesPrice)}</span>
+      </div>
+      <a href="${recBtn.polyUrl}" target="_blank" class="inv-btn" style="display:block;text-align:center;text-decoration:none">🔗 前往 Polymarket 下注</a>`;
+    $('superAlert').className = 'super-alert show';
+    notif('🔥 ' + pickMkt.title);
+  }
+
+  $('lastUpd').textContent = new Date().toLocaleTimeString('zh-TW', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
 }
 
-function qInvest(side) {
-  const m = MARKET_DATA.find(x => x.recSide !== null);
+function invest(slug) {
+  const m = MARKETS.find(x => x.slug === slug);
   if (!m) return;
-  const outcome = side === 'yes' ? (m.outcomes.find(o => o.label.includes('YES') && o.yesPrice > 0.5) || m.outcomes[0]) : m.outcomes.find(o => o.label.includes('NO') || o.yesPrice < 0.5) || m.outcomes[0];
-  sel[m.slug] = outcome.label;
-  amt[m.slug] = '20';
-  doInvest(m.slug);
-}
-
-function doInvest(slug) {
-  const m = MARKET_DATA.find(x => x.slug === slug);
-  if (!m) { toast('找不到市場', 'err'); return; }
-  const outcomeLabel = sel[slug] || m.outcomes[0].label;
-  const outcome = m.outcomes.find(o => o.label === outcomeLabel) || m.outcomes[0];
-  const a = parseFloat(amt[slug] || '10');
-  if (!a || a < 1) { toast('請輸入有效金額', 'err'); return; }
-  const isRec = m.recSide !== null && (
-    (m.recSide === 'yes' && (outcome.label.includes('YES') && outcome.yesPrice > 0.5)) ||
-    (m.recSide === 'no' && (outcome.label.includes('NO') || outcome.yesPrice < 0.5))
-  );
-  toast(`📩 已通知 Ada：${outcome.label} $${a} USDC${isRec?'（推薦）':''}`);
-  console.log('[PolyMonitor INVEST]', { question: m.title, outcome: outcome.label, yesPrice: outcome.yesPrice, amount: a, slug: 'https://polymarket.com/event/' + slug });
+  const amount = parseFloat(investAmounts[slug] || '20');
+  if (!amount || amount < 1) { toast('請輸入有效金額', 'err'); return; }
+  const recBtn = m.outcomes.find(o => o.yesRec) || m.outcomes[0];
+  const isRec = m.rec.yes !== null;
+  toast(`📩 已通知 Ada：${recBtn.outcome} $${amount} USDC${isRec?'（Ada推薦）':''}`, 'ok');
+  console.log('[PolyMonitor INVEST]', { market: m.title, outcome: recBtn.outcome, yesPrice: pct(recBtn.yesPrice), amount, url: recBtn.polyUrl });
   const req = JSON.parse(localStorage.getItem('polyReqs') || '[]');
-  req.push({ type: 'invest', question: m.title, outcome: outcome.label, yesPrice: outcome.yesPrice, amount: a, slug: 'https://polymarket.com/event/' + slug, ts: Date.now() });
-  localStorage.setItem('polyReqs', JSON.stringify(req));
-}
-
-function doRedeem(id, shares) {
-  if (!shares || shares < 1) return;
-  toast(`✅ 贖回請求：${shares} 股`);
-  const req = JSON.parse(localStorage.getItem('polyReqs') || '[]');
-  req.push({ type: 'redeem', id, shares, question: 'Strait of Hormuz traffic returns to normal by end of May?', ts: Date.now() });
+  req.push({ type: 'invest', market: m.title, outcome: recBtn.outcome, yesPrice: recBtn.yesPrice, amount, url: recBtn.polyUrl, ts: Date.now() });
   localStorage.setItem('polyReqs', JSON.stringify(req));
 }
 
 function toast(msg, type = 'ok') { $('toast').className = `toast show ${type}`; $('toast').textContent = msg; setTimeout(() => $('toast').className = 'toast', 4000); }
 function notif(msg) { $('notif').textContent = msg; $('notif').className = 'notif show'; setTimeout(() => $('notif').className = 'notif', 6000); }
 
-function refresh() {
-  const n = new Date();
-  $('lastUpd').textContent = `${n.getHours()}:${String(n.getMinutes()).padStart(2,'0')}:${String(n.getSeconds()).padStart(2,'0')}`;
-  renderOpps();
-  renderPos();
-}
-
-refresh();
+render();
 </script>
 </body>
 </html>
