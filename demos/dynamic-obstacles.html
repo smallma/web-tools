@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dynamic Obstacles — Pretext Text Flow</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    min-height: 100vh;
+    background: #faf8f5;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  header {
+    padding: 28px 24px 16px;
+    text-align: center;
+    max-width: 700px;
+  }
+  header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a1714;
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+  }
+  header p {
+    font-size: 13px;
+    color: #8a7f70;
+    line-height: 1.6;
+  }
+  header a { color: #E8590C; text-decoration: none; }
+  header a:hover { text-decoration: underline; }
+
+  #demo-container {
+    position: relative;
+    width: 800px;
+    max-width: 100vw;
+    padding: 0 16px 40px;
+  }
+
+  canvas {
+    display: block;
+    background: #fefefe;
+    border: 1px solid #e8e4dc;
+    border-radius: 12px;
+    cursor: default;
+    width: 100%;
+    height: auto;
+  }
+
+  .hint {
+    text-align: center;
+    font-size: 12px;
+    color: #b0a898;
+    margin-top: 8px;
+    line-height: 1.6;
+  }
+
+  .controls {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+  .controls button {
+    padding: 8px 18px;
+    border: 1px solid #d4cfc5;
+    background: #fff;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #3a3530;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .controls button:hover { background: #f4f0e8; }
+  .controls button.active {
+    background: #E8590C;
+    color: white;
+    border-color: #E8590C;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>動態障礙物文字排版</h1>
+  <p>
+    使用 <a href="https://github.com/chenglou/pretext" target="_blank">@chenglou/pretext</a>
+    的 <code>layoutNextLineRange</code>，文字即時繞著移動的障礙物流動。<br>
+    拖曳色塊可改變障礙物位置，文字會即時重新排版。
+  </p>
+</header>
+
+<div id="demo-container">
+  <canvas id="canvas" width="768" height="520"></canvas>
+  <p class="hint">👆 拖曳方塊改變位置 | 點「加入障礙物」新增 | 點「移動動畫」讓障礙物自己動</p>
+  <div class="controls">
+    <button id="btnAdd">+ 加入障礙物</button>
+    <button id="btnAnim">▶ 移動動畫</button>
+    <button id="btnReset">↺ 重置</button>
+  </div>
+</div>
+
+<script type="module">
+import { prepareWithSegments, layoutNextLineRange, materializeLineRange } from 'https://cdn.jsdelivr.net/npm/@chenglou/pretext@latest/+esm';
+
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const W = canvas.width;
+const H = canvas.height;
+
+const LINE_HEIGHT = 26;
+const FONT = '17px "Helvetica Neue", Helvetica, Arial, sans-serif';
+const COL = { bg: '#fefefe', ink: '#1a1714', obstacle: '#E8590C', obstacleAlpha: 'rgba(232,89,12,0.12)', obstacleStroke: '#E8590C', shadow: 'rgba(0,0,0,0.08)' };
+
+const LONG_TEXT = `人工智能的發展正在加速。從大型語言模型到代理人系統，從影像生成到代碼自動完成，AI 已經深入我們的生活與工作。2026 年，Agentic AI 成為最受關注的趨勢——AI 不再只是回答問題，而是能夠自主規劃、執行多步驟任務、並在執行中持續學習與調整。 Sebastian 是一間小型新創公司的工程師，他每天使用 AI 輔助工具来处理繁琐的文档整理工作。他的团队正在开发一个革命性的产品，这个产品将改变人们与计算机交互的方式。在接下来的几个月里，他们将经历无数次的失败与成功，最终创造出一个令人惊叹的作品。`;
+
+const prepared = prepareWithSegments(LONG_TEXT, FONT);
+
+// Obstacles: [{x, y, w, h, dragging, corner}]
+let obstacles = [
+  { x: 180, y: 80,  w: 130, h: 160 },
+  { x: 520, y: 280, w: 110, h: 130 },
+];
+let dragging = null;
+let dragCorner = null;
+let animating = false;
+let t = 0;
+let frameId = null;
+
+function drawOpaqueRect(x, y, w, h) {
+  // Shadow
+  ctx.shadowColor = COL.shadow;
+  ctx.shadowBlur = 12;
+  ctx.shadowOffsetY = 3;
+  ctx.fillStyle = COL.obstacleAlpha;
+  ctx.fillRect(x, y, w, h);
+  ctx.shadowColor = 'transparent';
+  ctx.shadowBlur = 0;
+  ctx.shadowOffsetY = 0;
+  // Border
+  ctx.strokeStyle = COL.obstacleStroke;
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([4, 3]);
+  ctx.strokeRect(x, y, w, h);
+  ctx.setLineDash([]);
+  // Label
+  ctx.fillStyle = COL.obstacleStroke;
+  ctx.font = '11px "Helvetica Neue", sans-serif';
+  ctx.fillText(`障礙物`, x + 8, y + 16);
+  ctx.fillStyle = 'rgba(232,89,12,0.4)';
+  ctx.font = '10px "Helvetica Neue", sans-serif';
+  ctx.fillText(`${Math.round(w)}×${Math.round(h)}`, x + 8, y + 30);
+}
+
+function getAvailableWidth(y, lineH) {
+  let used = 0;
+  for (const ob of obstacles) {
+    const obBottom = ob.y + ob.h;
+    const obTop = ob.y;
+    const lineBottom = y + lineH;
+    const lineTop = y;
+    // Does this line intersect the obstacle vertically?
+    if (lineBottom > obTop && lineTop < obBottom) {
+      // left overlap
+      if (ob.x < W / 2) used = Math.max(used, ob.x + ob.w);
+      // right overlap
+    }
+  }
+  return W - used;
+}
+
+function layout() {
+  let cursor = { segmentIndex: 0, graphemeIndex: 0 };
+  let y = 20;
+  let lineIndex = 0;
+
+  ctx.font = FONT;
+  ctx.textBaseline = 'top';
+
+  while (true) {
+    const avail = getAvailableWidth(y, LINE_HEIGHT);
+    if (avail <= 10) break;
+
+    const range = layoutNextLineRange(prepared, cursor, avail);
+    if (range === null) break;
+
+    const line = materializeLineRange(prepared, range);
+    if (!line.text) { cursor = range.end; y += LINE_HEIGHT; lineIndex++; continue; }
+
+    // Determine x offset (avoid obstacles on left side)
+    let x = 20;
+    for (const ob of obstacles) {
+      const lineBottom = y + LINE_HEIGHT;
+      const lineTop = y;
+      if (lineBottom > ob.y && lineTop < ob.y + ob.h) {
+        if (ob.x < W / 2 && ob.x + ob.w + 20 > x) {
+          x = ob.x + ob.w + 20;
+        }
+      }
+    }
+
+    // Soft gradient on alternate lines
+    if (lineIndex % 2 === 0) {
+      ctx.fillStyle = COL.ink;
+    } else {
+      ctx.fillStyle = '#3a3530';
+    }
+    ctx.fillText(line.text, x, y);
+
+    cursor = range.end;
+    y += LINE_HEIGHT;
+    lineIndex++;
+    if (y > H) break;
+  }
+}
+
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+
+  // Background
+  ctx.fillStyle = COL.bg;
+  ctx.fillRect(0, 0, W, H);
+
+  // Column edge hint
+  ctx.strokeStyle = 'rgba(0,0,0,0.04)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(W / 2, 0);
+  ctx.lineTo(W / 2, H);
+  ctx.stroke();
+
+  // Draw obstacles
+  for (const ob of obstacles) {
+    drawOpaqueRect(ob.x, ob.y, ob.w, ob.h);
+  }
+
+  // Draw text
+  layout();
+}
+
+function animate() {
+  if (!animating) return;
+  t += 0.018;
+
+  // Move obstacles in gentle orbits
+  const cx1 = 245, cy1 = 160, r1 = 60, a1 = t * 0.7;
+  obstacles[0].x = cx1 + Math.cos(a1) * r1 - obstacles[0].w / 2;
+  obstacles[0].y = cy1 + Math.sin(a1) * r1 * 0.7 - obstacles[0].h / 2;
+
+  const cx2 = 575, cy2 = 345, r2 = 50, a2 = t * 0.9 + 1.5;
+  obstacles[1].x = cx2 + Math.cos(a2) * r2 - obstacles[1].w / 2;
+  obstacles[1].y = cy2 + Math.sin(a2) * r2 * 0.6 - obstacles[1].h / 2;
+
+  draw();
+  frameId = requestAnimationFrame(animate);
+}
+
+// ── Mouse Interaction ──────────────────────────────────────────
+function getPos(e) {
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = W / rect.width;
+  const scaleY = H / rect.height;
+  return {
+    x: (e.clientX - rect.left) * scaleX,
+    y: (e.clientY - rect.top) * scaleY,
+  };
+}
+
+function findObstacle(x, y) {
+  for (let i = obstacles.length - 1; i >= 0; i--) {
+    const ob = obstacles[i];
+    if (x >= ob.x && x <= ob.x + ob.w && y >= ob.y && y <= ob.y + ob.h) return i;
+  }
+  return -1;
+}
+
+canvas.addEventListener('mousedown', e => {
+  const { x, y } = getPos(e);
+  const idx = findObstacle(x, y);
+  if (idx >= 0) {
+    dragging = idx;
+    if (animating) stopAnim();
+  }
+});
+
+canvas.addEventListener('mousemove', e => {
+  if (dragging === null) return;
+  const { x, y } = getPos(e);
+  const ob = obstacles[dragging];
+  ob.x = Math.max(0, Math.min(W - ob.w, x - ob.w / 2));
+  ob.y = Math.max(0, Math.min(H - ob.h, y - ob.h / 2));
+  draw();
+});
+
+canvas.addEventListener('mouseup', () => { dragging = null; });
+canvas.addEventListener('mouseleave', () => { dragging = null; });
+
+// Touch support
+canvas.addEventListener('touchstart', e => {
+  e.preventDefault();
+  const t0 = e.touches[0];
+  const { x, y } = getPos(t0);
+  const idx = findObstacle(x, y);
+  if (idx >= 0) dragging = idx;
+}, { passive: false });
+
+canvas.addEventListener('touchmove', e => {
+  e.preventDefault();
+  if (dragging === null) return;
+  const t0 = e.touches[0];
+  const { x, y } = getPos(t0);
+  const ob = obstacles[dragging];
+  ob.x = Math.max(0, Math.min(W - ob.w, x - ob.w / 2));
+  ob.y = Math.max(0, Math.min(H - ob.h, y - ob.h / 2));
+  draw();
+}, { passive: false });
+
+canvas.addEventListener('touchend', () => { dragging = null; });
+
+// ── Buttons ────────────────────────────────────────────────────
+function stopAnim() {
+  animating = false;
+  document.getElementById('btnAnim').textContent = '▶ 移動動畫';
+  document.getElementById('btnAnim').classList.remove('active');
+  if (frameId) { cancelAnimationFrame(frameId); frameId = null; }
+}
+
+document.getElementById('btnAnim').addEventListener('click', () => {
+  if (animating) {
+    stopAnim();
+  } else {
+    animating = true;
+    document.getElementById('btnAnim').textContent = '⏸ 停止';
+    document.getElementById('btnAnim').classList.add('active');
+    animate();
+  }
+});
+
+document.getElementById('btnAdd').addEventListener('click', () => {
+  if (obstacles.length >= 5) return;
+  obstacles.push({
+    x: 300 + Math.random() * 100,
+    y: 150 + Math.random() * 100,
+    w: 80 + Math.random() * 60,
+    h: 80 + Math.random() * 80,
+  });
+  draw();
+});
+
+document.getElementById('btnReset').addEventListener('click', () => {
+  stopAnim();
+  obstacles = [
+    { x: 180, y: 80,  w: 130, h: 160 },
+    { x: 520, y: 280, w: 110, h: 130 },
+  ];
+  t = 0;
+  draw();
+});
+
+// Initial draw
+draw();
+</script>
+</body>
+</html>
