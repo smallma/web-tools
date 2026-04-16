@@ -17,7 +17,7 @@ header{border-bottom:1px solid var(--border);padding:14px 24px;display:flex;alig
 .refresh-btn{background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:6px 14px;font-size:13px;cursor:pointer}
 .refresh-btn:hover{background:var(--border)}
 .last-updated{font-size:11px;color:var(--muted)}
-.main{max-width:1200px;margin:0 auto;padding:24px;display:grid;grid-template-columns:1fr 300px;gap:24px}
+.main{max-width:1200px;margin:0 auto;padding:24px;display:grid;grid-template-columns:1fr 280px;gap:24px}
 @media(max-width:900px){.main{grid-template-columns:1fr}}
 .section-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .section-title::after{content:'';flex:1;height:1px;background:var(--border)}
@@ -29,9 +29,9 @@ header{border-bottom:1px solid var(--border);padding:14px 24px;display:flex;alig
 .stat-val.g{color:var(--green)}.stat-val.r{color:var(--red)}.stat-val.p{color:var(--purple)}
 .stat-sub{font-size:10px;color:var(--muted);margin-top:2px}
 .pos-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px}
-.pos-q{font-size:13px;font-weight:600;line-height:1.4;margin-bottom:8px}
 .pos-chip{padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;display:inline-block;margin-bottom:8px}
 .pos-chip.yes{background:var(--tag-bg);color:var(--tag-green)}.pos-chip.no{background:#fde8e8;color:var(--red)}
+.pos-q{font-size:13px;font-weight:600;line-height:1.4;margin-bottom:8px}
 .pos-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;background:var(--bg);border-radius:8px;padding:10px}
 .pos-s-lbl{font-size:10px;color:var(--muted);text-align:center}
 .pos-s-val{font-size:14px;font-weight:600;text-align:center}
@@ -45,27 +45,35 @@ input[type=range]{flex:1;accent-color:var(--accent);cursor:pointer}
 .filter-btn{background:var(--card);border:1px solid var(--border);border-radius:20px;color:var(--muted);padding:4px 12px;font-size:11px;cursor:pointer;transition:all 0.2s}
 .filter-btn.active{background:var(--accent);color:white;border-color:var(--accent)}
 .filter-btn:hover{color:var(--text)}
-.opp-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;transition:border-color 0.2s;position:relative;overflow:hidden}
-.opp-card:hover{border-color:var(--accent)}
-.opp-card.pick{border-color:var(--orange);border-width:2px}
-.opp-card.pick::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--orange)}
+.opp-card{background:var(--card);border:2px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px;transition:border-color 0.2s;position:relative}
+.opp-card:hover{border-color:#30363d}
+.opp-card.pick{border-color:var(--orange);border-width:2px;background:linear-gradient(135deg,rgba(232,89,12,0.06),transparent)}
+.opp-card.pick::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--orange);border-radius:12px 12px 0 0}
 .opp-q{font-size:14px;font-weight:600;line-height:1.5;margin-bottom:10px;padding-right:8px}
-.opp-meta{display:flex;gap:10px;font-size:11px;color:var(--muted);margin-bottom:10px;flex-wrap:wrap;align-items:center}
-.tag{background:rgba(88,166,255,0.15);color:var(--accent);padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600;white-space:nowrap}
+.meta{display:flex;gap:8px;font-size:11px;color:var(--muted);margin-bottom:10px;flex-wrap:wrap;align-items:center}
+.tag{padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600}
 .tag.geo{background:rgba(232,89,12,0.15);color:var(--orange)}
 .tag.crypto{background:rgba(163,113,247,0.15);color:var(--purple)}
+.tag.macro{background:rgba(88,166,255,0.15);color:var(--accent)}
 .tag.short{background:rgba(63,185,80,0.15);color:var(--green)}
 .tag.highvol{background:rgba(210,153,34,0.15);color:var(--yellow)}
-.reason-box{background:rgba(232,89,12,0.08);border:1px solid rgba(232,89,12,0.3);border-radius:8px;padding:8px 10px;margin-bottom:10px;font-size:12px;color:var(--text);line-height:1.5}
+.reason-box{background:rgba(232,89,12,0.08);border:1px solid rgba(232,89,12,0.25);border-radius:8px;padding:8px 12px;margin-bottom:12px;font-size:12px;color:var(--text);line-height:1.6}
 .reason-box strong{color:var(--orange)}
-.outcomes{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
-.out-btn{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px 10px;cursor:pointer;text-align:left;transition:all 0.15s}
-.out-btn:hover{border-color:var(--accent)}
-.out-btn.sel{border-color:var(--accent);background:rgba(88,166,255,0.1)}
-.out-lbl{font-size:11px;color:var(--muted);margin-bottom:2px}
-.out-price{font-size:16px;font-weight:700}
-.out-prob{font-size:10px;color:var(--muted);margin-top:1px}
-.pick-badge{background:var(--orange);color:white;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;display:inline-block;margin-bottom:8px}
+.rec-badge{background:var(--orange);color:white;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;display:inline-block;margin-bottom:6px}
+.outcomes{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.out-btn{background:var(--bg);border:2px solid var(--border);border-radius:10px;padding:10px 12px;cursor:pointer;text-align:left;transition:all 0.15s;position:relative;overflow:hidden}
+.out-btn:hover{border-color:#4a5568}
+.out-btn.sel-yes{border-color:var(--green);background:rgba(63,185,80,0.1)}
+.out-btn.sel-no{border-color:var(--red);background:rgba(248,81,73,0.1)}
+.out-btn.sel-yes::after{content:'✅ 我的推薦';position:absolute;top:4px;right:6px;font-size:9px;font-weight:700;color:var(--green)}
+.out-btn.sel-no::after{content:'✅ 我的推薦';position:absolute;top:4px;right:6px;font-size:9px;font-weight:700;color:var(--red)}
+.out-lbl{font-size:12px;font-weight:700;margin-bottom:4px}
+.out-lbl.yes{color:var(--green)}.out-lbl.no{color:var(--red)}
+.out-price{font-size:20px;font-weight:800}
+.out-price.yes{color:var(--green)}.out-price.no{color:var(--red)}
+.out-hint{font-size:10px;color:var(--muted);margin-top:2px}
+.out-link{font-size:10px;color:var(--accent);text-decoration:underline;cursor:pointer}
+.out-link:hover{color:#7cbaff}
 .foot{display:flex;gap:8px;align-items:center}
 .amt-input{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);padding:7px 10px;font-size:13px}
 .amt-input:focus{outline:none;border-color:var(--accent)}
@@ -73,16 +81,16 @@ input[type=range]{flex:1;accent-color:var(--accent);cursor:pointer}
 .inv-btn:hover{background:#36a048}
 .inv-btn:disabled{opacity:0.4;cursor:not-allowed}
 .sidebar{}
-.super-alert{background:linear-gradient(135deg,rgba(232,89,12,0.25),rgba(163,113,247,0.15));border:2px solid var(--orange);border-radius:14px;padding:16px;margin-bottom:14px;display:none}
-.super-alert.show{display:block}
+.super-alert{display:none;margin-bottom:14px}
+.super-alert.show{display:block;background:linear-gradient(135deg,rgba(232,89,12,0.2),rgba(163,113,247,0.1));border:2px solid var(--orange);border-radius:14px;padding:16px}
 .super-alert-title{font-size:11px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
-.super-alert-title::before{content:'🔥 ';font-size:14px}
-.super-alert-q{font-size:14px;font-weight:700;line-height:1.4;margin-bottom:8px}
-.super-reason{background:rgba(232,89,12,0.1);border-radius:6px;padding:6px 10px;font-size:12px;color:var(--text);margin-bottom:10px;line-height:1.5}
-.super-outcomes{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
-.super-btn{flex:1;padding:8px;border-radius:6px;font-size:13px;font-weight:700;border:none;cursor:pointer;text-align:center}
-.super-btn-yes{background:var(--green);color:white}
-.super-btn-no{background:var(--red);color:white}
+.super-alert-title::before{content:'🔥 '}
+.super-alert-q{font-size:15px;font-weight:700;line-height:1.4;margin-bottom:8px}
+.super-reason{background:rgba(232,89,12,0.1);border-radius:8px;padding:8px 12px;font-size:12px;color:var(--text);margin-bottom:12px;line-height:1.6}
+.super-reason strong{color:var(--orange)}
+.super-outcomes{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.super-btn{flex:1;padding:9px;border-radius:8px;font-size:13px;font-weight:700;border:none;cursor:pointer;text-align:center}
+.super-btn-yes{background:var(--green);color:white}.super-btn-no{background:var(--red);color:white}
 .info-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px}
 .info-title{font-size:12px;font-weight:600;margin-bottom:8px}
 .info-row{display:flex;justify-content:space-between;font-size:11px;padding:5px 0;border-bottom:1px solid var(--border);color:var(--muted)}
@@ -124,7 +132,7 @@ input[type=range]{flex:1;accent-color:var(--accent);cursor:pointer}
       <div id="pos-list"><div class="loading"><div class="spinner"></div>載入中...</div></div>
     </div>
     <div>
-      <div class="section-title">🎯 投資機會 <span id="mkts-count" style="font-size:11px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0"></span></div>
+      <div class="section-title">🎯 市場觀察 <span id="mkts-count" style="font-size:11px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0"></span></div>
       <div class="filter-bar">
         <button class="filter-btn active" onclick="setF('all',this)">全部</button>
         <button class="filter-btn" onclick="setF('crypto',this)">🌙 加密</button>
@@ -137,7 +145,7 @@ input[type=range]{flex:1;accent-color:var(--accent);cursor:pointer}
   </div>
   <div class="sidebar">
     <div class="super-alert" id="superAlert">
-      <div class="super-alert-title">今日精選</div>
+      <div class="super-alert-title">🔥 今日精選</div>
       <div class="super-alert-q" id="superQ"></div>
       <div class="super-reason" id="superReason"></div>
       <div class="super-outcomes" id="superOuts"></div>
@@ -147,280 +155,278 @@ input[type=range]{flex:1;accent-color:var(--accent);cursor:pointer}
       </div>
     </div>
     <div class="info-card">
-      <div class="info-title">📋 評分說明</div>
-      <div class="info-row"><span>🔥 今日精選</span><span>我最推薦的市場</span></div>
-      <div class="info-row"><span>🌍 地緣</span><span>軍事/外交/衝突</span></div>
-      <div class="info-row"><span>🌙 加密</span><span>比特幣/加密貨幣相關</span></div>
-      <div class="info-row"><span>📊 宏觀</span><span>Fed/經濟/金融</span></div>
-      <div class="info-row"><span>⏱ 短期</span><span>7天內結束</span></div>
-      <div class="info-row"><span>💰 高流量</span><span>>$1M 24h 成交量</span></div>
+      <div class="info-title">📋 說明</div>
+      <div class="info-row"><span>🔥 精選</span><span>我最推薦的市場</span></div>
+      <div class="info-row"><span>✅ 我的推薦</span><span>YES 或 NO</span></div>
+      <div class="info-row"><span>💰 高流量</span><span>>$1M 24h 成交</span></div>
+      <div class="info-row"><span>⚠️ 價格</span><span>請點擊查看</span></div>
     </div>
     <div class="info-card">
       <div class="info-title">⚠️ 風險提示</div>
-      <div class="info-row"><span>預測市場</span><span>本金可能歸零</span></div>
-      <div class="info-row"><span>建議</span><span>每筆不超過總額20%</span></div>
-      <div class="info-row"><span>倉位</span><span>隨時可部分贖回</span></div>
+      <div class="info-row"><span>本金</span><span>可能歸零</span></div>
+      <div class="info-row"><span>建議</span><span>每筆≤20%總額</span></div>
+      <div class="info-row"><span>投資前</span><span>先看實際價格</span></div>
     </div>
     <div class="info-card">
-      <div class="info-title">💡 操作方式</div>
-      <div class="info-row"><span>投資</span><span>選方向→填金額→投資</span></div>
-      <div class="info-row"><span>贖回</span><span>滑動→確認贖回</span></div>
-      <div class="info-row"><span>自動更新</span><span>每3小時</span></div>
+      <div class="info-title">🔗 連結</div>
+      <div class="info-row"><span>Polymarket</span><span><a href="https://polymarket.com" target="_blank" rel="noopener">polymarket.com</a></span></div>
+      <div class="info-row"><span>倉位</span><span style="color:var(--yellow)">需錢包連接</span></div>
     </div>
   </div>
 </div>
 <script>
-// ── State ──
-const CAT_MAP={
-  crypto:['Crypto','Bitcoin','Ethereum','Solana','Airdrops','Fdv','Token Launch','Crypto Prices','Crypto Prices','Blockchain'],
-  geo:['Geopolitics','Iran','Military','Nuclear','Politics','Elections','Russia','China','Taiwan','War','Conflict'],
-  macro:['Finance','Economics','Fed','Interest Rate','CPI','Inflation','GDP','Market','Stock']
-};
-const PROXY='/api/poly';
-let mkts=[],pos=[],sel={},amt={},redeemAmt={},curF='all';
-let superPick=null,superSide='yes';
-
-// My analysis-driven recommendations (filled by agent)
-const RECOMMENDATIONS={
-  'military-action-against-iran-ends-by-522':{
-    pick:true,
-    reason:'你的邏輯很強：霍爾木茲海峽每天承載20%全球石油，長期封鎖對誰都沒好處。市場定價59%恢復正常，但你認為這個政治剛需會逼雙方讓步。繼續持有或加碼。',
-    side:'yes',
-    tags:['geo','highvol']
+// My analysis-driven recommendations
+const RECS = {
+  'military-action-against-iran-ends-by-522': {
+    pick: true,
+    side: 'yes',
+    reason: '霍爾木茲承載全球20%石油，長期封鎖對美國/中國/歐洲都無法承受。政治壓力會逼談判恢復。市場59%定價，我認為被低估。',
+    tags: ['geo', 'highvol']
   },
-  'fed-decision-in-april':{
-    pick:false,
-    reason:'Fed決策臨近，流動性充足但方向難判斷。觀望為主。',
-    side:'yes',
-    tags:['macro','short']
+  'fed-decision-in-april': {
+    pick: false,
+    side: 'yes',
+    reason: 'Fed決策臨近，高流量但方向不明。觀望為主，不主動推薦。',
+    tags: ['macro', 'short']
+  },
+  'israel-x-hezbollah-ceasefire-by': {
+    pick: false,
+    side: 'no',
+    reason: '地緣風險仍在，停火談判複雜。市場定價不夠清晰，不推薦重倉。',
+    tags: ['geo', 'highvol']
   }
 };
 
-const $=id=>document.getElementById(id);
-const fmt=(n,d=0)=>isNaN(n)?'—':'$'+parseFloat(n).toFixed(d);
-const left=ts=>{if(!ts)return'—';const d=new Date(ts)-Date.now();if(d<=0)return'已結束';const D=Math.floor(d/864e5),h=Math.floor(d%864e5/36e5),m=Math.floor(d%36e5/6e4);return D?`${D}天${h}小時`:`${h}小時${m}分`;};
-const volFmt=v=>{v=parseFloat(v||0);return v>1e6?(v/1e6).toFixed(1)+'M':v>1e3?(v/1e3).toFixed(0)+'K':v.toFixed(0);};
+const CAT_MAP = {
+  crypto: ['Crypto','Bitcoin','Ethereum','Solana','Airdrops','Fdv','Token Launch','Crypto Prices','Blockchain'],
+  geo: ['Geopolitics','Iran','Military','Nuclear','Politics','Elections','Russia','China','Taiwan','War','Conflict','Middle East'],
+  macro: ['Finance','Economics','Fed','Interest Rate','CPI','Inflation','GDP','Market','Stock']
+};
 
-function getCat(m){
-  const c=(m.categories||m.tags||[]);
-  for(const[k,v]of Object.entries(CAT_MAP))if(v.some(x=>c.some?c.includes(x):false))return k;
-  // fallback: check title
-  const t=(m.question||m.title||'').toLowerCase();
-  if(t.includes('btc')||t.includes('bitcoin')||t.includes('crypto')||t.includes('eth')||t.includes('sol'))return'crypto';
-  if(t.includes('iran')||t.includes('military')||t.includes('war')||t.includes('ceasefire')||t.includes('nuclear'))return'geo';
-  if(t.includes('fed')||t.includes('rate')||t.includes('inflation')||t.includes('cpi'))return'macro';
-  return'other';
+const PROXY = '/api/poly';
+let mkts = [], pos = [], sel = {}, amt = {}, redeemAmt = {}, curF = 'all';
+let superPick = null, superSide = 'yes';
+
+const $ = id => document.getElementById(id);
+const fmt = (n, d = 0) => isNaN(n) ? '—' : '$' + parseFloat(n).toFixed(d);
+const left = ts => {
+  if (!ts) return '—';
+  const d = new Date(ts) - Date.now();
+  if (d <= 0) return '已結束';
+  const D = Math.floor(d / 864e5), h = Math.floor(d % 864e5 / 36e5), m = Math.floor(d % 36e5 / 6e4);
+  return D ? `${D}天${h}小時` : `${h}小時${m}分`;
+};
+const volFmt = v => { v = parseFloat(v || 0); return v > 1e6 ? (v / 1e6).toFixed(1) + 'M' : v > 1e3 ? (v / 1e3).toFixed(0) + 'K' : v.toFixed(0); };
+
+function getCat(m) {
+  const c = (m.categories || m.tags || []);
+  for (const [k, v] of Object.entries(CAT_MAP))
+    if (v.some(x => c.includes(x))) return k;
+  const t = (m.question || m.title || '').toLowerCase();
+  if (t.includes('btc') || t.includes('bitcoin') || t.includes('crypto') || t.includes('eth') || t.includes('sol')) return 'crypto';
+  if (t.includes('iran') || t.includes('military') || t.includes('war') || t.includes('ceasefire') || t.includes('middle east')) return 'geo';
+  if (t.includes('fed') || t.includes('rate') || t.includes('inflation') || t.includes('cpi')) return 'macro';
+  return 'other';
 }
 
-function isShort(m){const d=(new Date(m.endDate)-Date.now())/864e5;return d<=7;}
-function isHighVol(m){return parseFloat(m.volume24h||0)>1e6;}
-function isPick(m){
-  if(!m.slug)return false;
-  const rec=RECOMMENDATIONS[m.slug];
-  if(rec&&rec.pick)return true;
-  // Auto pick: geo or crypto + high volume + short term
-  const c=getCat(m);
-  return(c==='geo'||c==='crypto')&&isHighVol(m)&&isShort(m);
+function isShort(m) { return (new Date(m.endDate) - Date.now()) / 864e5 <= 7; }
+function isHighVol(m) { return parseFloat(m.volume24h || 0) > 1e6; }
+function isPick(m) {
+  if (!m.slug) return false;
+  const rec = RECS[m.slug];
+  if (rec && rec.pick) return true;
+  return false; // Only agent-marked picks shown
 }
-
-function matches(m){
-  if(curF==='all')return true;
-  if(curF==='short')return isShort(m);
-  return getCat(m)===curF;
-}
-
-function getTags(m){
-  const tags=[];
-  const c=getCat(m);
-  if(c==='geo')tags.push({l:'🌍 地緣',cls:'geo'});
-  else if(c==='crypto')tags.push({l:'🌙 加密',cls:'crypto'});
-  else if(c==='macro')tags.push({l:'📊 宏觀',cls:'macro'});
-  if(isShort(m))tags.push({l:'⏱ 短期',cls:'short'});
-  if(isHighVol(m))tags.push({l:'💰 '+volFmt(m.volume24h),cls:'highvol'});
+function getRec(m) { return RECS[m.slug] || null; }
+function getTags(m) {
+  const tags = [], c = getCat(m);
+  if (c === 'geo') tags.push({ l: '🌍 地緣', cls: 'geo' });
+  else if (c === 'crypto') tags.push({ l: '🌙 加密', cls: 'crypto' });
+  else if (c === 'macro') tags.push({ l: '📊 宏觀', cls: 'macro' });
+  if (isShort(m)) tags.push({ l: '⏱ 短期', cls: 'short' });
+  if (isHighVol(m)) tags.push({ l: `💰 ${volFmt(m.volume24h)}`, cls: 'highvol' });
   return tags;
 }
+function matches(m) {
+  if (curF === 'all') return true;
+  if (curF === 'short') return isShort(m);
+  return getCat(m) === curF;
+}
 
-function renderOpps(){
-  const f=mkts.filter(m=>matches(m));
-  $('mkts-count').textContent=`（${f.length}個）`;
-  if(!f.length){$('opp-list').innerHTML='<div class="empty">目前無符合條件的市場</div>';return;}
+function renderOpps() {
+  const f = mkts.filter(m => matches(m));
+  $('mkts-count').textContent = `（${f.length}個）`;
 
-  // Check if super pick is in filtered list
-  const pickInList=f.find(m=>isPick(m));
-  if(pickInList&&!superPick)setSuperPick(pickInList);
+  // Set super pick
+  const recPick = f.find(m => RECS[m.slug] && RECS[m.slug].pick);
+  if (recPick && !superPick) setSuperPick(recPick);
 
-  $('opp-list').innerHTML=f.map(m=>{
-    const slug=m.slug||Math.random().toString(36);
-    const s=sel[slug]||'yes';
-    const a=amt[slug]||'10';
-    const tags=getTags(m);
-    const pick=isPick(m);
-    const rec=RECOMMENDATIONS[m.slug]||{};
-    const reason=rec.reason||'';
-    const out1Label='YES', out2Label='NO';
+  if (!f.length) { $('opp-list').innerHTML = '<div class="empty">目前無符合條件的市場</div>'; return; }
 
-    return`<div class="opp-card ${pick?'pick':''}">
-      ${pick?'<div class="pick-badge">🔥 今日精選</div>':''}
-      <div class="opp-q">${m.question||m.title||'—'}</div>
-      <div class="opp-meta">
-        ${tags.map(t=>`<span class="tag ${t.cls}">${t.l}</span>`).join('')}
-        <span style="color:var(--muted);font-size:10px">Vol ${volFmt(m.volume24h)} · ${left(m.endDate)}</span>
+  $('opp-list').innerHTML = f.map(m => {
+    const slug = m.slug || Math.random().toString(36);
+    const rec = getRec(m);
+    const pick = isPick(m);
+    const recSide = rec ? rec.side : (sel[slug] || 'yes');
+    const a = amt[slug] || '10';
+    const tags = getTags(m);
+    const marketUrl = 'https://polymarket.com/event/' + slug;
+
+    return `<div class="opp-card ${pick ? 'pick' : ''}">
+      ${pick ? '<div class="rec-badge">🔥 今日精選</div>' : ''}
+      <div class="opp-q">${m.question || m.title || '—'}</div>
+      <div class="meta">
+        ${tags.map(t => `<span class="tag ${t.cls}">${t.l}</span>`).join('')}
+        <span style="color:var(--muted);font-size:10px">⏱ ${left(m.endDate)}</span>
       </div>
-      ${reason?`<div class="reason-box">💡 <strong>點我原因：</strong>${reason}</div>`:''}
+      ${rec && rec.reason ? `<div class="reason-box">💡 <strong>Ada 分析：</strong>${rec.reason}</div>` : ''}
       <div class="outcomes">
-        <div class="out-btn ${pick&&rec.side==='yes'?'sel':s==='yes'?'sel':''}" onclick="sel['${slug}']='yes';renderOpps()">
-          <div class="out-lbl">${out1Label}</div>
-          <div class="out-price">—</div>
-          <div class="out-prob">點我看價格</div>
+        <div class="out-btn ${recSide === 'yes' ? 'sel-yes' : ''}" onclick="sel['${slug}']='yes';renderOpps()">
+          <div class="out-lbl yes">${rec && rec.side === 'yes' ? '✅ YES（我推薦）' : 'YES'}</div>
+          <div class="out-price yes">—</div>
+          <div class="out-hint"><span class="out-link" onclick="event.stopPropagation();window.open('${marketUrl}','_blank')">→ 查看實際價格</span></div>
         </div>
-        <div class="out-btn ${pick&&rec.side==='no'?'sel':s==='no'?'sel':''}" onclick="sel['${slug}']='no';renderOpps()">
-          <div class="out-lbl">${out2Label}</div>
-          <div class="out-price">—</div>
-          <div class="out-prob">點我看價格</div>
+        <div class="out-btn ${recSide === 'no' ? 'sel-no' : ''}" onclick="sel['${slug}']='no';renderOpps()">
+          <div class="out-lbl no">${rec && rec.side === 'no' ? '✅ NO（我推薦）' : 'NO'}</div>
+          <div class="out-price no">—</div>
+          <div class="out-hint"><span class="out-link" onclick="event.stopPropagation();window.open('${marketUrl}','_blank')">→ 查看實際價格</span></div>
         </div>
       </div>
       <div class="foot">
         <input class="amt-input" type="number" min="1" max="500" value="${a}" placeholder="投入金額 USDC" onchange="amt['${slug}']=this.value">
-        <button class="inv-btn" onclick="doInvest('${slug}')">投資 $${a}</button>
+        <button class="inv-btn" onclick="doInvest('${slug}')">📩 通知 Ada</button>
       </div>
     </div>`;
   }).join('');
 }
 
-function setSuperPick(m){
-  if(!m)return;
-  const slug=m.slug||m.id||'';
-  const rec=RECOMMENDATIONS[slug]||{};
-  const side=rec.side||'yes';
-  superPick=m;
-  superSide=side;
-  $('superQ').textContent=m.question||m.title||'';
-  $('superReason').innerHTML=`💡 <strong>理由：</strong>${rec.reason||'高流量地緣/加密市場，適合作為今日精選'}`;
-  $('superOuts').innerHTML=`
-    <div class="out-btn ${side==='yes'?'sel':''}" style="cursor:default">
-      <div class="out-lbl">YES</div><div class="out-price">—</div>
+function setSuperPick(m) {
+  if (!m) return;
+  const slug = m.slug || m.id || '';
+  const rec = RECS[slug] || {};
+  superPick = m;
+  superSide = rec.side || 'yes';
+  $('superQ').textContent = m.question || m.title || '';
+  $('superReason').innerHTML = `💡 <strong>分析：</strong>${rec.reason || '高流量市場，適合作為今日精選。'}`;
+  $('superOuts').innerHTML = `
+    <div class="out-btn ${superSide === 'yes' ? 'sel-yes' : ''}" style="cursor:default">
+      <div class="out-lbl yes">${superSide === 'yes' ? '✅ YES（推薦）' : 'YES'}</div>
+      <div class="out-price yes">—</div>
     </div>
-    <div class="out-btn ${side==='no'?'sel':''}" style="cursor:default">
-      <div class="out-lbl">NO</div><div class="out-price">—</div>
+    <div class="out-btn ${superSide === 'no' ? 'sel-no' : ''}" style="cursor:default">
+      <div class="out-lbl no">${superSide === 'no' ? '✅ NO（推薦）' : 'NO'}</div>
+      <div class="out-price no">—</div>
     </div>`;
-  document.getElementById('btnY').onclick=()=>qInvest('yes');
-  document.getElementById('btnN').onclick=()=>qInvest('no');
-  $('superAlert').className='super-alert show';
-  notif('🔥 今日精選：'+(m.question||m.title||'').slice(0,40));
+  document.getElementById('btnY').onclick = () => qInvest('yes');
+  document.getElementById('btnN').onclick = () => qInvest('no');
+  $('superAlert').className = 'super-alert show';
+  notif('🔥 今日精選：' + (m.question || m.title || '').slice(0, 40));
 }
 
-function qInvest(side){
-  if(!superPick)return;
-  const slug=superPick.slug||superPick.id||'';
-  sel[slug]=side;amt[slug]='20';doInvest(slug);
+function qInvest(side) {
+  if (!superPick) return;
+  const slug = superPick.slug || superPick.id || '';
+  sel[slug] = side;
+  amt[slug] = '20';
+  doInvest(slug);
 }
 
-function doInvest(slug){
-  const m=mkts.find(x=>(x.slug||'')===slug);
-  if(!m){toast('找不到市場','err');return;}
-  const side=sel[slug]||'yes';
-  const a=parseFloat(amt[slug]||'10');
-  if(!a||a<1){toast('請輸入有效金額','err');return;}
-  toast(`✅ 投資請求：${side.toUpperCase()} $${a} USDC`);
-  console.log('[PolyMonitor INVEST]',{question:m.question||m.title,side,amount:a,slug:'https://polymarket.com/event/'+slug});
-  const req=JSON.parse(localStorage.getItem('polyReqs')||'[]');
-  req.push({type:'invest',question:m.question||m.title,side,amount:a,slug,ts:Date.now()});
-  localStorage.setItem('polyReqs',JSON.stringify(req));
+function doInvest(slug) {
+  const m = mkts.find(x => (x.slug || '') === slug);
+  if (!m) { toast('找不到市場', 'err'); return; }
+  const side = sel[slug] || 'yes';
+  const a = parseFloat(amt[slug] || '10');
+  if (!a || a < 1) { toast('請輸入有效金額', 'err'); return; }
+  const marketUrl = 'https://polymarket.com/event/' + slug;
+  const rec = getRec(m);
+  const recText = rec && rec.side === side ? '（Ada推薦）' : '';
+  toast(`📩 已通知 Ada：${side.toUpperCase()}${recText} $${a} USDC`);
+  console.log('[PolyMonitor INVEST]', { question: m.question || m.title, side, recSide: rec ? rec.side : null, amount: a, slug: marketUrl, recReason: rec ? rec.reason : null });
+  const req = JSON.parse(localStorage.getItem('polyReqs') || '[]');
+  req.push({ type: 'invest', question: m.question || m.title, side, recSide: rec ? rec.side : null, recReason: rec ? rec.reason : null, amount: a, slug, ts: Date.now() });
+  localStorage.setItem('polyReqs', JSON.stringify(req));
 }
 
-function doRedeem(id,shares){
-  if(!shares||shares<1)return;
-  const p=pos.find(x=>x.id===id);
-  if(!p)return;
+function doRedeem(id, shares) {
+  if (!shares || shares < 1) return;
+  const p = pos.find(x => x.id === id);
+  if (!p) return;
   toast(`✅ 贖回請求：${shares} 股`);
-  console.log('[PolyMonitor REDEEM]',{id,shares,question:p.question});
-  const req=JSON.parse(localStorage.getItem('polyReqs')||'[]');
-  req.push({type:'redeem',id,shares,question:p.question,ts:Date.now()});
-  localStorage.setItem('polyReqs',JSON.stringify(req));
+  const req = JSON.parse(localStorage.getItem('polyReqs') || '[]');
+  req.push({ type: 'redeem', id, shares, question: p.question, ts: Date.now() });
+  localStorage.setItem('polyReqs', JSON.stringify(req));
 }
 
-function renderPos(){
-  if(!pos.length){$('pos-list').innerHTML='<div class="empty" style="padding:16px">尚無倉位或需錢包連接</div>';return;}
-  $('pos-list').innerHTML=pos.map(p=>{
-    const shares=parseFloat(p.shares||0),avgPx=parseFloat(p.avgPrice||0);
-    const nowPx=parseFloat(p.price||p.yesPrice||avgPx);
-    const cost=shares*avgPx,value=shares*nowPx,pnl=value-cost;
-    const maxRedeem=Math.floor(shares*0.5);
-    const ra=redeemAmt[p.id]!==undefined?redeemAmt[p.id]:Math.floor(shares*0.3);
-    return`<div class="pos-card">
-      <div class="pos-chip ${(p.outcome||'').toLowerCase()==='yes'?'yes':'no'}">${p.outcome||'?'}</div>
-      <div class="pos-q">${p.question||'—'}</div>
+function renderPos() {
+  if (!pos.length) { $('pos-list').innerHTML = '<div class="empty" style="padding:16px">尚無倉位或需錢包連接</div>'; return; }
+  $('pos-list').innerHTML = pos.map(p => {
+    const shares = parseFloat(p.shares || 0), avgPx = parseFloat(p.avgPrice || 0);
+    const nowPx = parseFloat(p.price || p.yesPrice || avgPx);
+    const cost = shares * avgPx, value = shares * nowPx, pnl = value - cost;
+    const maxRedeem = Math.floor(shares * 0.5);
+    const ra = redeemAmt[p.id] !== undefined ? redeemAmt[p.id] : Math.floor(shares * 0.3);
+    return `<div class="pos-card">
+      <div class="pos-chip ${(p.outcome || '').toLowerCase() === 'yes' ? 'yes' : 'no'}">${p.outcome || '?'}</div>
+      <div class="pos-q">${p.question || '—'}</div>
       <div class="pos-stats">
-        <div><div class="pos-s-val">${avgPx>0?(avgPx*100).toFixed(1)+'¢':'—'}</div><div class="pos-s-lbl">均價</div></div>
-        <div><div class="pos-s-val">${nowPx>0?(nowPx*100).toFixed(1)+'¢':'—'}</div><div class="pos-s-lbl">現價</div></div>
+        <div><div class="pos-s-val">${avgPx > 0 ? (avgPx * 100).toFixed(1) + '¢' : '—'}</div><div class="pos-s-lbl">均價</div></div>
+        <div><div class="pos-s-val">${nowPx > 0 ? (nowPx * 100).toFixed(1) + '¢' : '—'}</div><div class="pos-s-lbl">現價</div></div>
         <div><div class="pos-s-val">${shares.toFixed(1)}</div><div class="pos-s-lbl">股數</div></div>
-        <div style="color:${pnl>=0?'var(--green)':'var(--red)'}">
-          <div class="pos-s-val">${pnl>=0?'+':''}${fmt(pnl,2)}</div>
+        <div style="color:${pnl >= 0 ? 'var(--green)' : 'var(--red)'}">
+          <div class="pos-s-val">${pnl >= 0 ? '+' : ''}${fmt(pnl, 2)}</div>
           <div class="pos-s-lbl">未實現</div>
         </div>
       </div>
       <div class="redeem-row">
-        <div class="redeem-info">贖回 <span class="redeem-amount" id="ra-${p.id}">${ra}股≈${fmt(ra*nowPx,2)}</span></div>
+        <div class="redeem-info">贖回 <span class="redeem-amount" id="ra-${p.id}">${ra}股≈${fmt(ra * nowPx, 2)}</span></div>
         <input type="range" min="0" max="${maxRedeem}" value="${ra}" oninput="redeemAmt['${p.id}']=parseInt(this.value);document.getElementById('ra-${p.id}').textContent=this.value+'股≈$'+Math.round(this.value*${nowPx}*100)/100">
-        <button class="redeem-btn" onclick="doRedeem('${p.id}',${ra})" ${ra<1?'disabled':''}>贖回</button>
+        <button class="redeem-btn" onclick="doRedeem('${p.id}',${ra})" ${ra < 1 ? 'disabled' : ''}>贖回</button>
       </div>
     </div>`;
   }).join('');
-  const tv=pos.reduce((s,p)=>s+parseFloat(p.shares||0)*parseFloat(p.price||p.yesPrice||0),0);
-  const tc=pos.reduce((s,p)=>s+parseFloat(p.shares||0)*parseFloat(p.avgPrice||0),0);
-  const tp=tv-tc;
-  $('s-val').textContent=fmt(tv);$('s-val').className='stat-val '+(tp>=0?'g':'r');
-  $('s-chg').textContent=`${tp>=0?'+':''}${fmt(tp,2)} 未實現`;
-  $('s-pnl').textContent=`${tp>=0?'+':''}${fmt(tp,2)}`;$('s-pnl').className='stat-val '+(tp>=0?'g':'r');
+  const tv = pos.reduce((s, p) => s + parseFloat(p.shares || 0) * parseFloat(p.price || p.yesPrice || 0), 0);
+  const tc = pos.reduce((s, p) => s + parseFloat(p.shares || 0) * parseFloat(p.avgPrice || 0), 0);
+  const tp = tv - tc;
+  $('s-val').textContent = fmt(tv); $('s-val').className = 'stat-val ' + (tp >= 0 ? 'g' : 'r');
+  $('s-chg').textContent = `${tp >= 0 ? '+' : ''}${fmt(tp, 2)} 未實現`;
+  $('s-pnl').textContent = `${tp >= 0 ? '+' : ''}${fmt(tp, 2)}`; $('s-pnl').className = 'stat-val ' + (tp >= 0 ? 'g' : 'r');
 }
 
-function setF(f,btn){curF=f;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderOpps();}
+function setF(f, btn) { curF = f; document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); renderOpps(); }
 
-async function fetchMarkets(){
-  try{
-    const r=await fetch(PROXY+'?endpoint=markets');
-    if(!r.ok)throw new Error('API error');
-    const d=await r.json();
-    mkts=Array.isArray(d)?d:[];
-    mkts.sort((a,b)=>parseFloat(b.volume24h||0)-parseFloat(a.volume24h||0));
-    // Set super pick from recommendations or top highvol geo
-    if(!superPick){
-      const recPick=mkts.find(m=>RECOMMENDATIONS[m.slug]&&RECOMMENDATIONS[m.slug].pick);
-      if(recPick)setSuperPick(recPick);
-      else{
-        const autoPick=mkts.find(m=>isPick(m));
-        if(autoPick)setSuperPick(autoPick);
-      }
-    }
+async function fetchMarkets() {
+  try {
+    const r = await fetch(PROXY + '?endpoint=markets');
+    if (!r.ok) throw new Error('API error');
+    const d = await r.json();
+    mkts = Array.isArray(d) ? d : [];
+    mkts.sort((a, b) => parseFloat(b.volume24h || 0) - parseFloat(a.volume24h || 0));
     renderOpps();
-    $('dot').className='dot ok';$('status').textContent=`已連接 · ${mkts.length}個市場`;
-  }catch(e){
-    console.error(e);$('dot').className='dot error';$('status').textContent='載入失敗';
-    $('opp-list').innerHTML='<div class="empty" style="color:var(--red)">載入失敗，請確認本地伺服器運行中</div>';
+    $('dot').className = 'dot ok'; $('status').textContent = `已連接 · ${mkts.length}個市場`;
+  } catch (e) {
+    console.error(e); $('dot').className = 'dot error'; $('status').textContent = '載入失敗';
+    $('opp-list').innerHTML = '<div class="empty" style="color:var(--red)">載入失敗，請確認本地伺服器運行中</div>';
   }
 }
 
-function loadPositions(){
-  pos=[{id:'hormuz-1',question:'Strait of Hormuz traffic returns to normal by end of May?',outcome:'Yes',shares:'115.4',avgPrice:'0.345',price:'0.595',yesPrice:'0.595'}];
+function loadPositions() {
+  pos = [{ id: 'hormuz-1', question: 'Strait of Hormuz traffic returns to normal by end of May?', outcome: 'Yes', shares: '115.4', avgPrice: '0.345', price: '0.595', yesPrice: '0.595' }];
   renderPos();
 }
 
-async function refresh(){
-  $('dot').className='dot loading';$('status').textContent='更新中...';
-  await Promise.all([fetchMarkets(),loadPositions()]);
-  const n=new Date();$('lastUpd').textContent=`${n.getHours()}:${String(n.getMinutes()).padStart(2,'0')}:${String(n.getSeconds()).padStart(2,'0')}`;
+async function refresh() {
+  $('dot').className = 'dot loading'; $('status').textContent = '更新中...';
+  await Promise.all([fetchMarkets(), loadPositions()]);
+  const n = new Date(); $('lastUpd').textContent = `${n.getHours()}:${String(n.getMinutes()).padStart(2, '0')}:${String(n.getSeconds()).padStart(2, '0')}`;
 }
 
 let refreshTimer;
-function scheduleNext(){
-  clearTimeout(refreshTimer);
-  refreshTimer=setTimeout(refresh,3*3600*1000);
-}
+function scheduleNext() { clearTimeout(refreshTimer); refreshTimer = setTimeout(refresh, 3 * 3600 * 1000); }
 
-function toast(msg,type='ok'){$('toast').className=`toast show ${type}`;$('toast').textContent=msg;setTimeout(()=>$('toast').className='toast',4000);}
-function notif(msg){$('notif').textContent=msg;$('notif').className='notif show';setTimeout(()=>$('notif').className='notif',6000);}
+function toast(msg, type = 'ok') { $('toast').className = `toast show ${type}`; $('toast').textContent = msg; setTimeout(() => $('toast').className = 'toast', 4000); }
+function notif(msg) { $('notif').textContent = msg; $('notif').className = 'notif show'; setTimeout(() => $('notif').className = 'notif', 6000); }
 
-(async()=>{await refresh();scheduleNext();})();
+(async () => { await refresh(); scheduleNext(); })();
 </script>
 </body>
 </html>
