@@ -23,8 +23,7 @@
 
       font-family: 'Inter', sans-serif;
       color: var(--lg-text);
-      height: 100%;
-      overflow-y: auto;
+      min-height: 100%;
       padding: 32px 20px;
       display: flex;
       justify-content: center;

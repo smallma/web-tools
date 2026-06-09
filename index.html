@@ -88,6 +88,50 @@
           <span class="nav-item__label">Filter</span>
           <span class="nav-item__badge">CSS</span>
         </button>
+
+        <div class="sidebar__section-label">Developer</div>
+        <button class="nav-item" data-tool="json-formatter" id="tab-json-formatter" role="tab" aria-selected="false" aria-controls="panel-json-formatter" tabindex="-1">
+          <span class="nav-item__icon">⧉</span>
+          <span class="nav-item__label">JSON Formatter</span>
+          <span class="nav-item__badge">JSON</span>
+        </button>
+        <button class="nav-item" data-tool="base64" id="tab-base64" role="tab" aria-selected="false" aria-controls="panel-base64" tabindex="-1">
+          <span class="nav-item__icon">≡</span>
+          <span class="nav-item__label">Base64</span>
+          <span class="nav-item__badge">Encode</span>
+        </button>
+        <button class="nav-item" data-tool="regex-tester" id="tab-regex-tester" role="tab" aria-selected="false" aria-controls="panel-regex-tester" tabindex="-1">
+          <span class="nav-item__icon">∗</span>
+          <span class="nav-item__label">Regex Tester</span>
+          <span class="nav-item__badge">RegEx</span>
+        </button>
+        <button class="nav-item" data-tool="url-encoder" id="tab-url-encoder" role="tab" aria-selected="false" aria-controls="panel-url-encoder" tabindex="-1">
+          <span class="nav-item__icon">🔗</span>
+          <span class="nav-item__label">URL Encoder</span>
+          <span class="nav-item__badge">URL</span>
+        </button>
+
+        <div class="sidebar__section-label">Text &amp; Utilities</div>
+        <button class="nav-item" data-tool="lorem-ipsum" id="tab-lorem-ipsum" role="tab" aria-selected="false" aria-controls="panel-lorem-ipsum" tabindex="-1">
+          <span class="nav-item__icon">¶</span>
+          <span class="nav-item__label">Lorem Ipsum</span>
+          <span class="nav-item__badge">GEN</span>
+        </button>
+        <button class="nav-item" data-tool="case-converter" id="tab-case-converter" role="tab" aria-selected="false" aria-controls="panel-case-converter" tabindex="-1">
+          <span class="nav-item__icon">Aa</span>
+          <span class="nav-item__label">Case Converter</span>
+          <span class="nav-item__badge">TEXT</span>
+        </button>
+        <button class="nav-item" data-tool="word-counter" id="tab-word-counter" role="tab" aria-selected="false" aria-controls="panel-word-counter" tabindex="-1">
+          <span class="nav-item__icon">#</span>
+          <span class="nav-item__label">Word Counter</span>
+          <span class="nav-item__badge">STATS</span>
+        </button>
+        <button class="nav-item" data-tool="unit-converter" id="tab-unit-converter" role="tab" aria-selected="false" aria-controls="panel-unit-converter" tabindex="-1">
+          <span class="nav-item__icon">⇄</span>
+          <span class="nav-item__label">Unit Converter</span>
+          <span class="nav-item__badge">CSS/SI</span>
+        </button>
       </nav>
 
       <div class="sidebar__footer">
@@ -178,6 +222,54 @@
         <h2 class="sr-only">Filter</h2>
         <div id="filter-app"></div>
       </section>
+
+      <!-- JSON Formatter Tool -->
+      <section class="tool-panel hidden" id="panel-json-formatter" role="tabpanel" aria-labelledby="tab-json-formatter" hidden>
+        <h2 class="sr-only">JSON Formatter</h2>
+        <div id="json-formatter-app"></div>
+      </section>
+
+      <!-- Base64 Tool -->
+      <section class="tool-panel hidden" id="panel-base64" role="tabpanel" aria-labelledby="tab-base64" hidden>
+        <h2 class="sr-only">Base64 Converter</h2>
+        <div id="base64-app"></div>
+      </section>
+
+      <!-- Regex Tester Tool -->
+      <section class="tool-panel hidden" id="panel-regex-tester" role="tabpanel" aria-labelledby="tab-regex-tester" hidden>
+        <h2 class="sr-only">Regex Tester</h2>
+        <div id="regex-tester-app"></div>
+      </section>
+
+      <!-- URL Encoder Tool -->
+      <section class="tool-panel hidden" id="panel-url-encoder" role="tabpanel" aria-labelledby="tab-url-encoder" hidden>
+        <h2 class="sr-only">URL Encoder</h2>
+        <div id="url-encoder-app"></div>
+      </section>
+
+      <!-- Lorem Ipsum Tool -->
+      <section class="tool-panel hidden" id="panel-lorem-ipsum" role="tabpanel" aria-labelledby="tab-lorem-ipsum" hidden>
+        <h2 class="sr-only">Lorem Ipsum</h2>
+        <div id="lorem-ipsum-app"></div>
+      </section>
+
+      <!-- Case Converter Tool -->
+      <section class="tool-panel hidden" id="panel-case-converter" role="tabpanel" aria-labelledby="tab-case-converter" hidden>
+        <h2 class="sr-only">Case Converter</h2>
+        <div id="case-converter-app"></div>
+      </section>
+
+      <!-- Word Counter Tool -->
+      <section class="tool-panel hidden" id="panel-word-counter" role="tabpanel" aria-labelledby="tab-word-counter" hidden>
+        <h2 class="sr-only">Word Counter</h2>
+        <div id="word-counter-app"></div>
+      </section>
+
+      <!-- Unit Converter Tool -->
+      <section class="tool-panel hidden" id="panel-unit-converter" role="tabpanel" aria-labelledby="tab-unit-converter" hidden>
+        <h2 class="sr-only">Unit Converter</h2>
+        <div id="unit-converter-app"></div>
+      </section>
     </main>
   </div>
 
@@ -194,6 +286,14 @@
   <script src="tools/gradient-advanced.js"></script>
   <script src="tools/border.js"></script>
   <script src="tools/filter.js"></script>
+  <script src="tools/json-formatter.js"></script>
+  <script src="tools/base64.js"></script>
+  <script src="tools/regex-tester.js"></script>
+  <script src="tools/url-encoder.js"></script>
+  <script src="tools/lorem-ipsum.js"></script>
+  <script src="tools/case-converter.js"></script>
+  <script src="tools/word-counter.js"></script>
+  <script src="tools/unit-converter.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

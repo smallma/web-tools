@@ -5,8 +5,7 @@
       padding: 32px;
       color: #f8fafc;
       font-family: 'Inter', sans-serif;
-      height: 100%;
-      overflow-y: auto;
+      min-height: 100%;
     }
     #ada-app .ada-container {
       max-width: 1200px;
@@ -132,6 +131,8 @@
       border: 1px solid rgba(255,255,255,0.1);
     }
     #ada-app .results { display: flex; flex-direction: column; gap: 1.5rem; }
+    #ada-app .two-col-results { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 600px) { #ada-app .two-col-results { grid-template-columns: 1fr; } }
     #ada-app .result-block {
       background: rgba(0,0,0,0.2);
       border: 1px solid rgba(255, 255, 255, 0.05);
