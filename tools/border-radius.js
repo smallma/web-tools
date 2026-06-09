@@ -1,6 +1,6 @@
 (function() {
   var CSS = [
-    '#br-app{--c-bg:#0d0d12;--c-card:rgba(25,25,38,0.7);--c-border:rgba(255,255,255,0.09);--c-text:#f0f0f5;--c-text-sec:#8888a0;--c-accent:#8b5cf6;--c-accent2:#06b6d4;--c-success:#34d399;--c-font:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--c-mono:"JetBrains Mono","Fira Code",monospace;font-family:var(--c-font);color:var(--c-text);padding:28px 24px;display:flex;flex-direction:column;gap:20px;height:100%;overflow-y:auto}',
+    '#br-app{--c-bg:#0d0d12;--c-card:rgba(25,25,38,0.7);--c-border:rgba(255,255,255,0.09);--c-text:#f0f0f5;--c-text-sec:#aab0cc;--c-accent:#8b5cf6;--c-accent2:#06b6d4;--c-success:#34d399;--c-font:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--c-mono:"JetBrains Mono","Fira Code",monospace;font-family:var(--c-font);color:var(--c-text);padding:28px 24px;display:flex;flex-direction:column;gap:20px;height:100%;overflow-y:auto}',
     '#br-app *,*::before,*::after{box-sizing:border-box}',
     '#br-hdr{text-align:center}',
     '#br-hdr h1{font-size:1.7rem;font-weight:700;background:linear-gradient(130deg,#8b5cf6,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:3px}',
@@ -44,18 +44,18 @@
     '<div id="br-hdr"><h1>Border Radius Editor</h1><p>即時預覽 · CSS 輸出</p></div>',
     '<div id="br-main">',
     '<div class="br-col">',
-    '<div id="br-preview-box"></div>',
-    '<div class="br-section-label">預設</div>',
+    '<div id="br-preview-box" role="img" aria-label="圓角預覽區塊"></div>',
+    '<div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px"><span class="br-section-label" style="margin-top:0">預設</span><button class="br-preset" id="br-reset-btn" aria-label="重置四角圓角為預設值 20px" style="font-size:0.68rem;padding:3px 8px">重置</button></div>',
     '<div class="br-presets">',
-    '<button class="br-preset" data-tl="50" data-tr="50" data-br="50" data-bl="50">圓形</button>',
-    '<button class="br-preset" data-tl="50" data-tr="50" data-br="50" data-bl="50" data-unit="%">膠囊</button>',
-    '<button class="br-preset" data-tl="12" data-tr="12" data-br="12" data-bl="12">按鈕</button>',
-    '<button class="br-preset" data-tl="8" data-tr="8" data-br="0" data-bl="0">卡片</button>',
-    '<button class="br-preset" data-tl="50" data-tr="8" data-br="50" data-bl="8">不對稱</button>',
+    '<button class="br-preset" data-tl="50" data-tr="50" data-br="50" data-bl="50" aria-label="預設：圓形（四角 50px）">圓形</button>',
+    '<button class="br-preset" data-tl="50" data-tr="50" data-br="50" data-bl="50" data-unit="%" aria-label="預設：膠囊（四角 50%）">膠囊</button>',
+    '<button class="br-preset" data-tl="12" data-tr="12" data-br="12" data-bl="12" aria-label="預設：按鈕（四角 12px）">按鈕</button>',
+    '<button class="br-preset" data-tl="8" data-tr="8" data-br="0" data-bl="0" aria-label="預設：卡片（上方 8px，下方 0px）">卡片</button>',
+    '<button class="br-preset" data-tl="50" data-tr="8" data-br="50" data-bl="8" aria-label="預設：不對稱（左上右下 50px，右上左下 8px）">不對稱</button>',
     '</div>',
     '<div class="br-section-label">連動</div>',
-    '<button class="br-link-btn linked" id="br-link-btn">',
-    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>',
+    '<button class="br-link-btn linked" id="br-link-btn" aria-pressed="true" aria-label="四角連動，目前開啟">',
+    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>',
     '<span id="br-link-label">四角連動</span>',
     '</button>',
     '<div class="br-unit-toggle">',
@@ -63,14 +63,14 @@
     '<button class="br-unit-btn" data-unit="%">%</button>',
     '</div>',
     '<div class="br-inputs">',
-    '<div class="br-input-grp"><label>左上</label>',
-    '<div class="br-input-row"><input type="number" id="br-tl" value="20" min="0" max="500"><span id="br-tl-unit">px</span></div></div>',
-    '<div class="br-input-grp"><label>右上</label>',
-    '<div class="br-input-row"><input type="number" id="br-tr" value="20" min="0" max="500"><span id="br-tr-unit">px</span></div></div>',
-    '<div class="br-input-grp"><label>右下</label>',
-    '<div class="br-input-row"><input type="number" id="br-br" value="20" min="0" max="500"><span id="br-br-unit">px</span></div></div>',
-    '<div class="br-input-grp"><label>左下</label>',
-    '<div class="br-input-row"><input type="number" id="br-bl" value="20" min="0" max="500"><span id="br-bl-unit">px</span></div></div>',
+    '<div class="br-input-grp"><label for="br-tl">左上圓角</label>',
+    '<div class="br-input-row"><input type="number" id="br-tl" value="20" min="0" max="500" aria-label="左上圓角" aria-valuemin="0" aria-valuemax="500" aria-valuenow="20"><span id="br-tl-unit">px</span></div></div>',
+    '<div class="br-input-grp"><label for="br-tr">右上圓角</label>',
+    '<div class="br-input-row"><input type="number" id="br-tr" value="20" min="0" max="500" aria-label="右上圓角" aria-valuemin="0" aria-valuemax="500" aria-valuenow="20"><span id="br-tr-unit">px</span></div></div>',
+    '<div class="br-input-grp"><label for="br-br">右下圓角</label>',
+    '<div class="br-input-row"><input type="number" id="br-br" value="20" min="0" max="500" aria-label="右下圓角" aria-valuemin="0" aria-valuemax="500" aria-valuenow="20"><span id="br-br-unit">px</span></div></div>',
+    '<div class="br-input-grp"><label for="br-bl">左下圓角</label>',
+    '<div class="br-input-row"><input type="number" id="br-bl" value="20" min="0" max="500" aria-label="左下圓角" aria-valuemin="0" aria-valuemax="500" aria-valuenow="20"><span id="br-bl-unit">px</span></div></div>',
     '</div>',
     '</div>',
     '<div class="br-col">',
@@ -78,7 +78,8 @@
     '<div class="br-css-output">',
     '<div class="br-css-label">border-radius</div>',
     '<div class="br-css-code" id="br-css-code">border-radius: 20px 20px 20px 20px;</div>',
-    '<button class="br-copy" id="br-copy-btn">複製</button>',
+    '<button class="br-copy" id="br-copy-btn" aria-label="複製 CSS">複製</button>',
+    '<span id="br-copy-status" role="status" aria-live="polite" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0"></span>',
     '</div>',
     '<div class="br-section-label">快捷語法</div>',
     '<div class="br-css-output" style="font-size:0.78rem">',
@@ -162,6 +163,8 @@
     $('br-link-btn').addEventListener('click', function() {
       linked = !linked;
       $('br-link-btn').classList.toggle('linked', linked);
+      $('br-link-btn').setAttribute('aria-pressed', linked ? 'true' : 'false');
+      $('br-link-btn').setAttribute('aria-label', linked ? '四角連動，目前開啟' : '四角連動，目前關閉');
       $('br-link-label').textContent = linked ? '四角連動' : '四角獨立';
       if (linked) {
         var v = parseInt($('br-tl').value) || 0;
@@ -192,9 +195,24 @@
         tr = parseInt($('br-tr').value) || 0;
         br = parseInt($('br-br').value) || 0;
         bl = parseInt($('br-bl').value) || 0;
+        // sync aria-valuenow
+        ['tl','tr','br','bl'].forEach(function(c) {
+          var el = $('br-' + c);
+          el.setAttribute('aria-valuenow', el.value);
+        });
         updatePreview();
         updateCSS();
       });
+    });
+
+    // Reset
+    $('br-reset-btn').addEventListener('click', function() {
+      unit = 'px';
+      document.querySelectorAll('.br-unit-btn').forEach(function(b) {
+        b.classList.toggle('active', b.dataset.unit === 'px');
+      });
+      updateUnits();
+      applyAll({ tl: 20, tr: 20, br: 20, bl: 20 });
     });
 
     // Presets
@@ -221,14 +239,32 @@
     // Copy
     $('br-copy-btn').addEventListener('click', function() {
       var text = $('br-css-code').textContent;
-      navigator.clipboard.writeText(text).then(function() {
+      function onCopied() {
         $('br-copy-btn').classList.add('copied');
         $('br-copy-btn').textContent = '已複製!';
+        $('br-copy-status').textContent = '已複製';
         setTimeout(function() {
           $('br-copy-btn').classList.remove('copied');
           $('br-copy-btn').textContent = '複製';
+          $('br-copy-status').textContent = '';
         }, 1500);
-      });
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(onCopied).catch(function() {
+          try { document.execCommand('copy'); onCopied(); } catch(e) {}
+        });
+      } else {
+        try {
+          var ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed'; ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          onCopied();
+        } catch(e) {}
+      }
     });
 
     updatePreview();

@@ -1,7 +1,8 @@
 (function() {
   var CSS = [
-    '#fg-app{--c-bg:#0d0d12;--c-card:rgba(25,25,38,0.7);--c-border:rgba(255,255,255,0.09);--c-text:#f0f0f5;--c-text-sec:#8888a0;--c-accent:#8b5cf6;--c-accent2:#06b6d4;--c-success:#34d399;--c-font:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--c-mono:"JetBrains Mono","Fira Code",monospace;font-family:var(--c-font);color:var(--c-text);padding:28px 24px;display:flex;flex-direction:column;gap:20px;height:100%;overflow-y:auto}',
+    '#fg-app{--c-bg:#0d0d12;--c-card:rgba(25,25,38,0.7);--c-border:rgba(255,255,255,0.09);--c-text:#f0f0f5;--c-text-sec:#aab0cc;--c-accent:#8b5cf6;--c-accent2:#06b6d4;--c-success:#34d399;--c-font:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--c-mono:"JetBrains Mono","Fira Code",monospace;font-family:var(--c-font);color:var(--c-text);padding:28px 24px;display:flex;flex-direction:column;gap:20px;height:100%;overflow-y:auto}',
     '#fg-app *,*::before,*::after{box-sizing:border-box}',
+    '.fg-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}',
     '#fg-hdr{text-align:center}',
     '#fg-hdr h1{font-size:1.7rem;font-weight:700;background:linear-gradient(130deg,#8b5cf6,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:3px}',
     '#fg-hdr p{font-size:0.85rem;color:var(--c-text-sec)}',
@@ -41,23 +42,26 @@
   var HTML = [
     '<div id="fg-app">',
     '<div id="fg-hdr"><h1>Flexbox & Grid Generator</h1><p>即時預覽 · CSS 輸出</p></div>',
-    '<div id="fg-mode-tabs">',
-    '<button class="fg-mode-tab active" data-mode="flex">Flexbox</button>',
-    '<button class="fg-mode-tab" data-mode="grid">CSS Grid</button>',
+    '<div id="fg-mode-tabs" role="tablist" aria-label="版面模式切換">',
+    '<button class="fg-mode-tab active" data-mode="flex" role="tab" aria-selected="true" aria-controls="fg-main">Flexbox</button>',
+    '<button class="fg-mode-tab" data-mode="grid" role="tab" aria-selected="false" aria-controls="fg-main">CSS Grid</button>',
     '</div>',
     '<div id="fg-main">',
     '<div class="fg-col" id="fg-controls">',
     '<div class="fg-section-label">Container</div>',
     '<div id="fg-container-ctrl"></div>',
-    '<div id="fg-item-count"><label>Items</label><input type=number id=fg-count min=1 max=12 value=4></div>',
+    '<div id="fg-item-count"><label for="fg-count">Items</label><input type=number id=fg-count min=1 max=12 value=4 aria-label="項目數量（1 到 12）"></div>',
     '<div class="fg-section-label">CSS 輸出</div>',
     '</div>',
     '<div class="fg-col">',
     '<div class="fg-section-label">預覽</div>',
-    '<div class="fg-preview-area" id="fg-preview-area"></div>',
+    '<div class="fg-preview-area" id="fg-preview-area" role="region" aria-label="佈局預覽"></div>',
     '<div class="fg-css-output">',
     '<div class="fg-css-code" id="fg-css-code"></div>',
-    '<div class="fg-copy-row"><button class="fg-copy" id="fg-copy-btn">複製</button></div>',
+    '<div class="fg-copy-row">',
+    '<span id="fg-copy-announce" class="fg-sr-only" role="status" aria-live="polite"></span>',
+    '<button class="fg-copy" id="fg-copy-btn">複製</button>',
+    '</div>',
     '</div>',
     '</div>',
     '</div>',
@@ -101,10 +105,11 @@
   function buildControls(controls, values) {
     var html = '<div class="fg-ctrl">';
     controls.forEach(function(c) {
+      var selectId = 'fg-sel-' + c.key;
       var opts = c.options.map(function(o) {
         return '<option value="' + o + '"' + (values[c.key] === o ? ' selected' : '') + '>' + o + '</option>';
       }).join('');
-      html += '<div class="fg-ctrl-row"><label>' + c.label + '</label><select id="fg-sel-' + c.key + '">' + opts + '</select></div>';
+      html += '<div class="fg-ctrl-row"><label for="' + selectId + '">' + c.label + '</label><select id="' + selectId + '" aria-label="' + c.label + '">' + opts + '</select></div>';
     });
     html += '</div>';
     return html;
@@ -144,20 +149,24 @@
   }
 
   function init() {
-    // Render initial
-    $id('fg-controls').innerHTML = buildControls(flexControls, flexValues);
+    // Render initial — only fill the container-control slot, keep item-count intact
+    $id('fg-container-ctrl').innerHTML = buildControls(flexControls, flexValues);
     renderItems();
 
     // Mode switch
     document.querySelectorAll('.fg-mode-tab').forEach(function(btn) {
       btn.addEventListener('click', function() {
-        document.querySelectorAll('.fg-mode-tab').forEach(function(b) { b.classList.remove('active'); });
+        document.querySelectorAll('.fg-mode-tab').forEach(function(b) {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
         btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
         mode = btn.dataset.mode;
         if (mode === 'flex') {
-          $id('fg-controls').innerHTML = '<div class="fg-section-label">Container</div>' + buildControls(flexControls, flexValues);
+          $id('fg-container-ctrl').innerHTML = buildControls(flexControls, flexValues);
         } else {
-          $id('fg-controls').innerHTML = '<div class="fg-section-label">Container</div>' + buildControls(gridControls, gridValues);
+          $id('fg-container-ctrl').innerHTML = buildControls(gridControls, gridValues);
         }
         renderItems();
         attachControlListeners();
@@ -175,13 +184,37 @@
 
     // Copy
     $id('fg-copy-btn').addEventListener('click', function() {
-      navigator.clipboard.writeText(buildCSS()).then(function() {
+      var text = buildCSS();
+      var announce = $id('fg-copy-announce');
+      navigator.clipboard.writeText(text).then(function() {
         $id('fg-copy-btn').classList.add('copied');
         $id('fg-copy-btn').textContent = '已複製!';
+        announce.textContent = '已複製';
         setTimeout(function() {
           $id('fg-copy-btn').classList.remove('copied');
           $id('fg-copy-btn').textContent = '複製';
+          announce.textContent = '';
         }, 1500);
+      }).catch(function() {
+        try {
+          var ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.focus();
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          $id('fg-copy-btn').classList.add('copied');
+          $id('fg-copy-btn').textContent = '已複製!';
+          announce.textContent = '已複製';
+          setTimeout(function() {
+            $id('fg-copy-btn').classList.remove('copied');
+            $id('fg-copy-btn').textContent = '複製';
+            announce.textContent = '';
+          }, 1500);
+        } catch (e) {}
       });
     });
   }

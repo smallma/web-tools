@@ -1,6 +1,6 @@
 (function() {
   var CSS = [
-    '#bs-app{--c-bg:#0d0d12;--c-card:rgba(25,25,38,0.7);--c-border:rgba(255,255,255,0.09);--c-text:#f0f0f5;--c-text-sec:#8888a0;--c-accent:#8b5cf6;--c-accent2:#06b6d4;--c-success:#34d399;--c-font:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--c-mono:"JetBrains Mono","Fira Code",monospace;font-family:var(--c-font);color:var(--c-text);padding:28px 24px;display:flex;flex-direction:column;gap:20px;height:100%;overflow-y:auto}',
+    '#bs-app{--c-bg:#0d0d12;--c-card:rgba(25,25,38,0.7);--c-border:rgba(255,255,255,0.09);--c-text:#f0f0f5;--c-text-sec:#aab0cc;--c-accent:#8b5cf6;--c-accent2:#06b6d4;--c-success:#34d399;--c-font:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--c-mono:"JetBrains Mono","Fira Code",monospace;font-family:var(--c-font);color:var(--c-text);padding:28px 24px;display:flex;flex-direction:column;gap:20px;height:100%;overflow-y:auto}',
     '#bs-app *,*::before,*::after{box-sizing:border-box}',
     '#bs-hdr{text-align:center}',
     '#bs-hdr h1{font-size:1.7rem;font-weight:700;background:linear-gradient(130deg,#8b5cf6,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:3px}',
@@ -40,7 +40,8 @@
     '.bs-copy-row{display:flex;justify-content:flex-end;padding-top:4px}',
     '.bs-copy{background:transparent;border:1px solid var(--c-border);border-radius:6px;padding:5px 12px;cursor:pointer;color:var(--c-text-sec);font-size:0.75rem;font-weight:600;transition:all 0.18s}',
     '.bs-copy:hover{color:var(--c-accent);border-color:var(--c-accent);background:rgba(139,92,246,0.1)}',
-    '.bs-copy.copied{color:var(--c-success);border-color:var(--c-success);background:rgba(52,211,153,0.1)}'
+    '.bs-copy.copied{color:var(--c-success);border-color:var(--c-success);background:rgba(52,211,153,0.1)}',
+    '.bs-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}'
   ].join('');
 
   var HTML = [
@@ -48,17 +49,17 @@
     '<div id="bs-hdr"><h1>Box Shadow Generator</h1><p>多層陰影 · 即時預覽</p></div>',
     '<div id="bs-main">',
     '<div class="bs-col">',
-    '<div class="bs-section-label">陰影圖層</div>',
-    '<div class="bs-layers" id="bs-layers"></div>',
-    '<button class="bs-add-layer" id="bs-add-layer">+ 新增圖層</button>',
+    '<div class="bs-section-label" id="bs-layers-label">陰影圖層</div>',
+    '<div class="bs-layers" id="bs-layers" role="list" aria-labelledby="bs-layers-label"></div>',
+    '<button class="bs-add-layer" id="bs-add-layer" aria-label="新增陰影圖層">+ 新增圖層</button>',
     '<div class="bs-section-label" style="margin-top:8px">預設</div>',
-    '<div class="bs-presets">',
-    '<button class="bs-preset" data-preset="material">Material</button>',
-    '<button class="bs-preset" data-preset="neumorphic">Neumorphic</button>',
-    '<button class="bs-preset" data-preset="card">Card</button>',
-    '<button class="bs-preset" data-preset="floating">Floating</button>',
-    '<button class="bs-preset" data-preset="hard">Hard</button>',
-    '<button class="bs-preset" data-preset="glow">Glow</button>',
+    '<div class="bs-presets" role="group" aria-label="預設陰影效果">',
+    '<button class="bs-preset" data-preset="material" aria-label="套用 Material 預設陰影">Material</button>',
+    '<button class="bs-preset" data-preset="neumorphic" aria-label="套用 Neumorphic 預設陰影">Neumorphic</button>',
+    '<button class="bs-preset" data-preset="card" aria-label="套用 Card 預設陰影">Card</button>',
+    '<button class="bs-preset" data-preset="floating" aria-label="套用 Floating 預設陰影">Floating</button>',
+    '<button class="bs-preset" data-preset="hard" aria-label="套用 Hard 預設陰影">Hard</button>',
+    '<button class="bs-preset" data-preset="glow" aria-label="套用 Glow 預設陰影">Glow</button>',
     '</div>',
     '</div>',
     '<div class="bs-col">',
@@ -67,7 +68,8 @@
     '<div class="bs-section-label">CSS 輸出</div>',
     '<div class="bs-css-output">',
     '<div class="bs-css-code" id="bs-css-code"></div>',
-    '<div class="bs-copy-row"><button class="bs-copy" id="bs-copy-btn">複製</button></div>',
+    '<div class="bs-copy-row"><button class="bs-copy" id="bs-copy-btn" aria-label="複製 CSS 程式碼">複製</button></div>',
+    '<div id="bs-copy-announce" class="bs-sr-only" role="status" aria-live="polite"></div>',
     '</div>',
     '</div>',
     '</div>',
@@ -114,15 +116,16 @@
 
   function renderLayers() {
     var html = '';
-    layers.forEach(function(l) {
+    layers.forEach(function(l, idx) {
+      var layerNum = idx + 1;
       html += [
-        '<div class="bs-layer" data-id="' + l.id + '">',
+        '<div class="bs-layer" data-id="' + l.id + '" role="listitem">',
         '<div class="bs-layer-color">',
         '<div class="bs-layer-color-preview" style="background:' + l.color + '"></div>',
-        '<input type="color" value="' + (l.color.startsWith('#') ? l.color.slice(0,7) : '#8b5cf6') + '" data-id="' + l.id + '">',
+        '<input type="color" value="' + (l.color.startsWith('#') ? l.color.slice(0,7) : '#8b5cf6') + '" data-id="' + l.id + '" aria-label="圖層 ' + layerNum + ' 顏色">',
         '</div>',
-        '<div class="bs-layer-info">x:' + l.x + ' y:' + l.y + ' b:' + l.blur + ' ' + (l.inset ? 'inset' : '') + '</div>',
-        '<button class="bs-layer-del" data-id="' + l.id + '">×</button>',
+        '<div class="bs-layer-info" role="button" tabindex="0" aria-expanded="false" aria-label="圖層 ' + layerNum + ' 設定，點擊展開控制項">x:' + l.x + ' y:' + l.y + ' b:' + l.blur + ' ' + (l.inset ? 'inset' : '') + '</div>',
+        '<button class="bs-layer-del" data-id="' + l.id + '" aria-label="刪除圖層 ' + layerNum + '">×</button>',
         '</div>'
       ].join('');
     });
@@ -163,32 +166,39 @@
     // Show a simple inline control for the clicked layer
     var el = $id('bs-layers').querySelector('[data-id="' + l.id + '"]');
     if (!el) return;
+    var infoEl = el.querySelector('.bs-layer-info');
     // Build controls
     var existing = el.querySelector('.bs-ctrl-inline');
-    if (existing) { existing.remove(); return; }
+    if (existing) {
+      existing.remove();
+      if (infoEl) infoEl.setAttribute('aria-expanded', 'false');
+      return;
+    }
+    if (infoEl) infoEl.setAttribute('aria-expanded', 'true');
     var ctrl = document.createElement('div');
     ctrl.className = 'bs-ctrl-inline';
     ctrl.style.cssText = 'display:flex;flex-direction:column;gap:4px;padding:8px 0 4px;border-top:1px solid rgba(255,255,255,0.06);margin-top:4px';
     ctrl.innerHTML = [
-      '<div class="bs-ctrl-row"><label>X</label><input type=range min=-50 max=50 value=' + l.x + ' data-key=x><span class=bs-val>' + l.x + 'px</span></div>',
-      '<div class="bs-ctrl-row"><label>Y</label><input type=range min=-50 max=50 value=' + l.y + ' data-key=y><span class=bs-val>' + l.y + 'px</span></div>',
-      '<div class="bs-ctrl-row"><label>Blur</label><input type=range min=0 max=100 value=' + l.blur + ' data-key=blur><span class=bs-val>' + l.blur + 'px</span></div>',
-      '<div class="bs-ctrl-row"><label>Spread</label><input type=range min=-20 max=50 value=' + l.spread + ' data-key=spread><span class=bs-val>' + l.spread + 'px</span></div>',
-      '<div class="bs-toggle-row"><label class=bs-toggle><input type=checkbox data-key=inset' + (l.inset ? ' checked' : '') + '>Inset</label></div>'
+      '<div class="bs-ctrl-row"><label for="bsc-x-' + l.id + '">X</label><input type=range id="bsc-x-' + l.id + '" min=-50 max=50 value=' + l.x + ' data-key=x aria-label="X 偏移" aria-valuemin="-50" aria-valuemax="50" aria-valuenow="' + l.x + '"><span class=bs-val>' + l.x + 'px</span></div>',
+      '<div class="bs-ctrl-row"><label for="bsc-y-' + l.id + '">Y</label><input type=range id="bsc-y-' + l.id + '" min=-50 max=50 value=' + l.y + ' data-key=y aria-label="Y 偏移" aria-valuemin="-50" aria-valuemax="50" aria-valuenow="' + l.y + '"><span class=bs-val>' + l.y + 'px</span></div>',
+      '<div class="bs-ctrl-row"><label for="bsc-blur-' + l.id + '">Blur</label><input type=range id="bsc-blur-' + l.id + '" min=0 max=100 value=' + l.blur + ' data-key=blur aria-label="模糊半徑" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + l.blur + '"><span class=bs-val>' + l.blur + 'px</span></div>',
+      '<div class="bs-ctrl-row"><label for="bsc-spread-' + l.id + '">Spread</label><input type=range id="bsc-spread-' + l.id + '" min=-20 max=50 value=' + l.spread + ' data-key=spread aria-label="擴散距離" aria-valuemin="-20" aria-valuemax="50" aria-valuenow="' + l.spread + '"><span class=bs-val>' + l.spread + 'px</span></div>',
+      '<div class="bs-toggle-row"><label class=bs-toggle><input type=checkbox data-key=inset' + (l.inset ? ' checked' : '') + ' aria-label="內陰影 (Inset)">Inset</label></div>'
     ].join('');
     el.appendChild(ctrl);
     ctrl.querySelectorAll('input[type=range]').forEach(function(inp) {
       inp.style.cssText = 'flex:1;-webkit-appearance:none;height:4px;border-radius:2px;background:rgba(255,255,255,0.1);outline:none';
       inp.addEventListener('input', function() {
         l[inp.dataset.key] = parseInt(inp.value);
-        inp.previousElementSibling.textContent = inp.value + 'px';
-        el.querySelector('.bs-layer-info').textContent = 'x:' + l.x + ' y:' + l.y + ' b:' + l.blur + ' ' + (l.inset ? 'inset' : '');
+        inp.setAttribute('aria-valuenow', inp.value);
+        inp.nextElementSibling.textContent = inp.value + 'px';
+        if (infoEl) infoEl.textContent = 'x:' + l.x + ' y:' + l.y + ' b:' + l.blur + ' ' + (l.inset ? 'inset' : '');
         applyShadow();
       });
     });
     ctrl.querySelector('input[type=checkbox]').addEventListener('change', function() {
       l.inset = this.checked;
-      el.querySelector('.bs-layer-info').textContent = 'x:' + l.x + ' y:' + l.y + ' b:' + l.blur + ' ' + (l.inset ? 'inset' : '');
+      if (infoEl) infoEl.textContent = 'x:' + l.x + ' y:' + l.y + ' b:' + l.blur + ' ' + (l.inset ? 'inset' : '');
       applyShadow();
     });
   }
@@ -209,6 +219,16 @@
       }
     });
 
+    $id('bs-layers').addEventListener('keydown', function(e) {
+      if (e.target.classList.contains('bs-layer-info') && (e.key === 'Enter' || e.key === ' ')) {
+        e.preventDefault();
+        var layerEl = e.target.closest('.bs-layer');
+        var id = parseInt(layerEl.dataset.id);
+        var l = layers.find(function(x) { return x.id === id; });
+        if (l) showControls(l);
+      }
+    });
+
     document.querySelectorAll('.bs-preset').forEach(function(btn) {
       btn.addEventListener('click', function() {
         var preset = PRESETS[btn.dataset.preset] || PRESETS.material;
@@ -221,14 +241,26 @@
     });
 
     $id('bs-copy-btn').addEventListener('click', function() {
-      navigator.clipboard.writeText(fullCSS()).then(function() {
-        $id('bs-copy-btn').classList.add('copied');
-        $id('bs-copy-btn').textContent = '已複製!';
+      var css = fullCSS();
+      var btn = $id('bs-copy-btn');
+      var announce = $id('bs-copy-announce');
+      function onCopied() {
+        btn.classList.add('copied');
+        btn.textContent = '已複製!';
+        if (announce) { announce.textContent = ''; announce.textContent = '已複製 CSS 程式碼'; }
         setTimeout(function() {
-          $id('bs-copy-btn').classList.remove('copied');
-          $id('bs-copy-btn').textContent = '複製';
+          btn.classList.remove('copied');
+          btn.textContent = '複製';
+          if (announce) announce.textContent = '';
         }, 1500);
-      });
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(css).then(onCopied).catch(function() {
+          try { document.execCommand('copy', false, css); onCopied(); } catch(e) {}
+        });
+      } else {
+        try { document.execCommand('copy', false, css); onCopied(); } catch(e) {}
+      }
     });
 
     renderLayers();

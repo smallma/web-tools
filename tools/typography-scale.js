@@ -1,6 +1,6 @@
 (function() {
   var CSS = [
-    '#ts-app{--c-bg:#0d0d12;--c-card:rgba(25,25,38,0.7);--c-border:rgba(255,255,255,0.09);--c-text:#f0f0f5;--c-text-sec:#8888a0;--c-accent:#8b5cf6;--c-accent2:#06b6d4;--c-success:#34d399;--c-font:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--c-mono:"JetBrains Mono","Fira Code",monospace;font-family:var(--c-font);color:var(--c-text);padding:28px 24px;display:flex;flex-direction:column;gap:20px;height:100%;overflow-y:auto}',
+    '#ts-app{--c-bg:#0d0d12;--c-card:rgba(25,25,38,0.7);--c-border:rgba(255,255,255,0.09);--c-text:#f0f0f5;--c-text-sec:#aab0cc;--c-accent:#8b5cf6;--c-accent2:#06b6d4;--c-success:#34d399;--c-font:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--c-mono:"JetBrains Mono","Fira Code",monospace;font-family:var(--c-font);color:var(--c-text);padding:28px 24px;display:flex;flex-direction:column;gap:20px;height:100%;overflow-y:auto}',
     '#ts-app *,*::before,*::after{box-sizing:border-box}',
     '#ts-hdr{text-align:center}',
     '#ts-hdr h1{font-size:1.7rem;font-weight:700;background:linear-gradient(130deg,#8b5cf6,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:3px}',
@@ -40,7 +40,15 @@
     '.ts-copy{background:transparent;border:1px solid var(--c-border);border-radius:6px;padding:5px 12px;cursor:pointer;color:var(--c-text-sec);font-size:0.75rem;font-weight:600;transition:all 0.18s}',
     '.ts-copy:hover{color:var(--c-accent);border-color:var(--c-accent);background:rgba(139,92,246,0.1)}',
     '.ts-copy.copied{color:var(--c-success);border-color:var(--c-success);background:rgba(52,211,153,0.1)}',
-    '#ts-custom-css{font-size:0.78rem}'
+    '#ts-custom-css{font-size:0.78rem}',
+    '#ts-scale-table{width:100%;border-collapse:collapse}',
+    '#ts-scale-table th{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--c-text-sec);text-align:left;padding:4px 8px;border-bottom:1px solid var(--c-border)}',
+    '#ts-scale-table td{padding:6px 8px;border-bottom:1px solid rgba(255,255,255,0.04);vertical-align:middle}',
+    '#ts-scale-table tr:last-child td{border-bottom:none}',
+    '.ts-tbl-name{font-family:var(--c-mono);font-size:0.72rem;color:var(--c-text-sec)}',
+    '.ts-tbl-size{font-family:var(--c-mono);font-size:0.8rem;color:var(--c-accent2);text-align:right}',
+    '.ts-tbl-bar{width:120px}',
+    '.ts-tbl-sample{text-align:right;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}'
   ].join('');
 
   var HTML = [
@@ -50,23 +58,24 @@
     '<div class="ts-col">',
     '<div class="ts-section-label">Base Size</div>',
     '<div class="ts-input-row">',
-    '<label>font-size</label>',
-    '<input type="number" id="ts-base" value="16" min="8" max="100">',
+    '<label for="ts-base">font-size</label>',
+    '<input type="number" id="ts-base" value="16" min="8" max="100" aria-label="基礎字體大小（px）">',
     '<span>px</span>',
     '</div>',
     '<div class="ts-section-label">Scale Ratio</div>',
     '<div class="ts-ratio-grid">',
-    '<button class="ts-ratio-btn" data-ratio="1.067"><span class="ts-ratio-name">Minor Second</span><span class="ts-ratio-val">1.067</span></button>',
-    '<button class="ts-ratio-btn active" data-ratio="1.25"><span class="ts-ratio-name">Major Third</span><span class="ts-ratio-val">1.25</span></button>',
-    '<button class="ts-ratio-btn" data-ratio="1.333"><span class="ts-ratio-name">Perfect Fourth</span><span class="ts-ratio-val">1.333</span></button>',
-    '<button class="ts-ratio-btn" data-ratio="1.5"><span class="ts-ratio-name">Perfect Fifth</span><span class="ts-ratio-val">1.5</span></button>',
-    '<button class="ts-ratio-btn" data-ratio="1.618"><span class="ts-ratio-name">Golden Ratio</span><span class="ts-ratio-val">1.618</span></button>',
-    '<button class="ts-ratio-btn" data-ratio="2"><span class="ts-ratio-name">Octave</span><span class="ts-ratio-val">2.0</span></button>',
+    '<button class="ts-ratio-btn" data-ratio="1.067" aria-label="比例：小二度 1.067"><span class="ts-ratio-name">Minor Second</span><span class="ts-ratio-val">1.067</span></button>',
+    '<button class="ts-ratio-btn active" data-ratio="1.25" aria-label="比例：大三度 1.250"><span class="ts-ratio-name">Major Third</span><span class="ts-ratio-val">1.25</span></button>',
+    '<button class="ts-ratio-btn" data-ratio="1.333" aria-label="比例：完全四度 1.333"><span class="ts-ratio-name">Perfect Fourth</span><span class="ts-ratio-val">1.333</span></button>',
+    '<button class="ts-ratio-btn" data-ratio="1.5" aria-label="比例：完全五度 1.500"><span class="ts-ratio-name">Perfect Fifth</span><span class="ts-ratio-val">1.5</span></button>',
+    '<button class="ts-ratio-btn" data-ratio="1.618" aria-label="比例：黃金比例 1.618"><span class="ts-ratio-name">Golden Ratio</span><span class="ts-ratio-val">1.618</span></button>',
+    '<button class="ts-ratio-btn" data-ratio="2" aria-label="比例：八度音程 2.000"><span class="ts-ratio-name">Octave</span><span class="ts-ratio-val">2.0</span></button>',
     '</div>',
     '<div class="ts-section-label">Custom Ratio</div>',
     '<div class="ts-custom">',
-    '<input type="number" id="ts-custom-ratio" placeholder="e.g. 1.414" step="0.001" min="1" max="3">',
-    '<span>×</span>',
+    '<label for="ts-custom-ratio" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">自訂比例</label>',
+    '<input type="number" id="ts-custom-ratio" placeholder="e.g. 1.414" step="0.001" min="1" max="3" aria-label="自訂比例值（1 到 3 之間）">',
+    '<span aria-hidden="true">×</span>',
     '</div>',
     '</div>',
     '<div class="ts-col">',
@@ -76,7 +85,7 @@
     '<div class="ts-css-output">',
     '<div class="ts-css-label">Custom Properties</div>',
     '<div class="ts-css-code" id="ts-css-code"></div>',
-    '<div class="ts-copy-row"><button class="ts-copy" id="ts-copy-btn">複製 CSS</button></div>',
+    '<div class="ts-copy-row"><button class="ts-copy" id="ts-copy-btn" aria-label="複製 CSS 變數">複製 CSS</button><span id="ts-copy-status" role="status" aria-live="polite" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0"></span></div>',
     '</div>',
     '</div>',
     '</div>',
@@ -131,21 +140,24 @@
   function renderPreview() {
     var maxSize = getMaxSize();
     var preview = $id('ts-preview');
-    var html = '';
+    var html = '<table id="ts-scale-table" aria-label="字型比例預覽表格"><thead><tr>' +
+      '<th scope="col">名稱</th>' +
+      '<th scope="col">大小</th>' +
+      '<th scope="col">比例條</th>' +
+      '<th scope="col">樣本</th>' +
+      '</tr></thead><tbody>';
     steps.forEach(function(s) {
       var size = calcSize(s.delta);
       var barWidth = Math.round((size / maxSize) * 100);
-      // Chinese-friendly sample text
       var sample = size < 12 ? '微小文字' : size < 16 ? '標準內文' : size < 24 ? '標題文字' : size < 36 ? '大標題' : '巨型標題';
-      html += [
-        '<div class="ts-scale-row">',
-        '<span class="ts-scale-name">' + s.label + '</span>',
-        '<span class="ts-scale-size">' + size + 'px</span>',
-        '<div class="ts-scale-bar"><div class="ts-scale-bar-fill" style="width:' + barWidth + '%"></div></div>',
-        '<span class="ts-scale-sample" style="font-size:' + size + 'px">' + sample + '</span>',
-        '</div>'
-      ].join('');
+      html += '<tr>' +
+        '<td class="ts-tbl-name">' + s.label + '</td>' +
+        '<td class="ts-tbl-size">' + size + 'px</td>' +
+        '<td class="ts-tbl-bar"><div class="ts-scale-bar"><div class="ts-scale-bar-fill" style="width:' + barWidth + '%"></div></div></td>' +
+        '<td class="ts-tbl-sample" style="font-size:' + size + 'px">' + sample + '</td>' +
+        '</tr>';
     });
+    html += '</tbody></table>';
     preview.innerHTML = html;
     $id('ts-css-code').textContent = generateCSS();
   }
@@ -180,15 +192,33 @@
 
     // Copy
     $id('ts-copy-btn').addEventListener('click', function() {
-      var css = generateCSS();
-      navigator.clipboard.writeText(css).then(function() {
+      var text = generateCSS();
+      function onCopied() {
         $id('ts-copy-btn').classList.add('copied');
         $id('ts-copy-btn').textContent = '已複製!';
+        $id('ts-copy-status').textContent = '已複製';
         setTimeout(function() {
           $id('ts-copy-btn').classList.remove('copied');
           $id('ts-copy-btn').textContent = '複製 CSS';
+          $id('ts-copy-status').textContent = '';
         }, 1500);
-      });
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(onCopied).catch(function() {
+          try { document.execCommand('copy'); onCopied(); } catch(e) {}
+        });
+      } else {
+        try {
+          var ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed'; ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          onCopied();
+        } catch(e) {}
+      }
     });
 
     renderPreview();

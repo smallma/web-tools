@@ -1,7 +1,8 @@
 (function() {
   var CSS = [
-    '#tf-app{--c-bg:#0d0d12;--c-card:rgba(25,25,38,0.7);--c-border:rgba(255,255,255,0.09);--c-text:#f0f0f5;--c-text-sec:#8888a0;--c-accent:#8b5cf6;--c-accent2:#06b6d4;--c-success:#34d399;--c-font:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--c-mono:"JetBrains Mono","Fira Code",monospace;font-family:var(--c-font);color:var(--c-text);padding:28px 24px;display:flex;flex-direction:column;gap:20px;height:100%;overflow-y:auto}',
+    '#tf-app{--c-bg:#0d0d12;--c-card:rgba(25,25,38,0.7);--c-border:rgba(255,255,255,0.09);--c-text:#f0f0f5;--c-text-sec:#aab0cc;--c-accent:#8b5cf6;--c-accent2:#06b6d4;--c-success:#34d399;--c-font:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--c-mono:"JetBrains Mono","Fira Code",monospace;font-family:var(--c-font);color:var(--c-text);padding:28px 24px;display:flex;flex-direction:column;gap:20px;height:100%;overflow-y:auto}',
     '#tf-app *,*::before,*::after{box-sizing:border-box}',
+    '.tf-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}',
     '#tf-hdr{text-align:center}',
     '#tf-hdr h1{font-size:1.7rem;font-weight:700;background:linear-gradient(130deg,#8b5cf6,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:3px}',
     '#tf-hdr p{font-size:0.85rem;color:var(--c-text-sec)}',
@@ -38,34 +39,34 @@
     '<div class="tf-col">',
     '<div class="tf-section-label">Rotate</div>',
     '<div class="tf-ctrl">',
-    '<div class="tf-ctrl-row"><label>Rotate</label><input type=range id=tf-rotate min=-180 max=180 value=0><span class=tf-val id=tf-rotate-v>0deg</span></div>',
+    '<div class="tf-ctrl-row"><label for="tf-rotate">Rotate</label><input type=range id=tf-rotate min=-180 max=180 value=0 aria-label="旋轉角度" aria-valuemin="-180" aria-valuemax="180" aria-valuenow="0"><span class=tf-val id=tf-rotate-v>0deg</span></div>',
     '</div>',
     '<div class="tf-section-label">Scale</div>',
     '<div class="tf-ctrl">',
-    '<div class="tf-ctrl-row"><label>X</label><input type=range id=tf-sx min=0 max=3 step=0.05 value=1><span class=tf-val id=tf-sx-v>1</span></div>',
-    '<div class="tf-ctrl-row"><label>Y</label><input type=range id=tf-sy min=0 max=3 step=0.05 value=1><span class=tf-val id=tf-sy-v>1</span></div>',
-    '<div class="tf-toggle"><input type=checkbox id=tf-uniform checked><span>Uniform scale</span></div>',
+    '<div class="tf-ctrl-row"><label for="tf-sx">X</label><input type=range id=tf-sx min=0 max=3 step=0.05 value=1 aria-label="縮放 X 軸" aria-valuemin="0" aria-valuemax="3" aria-valuenow="1"><span class=tf-val id=tf-sx-v>1</span></div>',
+    '<div class="tf-ctrl-row"><label for="tf-sy">Y</label><input type=range id=tf-sy min=0 max=3 step=0.05 value=1 aria-label="縮放 Y 軸" aria-valuemin="0" aria-valuemax="3" aria-valuenow="1"><span class=tf-val id=tf-sy-v>1</span></div>',
+    '<div class="tf-toggle"><input type=checkbox id=tf-uniform checked aria-label="等比縮放（同時調整 X 與 Y）"><label for="tf-uniform">Uniform scale</label></div>',
     '</div>',
     '<div class="tf-section-label">Skew</div>',
     '<div class="tf-ctrl">',
-    '<div class="tf-ctrl-row"><label>X</label><input type=range id=tf-kx min=-90 max=90 value=0><span class=tf-val id=tf-kx-v>0deg</span></div>',
-    '<div class="tf-ctrl-row"><label>Y</label><input type=range id=tf-ky min=-90 max=90 value=0><span class=tf-val id=tf-ky-v>0deg</span></div>',
+    '<div class="tf-ctrl-row"><label for="tf-kx">X</label><input type=range id=tf-kx min=-90 max=90 value=0 aria-label="傾斜 X 軸" aria-valuemin="-90" aria-valuemax="90" aria-valuenow="0"><span class=tf-val id=tf-kx-v>0deg</span></div>',
+    '<div class="tf-ctrl-row"><label for="tf-ky">Y</label><input type=range id=tf-ky min=-90 max=90 value=0 aria-label="傾斜 Y 軸" aria-valuemin="-90" aria-valuemax="90" aria-valuenow="0"><span class=tf-val id=tf-ky-v>0deg</span></div>',
     '</div>',
     '<div class="tf-section-label">Translate</div>',
     '<div class="tf-ctrl">',
-    '<div class="tf-ctrl-row"><label>X</label><input type=range id=tf-tx min=-200 max=200 value=0><span class=tf-val id=tf-tx-v>0px</span></div>',
-    '<div class="tf-ctrl-row"><label>Y</label><input type=range id=tf-ty min=-200 max=200 value=0><span class=tf-val id=tf-ty-v>0px</span></div>',
+    '<div class="tf-ctrl-row"><label for="tf-tx">X</label><input type=range id=tf-tx min=-200 max=200 value=0 aria-label="平移 X 軸" aria-valuemin="-200" aria-valuemax="200" aria-valuenow="0"><span class=tf-val id=tf-tx-v>0px</span></div>',
+    '<div class="tf-ctrl-row"><label for="tf-ty">Y</label><input type=range id=tf-ty min=-200 max=200 value=0 aria-label="平移 Y 軸" aria-valuemin="-200" aria-valuemax="200" aria-valuenow="0"><span class=tf-val id=tf-ty-v>0px</span></div>',
     '</div>',
     '<div class="tf-section-label">Presets</div>',
     '<div class="tf-presets">',
-    '<button class="tf-preset" data-t="rotate:45">Rotate 45</button>',
-    '<button class="tf-preset" data-t="rotate:-15 skewX:10">Tilt</button>',
-    '<button class="tf-preset" data-t="scale:1.2">Zoom In</button>',
-    '<button class="tf-preset" data-t="scale:0.9">Zoom Out</button>',
-    '<button class="tf-preset" data-t="rotate:180">Flip H</button>',
-    '<button class="tf-preset" data-t="scaleX:-1">Mirror</button>',
-    '<button class="tf-preset" data-t="tx:30 ty:-20">Slide</button>',
-    '<button class="tf-preset" data-t="reset">Reset</button>',
+    '<button class="tf-preset" data-t="rotate:45" aria-label="預設：旋轉 45 度">Rotate 45</button>',
+    '<button class="tf-preset" data-t="rotate:-15 skewX:10" aria-label="預設：Tilt">Tilt</button>',
+    '<button class="tf-preset" data-t="scale:1.2" aria-label="預設：Zoom In">Zoom In</button>',
+    '<button class="tf-preset" data-t="scale:0.9" aria-label="預設：Zoom Out">Zoom Out</button>',
+    '<button class="tf-preset" data-t="rotate:180" aria-label="預設：上下翻轉（旋轉 180 度）">上下翻轉</button>',
+    '<button class="tf-preset" data-t="scaleX:-1" aria-label="預設：水平鏡像（X 軸翻轉）">水平鏡像</button>',
+    '<button class="tf-preset" data-t="tx:30 ty:-20" aria-label="預設：Slide">Slide</button>',
+    '<button class="tf-preset" data-t="reset" aria-label="重置所有變形">Reset</button>',
     '</div>',
     '</div>',
     '<div class="tf-col">',
@@ -74,7 +75,10 @@
     '<div class="tf-section-label">CSS 輸出</div>',
     '<div class="tf-css-output">',
     '<div class="tf-css-code" id="tf-css-code"></div>',
-    '<div class="tf-copy-row"><button class="tf-copy" id="tf-copy-btn">複製</button></div>',
+    '<div class="tf-copy-row">',
+    '<span id="tf-copy-announce" class="tf-sr-only" role="status" aria-live="polite"></span>',
+    '<button class="tf-copy" id="tf-copy-btn">複製</button>',
+    '</div>',
     '</div>',
     '</div>',
     '</div>',
@@ -109,6 +113,15 @@
     $id('tf-ky-v').textContent = ky + 'deg';
     $id('tf-tx-v').textContent = tx + 'px';
     $id('tf-ty-v').textContent = ty + 'px';
+
+    // 更新 aria-valuenow
+    $id('tf-rotate').setAttribute('aria-valuenow', r);
+    $id('tf-sx').setAttribute('aria-valuenow', sx);
+    $id('tf-sy').setAttribute('aria-valuenow', sy);
+    $id('tf-kx').setAttribute('aria-valuenow', kx);
+    $id('tf-ky').setAttribute('aria-valuenow', ky);
+    $id('tf-tx').setAttribute('aria-valuenow', tx);
+    $id('tf-ty').setAttribute('aria-valuenow', ty);
   }
 
   function init() {
@@ -158,10 +171,37 @@
     });
 
     $id('tf-copy-btn').addEventListener('click', function() {
-      navigator.clipboard.writeText('transform: ' + $id('tf-css-code').textContent.replace('transform:\n  ', '') + ';').then(function() {
+      var text = 'transform: ' + $id('tf-css-code').textContent.replace('transform:\n  ', '') + ';';
+      var announce = $id('tf-copy-announce');
+      navigator.clipboard.writeText(text).then(function() {
         $id('tf-copy-btn').classList.add('copied');
         $id('tf-copy-btn').textContent = '已複製!';
-        setTimeout(function() { $id('tf-copy-btn').classList.remove('copied'); $id('tf-copy-btn').textContent = '複製'; }, 1500);
+        announce.textContent = '已複製';
+        setTimeout(function() {
+          $id('tf-copy-btn').classList.remove('copied');
+          $id('tf-copy-btn').textContent = '複製';
+          announce.textContent = '';
+        }, 1500);
+      }).catch(function() {
+        try {
+          var ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.focus();
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          $id('tf-copy-btn').classList.add('copied');
+          $id('tf-copy-btn').textContent = '已複製!';
+          announce.textContent = '已複製';
+          setTimeout(function() {
+            $id('tf-copy-btn').classList.remove('copied');
+            $id('tf-copy-btn').textContent = '複製';
+            announce.textContent = '';
+          }, 1500);
+        } catch (e) {}
       });
     });
 

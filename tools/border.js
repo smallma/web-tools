@@ -1,6 +1,6 @@
 (function() {
   var CSS = [
-    '#bd-app{--c-bg:#0d0d12;--c-card:rgba(25,25,38,0.7);--c-border:rgba(255,255,255,0.09);--c-text:#f0f0f5;--c-text-sec:#8888a0;--c-accent:#8b5cf6;--c-accent2:#06b6d4;--c-success:#34d399;--c-font:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--c-mono:"JetBrains Mono","Fira Code",monospace;font-family:var(--c-font);color:var(--c-text);padding:28px 24px;display:flex;flex-direction:column;gap:20px;height:100%;overflow-y:auto}',
+    '#bd-app{--c-bg:#0d0d12;--c-card:rgba(25,25,38,0.7);--c-border:rgba(255,255,255,0.09);--c-text:#f0f0f5;--c-text-sec:#aab0cc;--c-accent:#8b5cf6;--c-accent2:#06b6d4;--c-success:#34d399;--c-font:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--c-mono:"JetBrains Mono","Fira Code",monospace;font-family:var(--c-font);color:var(--c-text);padding:28px 24px;display:flex;flex-direction:column;gap:20px;height:100%;overflow-y:auto}',
     '#bd-app *,*::before,*::after{box-sizing:border-box}',
     '#bd-hdr{text-align:center}',
     '#bd-hdr h1{font-size:1.7rem;font-weight:700;background:linear-gradient(130deg,#8b5cf6,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:3px}',
@@ -41,24 +41,24 @@
     '<div class="bd-col">',
     '<div class="bd-section-label">Style</div>',
     '<div class="bd-ctrl">',
-    '<div class="bd-ctrl-row"><label>Style</label><select id=bd-style><option>solid</option><option>dashed</option><option>dotted</option><option>double</option><option>groove</option><option>ridge</option><option>inset</option><option>outset</option></select></div>',
-    '<div class="bd-ctrl-row"><label>Width</label><input type=range id=bd-width min=1 max=20 value=2><span class=bd-val id=bd-width-v>2px</span></div>',
-    '<div class="bd-ctrl-row"><label>Color</label><input type=color id=bd-color value="#8b5cf6"></div>',
+    '<div class="bd-ctrl-row"><label for="bd-style">Style</label><select id="bd-style" aria-label="邊框樣式"><option>solid</option><option>dashed</option><option>dotted</option><option>double</option><option>groove</option><option>ridge</option><option>inset</option><option>outset</option></select></div>',
+    '<div class="bd-ctrl-row"><label for="bd-width">Width</label><input type="range" id="bd-width" min="1" max="20" value="2" aria-label="邊框寬度" aria-valuemin="1" aria-valuemax="20" aria-valuenow="2"><span class="bd-val" id="bd-width-v">2px</span></div>',
+    '<div class="bd-ctrl-row"><label for="bd-color">Color</label><input type="color" id="bd-color" value="#8b5cf6" aria-label="邊框顏色"></div>',
     '</div>',
     '<div class="bd-section-label">Apply to</div>',
-    '<div class="bd-sides">',
-    '<div class="bd-side"><span class=bd-side-label>Top</span><input type=checkbox id=bd-top checked></div>',
-    '<div class="bd-side"><span class=bd-side-label>Right</span><input type=checkbox id=bd-right checked></div>',
-    '<div class="bd-side"><span class=bd-side-label>Bottom</span><input type=checkbox id=bd-bottom checked></div>',
-    '<div class="bd-side"><span class=bd-side-label>Left</span><input type=checkbox id=bd-left checked></div>',
+    '<div class="bd-sides" role="group" aria-label="套用邊框的方向">',
+    '<div class="bd-side"><label for="bd-top" class="bd-side-label">Top</label><input type="checkbox" id="bd-top" checked aria-label="上邊框"></div>',
+    '<div class="bd-side"><label for="bd-right" class="bd-side-label">Right</label><input type="checkbox" id="bd-right" checked aria-label="右邊框"></div>',
+    '<div class="bd-side"><label for="bd-bottom" class="bd-side-label">Bottom</label><input type="checkbox" id="bd-bottom" checked aria-label="下邊框"></div>',
+    '<div class="bd-side"><label for="bd-left" class="bd-side-label">Left</label><input type="checkbox" id="bd-left" checked aria-label="左邊框"></div>',
     '</div>',
     '<div class="bd-section-label" style="margin-top:8px">Presets</div>',
     '<div class="bd-presets">',
-    '<button class="bd-preset" data-p="solid:2:#8b5cf6" style="background:#8b5cf6"></button>',
-    '<button class="bd-preset" data-p="dashed:2:#06b6d4" style="background:transparent;border:2px dashed #06b6d4"></button>',
-    '<button class="bd-preset" data-p="dotted:3:#34d399" style="background:transparent;border:3px dotted #34d399"></button>',
-    '<button class="bd-preset" data-p="double:4:#f59e0b" style="background:transparent;border:4px double #f59e0b"></button>',
-    '<button class="bd-preset" data-p="gradient:3" style="background:linear-gradient(90deg,#8b5cf6,#06b6d4,#ec4899)"></button>',
+    '<button class="bd-preset" data-p="solid:2:#8b5cf6" style="background:#8b5cf6" aria-label="預設：實線 2px 紫色"></button>',
+    '<button class="bd-preset" data-p="dashed:2:#06b6d4" style="background:transparent;border:2px dashed #06b6d4" aria-label="預設：虛線 2px 青色"></button>',
+    '<button class="bd-preset" data-p="dotted:3:#34d399" style="background:transparent;border:3px dotted #34d399" aria-label="預設：點線 3px 綠色"></button>',
+    '<button class="bd-preset" data-p="double:4:#f59e0b" style="background:transparent;border:4px double #f59e0b" aria-label="預設：雙線 4px 橘色"></button>',
+    '<button class="bd-preset" data-p="gradient:3" style="background:linear-gradient(90deg,#8b5cf6,#06b6d4,#ec4899)" aria-label="預設：漸層邊框"></button>',
     '</div>',
     '</div>',
     '<div class="bd-col">',
@@ -67,7 +67,7 @@
     '<div class="bd-section-label">CSS 輸出</div>',
     '<div class="bd-css-output">',
     '<div class="bd-css-code" id="bd-css-code"></div>',
-    '<div class="bd-copy-row"><button class="bd-copy" id="bd-copy-btn">複製</button></div>',
+    '<div class="bd-copy-row"><button class="bd-copy" id="bd-copy-btn" aria-label="複製 CSS">複製</button><span id="bd-copy-status" role="status" aria-live="polite" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0"></span></div>',
     '</div>',
     '</div>',
     '</div>',
@@ -115,7 +115,10 @@
 
   function init() {
     $id('bd-style').addEventListener('change', apply);
-    $id('bd-width').addEventListener('input', apply);
+    $id('bd-width').addEventListener('input', function() {
+      $id('bd-width').setAttribute('aria-valuenow', $id('bd-width').value);
+      apply();
+    });
     $id('bd-color').addEventListener('input', apply);
     ['top','right','bottom','left'].forEach(function(side) {
       $id('bd-' + side).addEventListener('change', apply);
@@ -142,11 +145,33 @@
     });
 
     $id('bd-copy-btn').addEventListener('click', function() {
-      navigator.clipboard.writeText($id('bd-css-code').textContent).then(function() {
+      var text = $id('bd-css-code').textContent;
+      function onCopied() {
         $id('bd-copy-btn').classList.add('copied');
         $id('bd-copy-btn').textContent = '已複製!';
-        setTimeout(function() { $id('bd-copy-btn').classList.remove('copied'); $id('bd-copy-btn').textContent = '複製'; }, 1500);
-      });
+        $id('bd-copy-status').textContent = '已複製';
+        setTimeout(function() {
+          $id('bd-copy-btn').classList.remove('copied');
+          $id('bd-copy-btn').textContent = '複製';
+          $id('bd-copy-status').textContent = '';
+        }, 1500);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(onCopied).catch(function() {
+          try { document.execCommand('copy'); onCopied(); } catch(e) {}
+        });
+      } else {
+        try {
+          var ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed'; ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          onCopied();
+        } catch(e) {}
+      }
     });
 
     apply();

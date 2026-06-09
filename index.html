@@ -11,6 +11,8 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <a class="skip-link" href="#main-content">跳到主要內容</a>
+  <h1 class="sr-only">Dev Tools Hub 開發工具集合</h1>
   <div class="layout">
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
@@ -19,71 +21,69 @@
         <span class="sidebar__brand-name">Dev Tools</span>
       </div>
 
-      <nav class="sidebar__nav" role="navigation" aria-label="工具選單">
+      <nav class="sidebar__nav" role="tablist" aria-label="工具選單" aria-orientation="vertical">
         <div class="sidebar__section-label">Design</div>
-        <button class="nav-item nav-item--active" data-tool="ada-contrast" role="tab" aria-selected="true">
+        <button class="nav-item nav-item--active" data-tool="ada-contrast" id="tab-ada-contrast" role="tab" aria-selected="true" aria-controls="panel-ada-contrast" tabindex="0">
           <span class="nav-item__icon">◑</span>
           <span class="nav-item__label">ADA Contrast</span>
           <span class="nav-item__badge">AA/AAA</span>
         </button>
-        <button class="nav-item" data-tool="linear-gradient" role="tab" aria-selected="false">
+        <button class="nav-item" data-tool="linear-gradient" id="tab-linear-gradient" role="tab" aria-selected="false" aria-controls="panel-linear-gradient" tabindex="-1">
           <span class="nav-item__icon">◆</span>
           <span class="nav-item__label">Gradient Gen</span>
           <span class="nav-item__badge">CSS</span>
         </button>
-        <button class="nav-item" data-tool="color-format" role="tab" aria-selected="false">
+        <button class="nav-item" data-tool="color-format" id="tab-color-format" role="tab" aria-selected="false" aria-controls="panel-color-format" tabindex="-1">
           <span class="nav-item__icon">◈</span>
           <span class="nav-item__label">Color Format</span>
           <span class="nav-item__badge">HEX/RGB/HSL</span>
         </button>
-        <button class="nav-item" data-tool="border-radius" role="tab" aria-selected="false">
+        <button class="nav-item" data-tool="border-radius" id="tab-border-radius" role="tab" aria-selected="false" aria-controls="panel-border-radius" tabindex="-1">
           <span class="nav-item__icon">◔</span>
           <span class="nav-item__label">Border Radius</span>
           <span class="nav-item__badge">CSS</span>
         </button>
-        <button class="nav-item" data-tool="typography-scale" role="tab" aria-selected="false">
+        <button class="nav-item" data-tool="typography-scale" id="tab-typography-scale" role="tab" aria-selected="false" aria-controls="panel-typography-scale" tabindex="-1">
           <span class="nav-item__icon">T</span>
           <span class="nav-item__label">Typography Scale</span>
           <span class="nav-item__badge">CSS</span>
         </button>
-        <button class="nav-item" data-tool="box-shadow" role="tab" aria-selected="false">
+        <button class="nav-item" data-tool="box-shadow" id="tab-box-shadow" role="tab" aria-selected="false" aria-controls="panel-box-shadow" tabindex="-1">
           <span class="nav-item__icon">▭</span>
           <span class="nav-item__label">Box Shadow</span>
           <span class="nav-item__badge">CSS</span>
         </button>
-          <span class="nav-item__badge">CSS</span>
-        </button>
-        <button class="nav-item" data-tool="flexbox-grid" role="tab" aria-selected="false">
+        <button class="nav-item" data-tool="flexbox-grid" id="tab-flexbox-grid" role="tab" aria-selected="false" aria-controls="panel-flexbox-grid" tabindex="-1">
           <span class="nav-item__icon">⊞</span>
           <span class="nav-item__label">Flexbox / Grid</span>
           <span class="nav-item__badge">CSS</span>
         </button>
-        <button class="nav-item" data-tool="glassmorphism" role="tab" aria-selected="false">
+        <button class="nav-item" data-tool="glassmorphism" id="tab-glassmorphism" role="tab" aria-selected="false" aria-controls="panel-glassmorphism" tabindex="-1">
           <span class="nav-item__icon">◐</span>
           <span class="nav-item__label">Glassmorphism</span>
           <span class="nav-item__badge">CSS</span>
         </button>
-        <button class="nav-item" data-tool="text-shadow" role="tab" aria-selected="false">
+        <button class="nav-item" data-tool="text-shadow" id="tab-text-shadow" role="tab" aria-selected="false" aria-controls="panel-text-shadow" tabindex="-1">
           <span class="nav-item__icon">T̸</span>
           <span class="nav-item__label">Text Shadow</span>
           <span class="nav-item__badge">CSS</span>
         </button>
-        <button class="nav-item" data-tool="transform" role="tab" aria-selected="false">
+        <button class="nav-item" data-tool="transform" id="tab-transform" role="tab" aria-selected="false" aria-controls="panel-transform" tabindex="-1">
           <span class="nav-item__icon">↗</span>
           <span class="nav-item__label">Transform</span>
           <span class="nav-item__badge">CSS</span>
         </button>
-        <button class="nav-item" data-tool="gradient-advanced" role="tab" aria-selected="false">
+        <button class="nav-item" data-tool="gradient-advanced" id="tab-gradient-advanced" role="tab" aria-selected="false" aria-controls="panel-gradient-advanced" tabindex="-1">
           <span class="nav-item__icon">⁕</span>
           <span class="nav-item__label">Gradient</span>
           <span class="nav-item__badge">CSS</span>
         </button>
-        <button class="nav-item" data-tool="border" role="tab" aria-selected="false">
+        <button class="nav-item" data-tool="border" id="tab-border" role="tab" aria-selected="false" aria-controls="panel-border" tabindex="-1">
           <span class="nav-item__icon">▬</span>
           <span class="nav-item__label">Border</span>
           <span class="nav-item__badge">CSS</span>
         </button>
-        <button class="nav-item" data-tool="filter" role="tab" aria-selected="false">
+        <button class="nav-item" data-tool="filter" id="tab-filter" role="tab" aria-selected="false" aria-controls="panel-filter" tabindex="-1">
           <span class="nav-item__icon">◑</span>
           <span class="nav-item__label">Filter</span>
           <span class="nav-item__badge">CSS</span>
@@ -100,69 +100,82 @@
     </aside>
 
     <!-- Main Content -->
-    <main class="main-content" id="main-content">
+    <main class="main-content" id="main-content" aria-label="工具面板">
       <!-- Ada Contrast Tool -->
-      <section class="tool-panel" id="panel-ada-contrast" role="tabpanel">
+      <section class="tool-panel" id="panel-ada-contrast" role="tabpanel" aria-labelledby="tab-ada-contrast">
+        <h2 class="sr-only">ADA Contrast</h2>
         <div id="ada-app"></div>
       </section>
 
       <!-- Linear Gradient Tool -->
-      <section class="tool-panel hidden" id="panel-linear-gradient" role="tabpanel">
+      <section class="tool-panel hidden" id="panel-linear-gradient" role="tabpanel" aria-labelledby="tab-linear-gradient" hidden>
+        <h2 class="sr-only">Gradient Gen</h2>
         <div id="gradient-app"></div>
       </section>
 
       <!-- Color Format Tool -->
-      <section class="tool-panel hidden" id="panel-color-format" role="tabpanel">
+      <section class="tool-panel hidden" id="panel-color-format" role="tabpanel" aria-labelledby="tab-color-format" hidden>
+        <h2 class="sr-only">Color Format</h2>
         <div id="color-app"></div>
       </section>
 
       <!-- Border Radius Tool -->
-      <section class="tool-panel hidden" id="panel-border-radius" role="tabpanel">
+      <section class="tool-panel hidden" id="panel-border-radius" role="tabpanel" aria-labelledby="tab-border-radius" hidden>
+        <h2 class="sr-only">Border Radius</h2>
         <div id="border-radius-app"></div>
       </section>
 
       <!-- Typography Scale Tool -->
-      <section class="tool-panel hidden" id="panel-typography-scale" role="tabpanel">
+      <section class="tool-panel hidden" id="panel-typography-scale" role="tabpanel" aria-labelledby="tab-typography-scale" hidden>
+        <h2 class="sr-only">Typography Scale</h2>
         <div id="typography-scale-app"></div>
       </section>
 
       <!-- Box Shadow Tool -->
-      <section class="tool-panel hidden" id="panel-box-shadow" role="tabpanel">
+      <section class="tool-panel hidden" id="panel-box-shadow" role="tabpanel" aria-labelledby="tab-box-shadow" hidden>
+        <h2 class="sr-only">Box Shadow</h2>
         <div id="box-shadow-app"></div>
       </section>
 
       <!-- Flexbox/Grid Tool -->
-      <section class="tool-panel hidden" id="panel-flexbox-grid" role="tabpanel">
+      <section class="tool-panel hidden" id="panel-flexbox-grid" role="tabpanel" aria-labelledby="tab-flexbox-grid" hidden>
+        <h2 class="sr-only">Flexbox Grid</h2>
         <div id="flexbox-grid-app"></div>
       </section>
 
       <!-- Glassmorphism Tool -->
-      <section class="tool-panel hidden" id="panel-glassmorphism" role="tabpanel">
+      <section class="tool-panel hidden" id="panel-glassmorphism" role="tabpanel" aria-labelledby="tab-glassmorphism" hidden>
+        <h2 class="sr-only">Glassmorphism</h2>
         <div id="glassmorphism-app"></div>
       </section>
 
       <!-- Text Shadow Tool -->
-      <section class="tool-panel hidden" id="panel-text-shadow" role="tabpanel">
+      <section class="tool-panel hidden" id="panel-text-shadow" role="tabpanel" aria-labelledby="tab-text-shadow" hidden>
+        <h2 class="sr-only">Text Shadow</h2>
         <div id="text-shadow-app"></div>
       </section>
 
       <!-- Transform Tool -->
-      <section class="tool-panel hidden" id="panel-transform" role="tabpanel">
+      <section class="tool-panel hidden" id="panel-transform" role="tabpanel" aria-labelledby="tab-transform" hidden>
+        <h2 class="sr-only">Transform</h2>
         <div id="transform-app"></div>
       </section>
 
       <!-- Gradient Advanced Tool -->
-      <section class="tool-panel hidden" id="panel-gradient-advanced" role="tabpanel">
+      <section class="tool-panel hidden" id="panel-gradient-advanced" role="tabpanel" aria-labelledby="tab-gradient-advanced" hidden>
+        <h2 class="sr-only">Gradient</h2>
         <div id="gradient-advanced-app"></div>
       </section>
 
       <!-- Border Tool -->
-      <section class="tool-panel hidden" id="panel-border" role="tabpanel">
+      <section class="tool-panel hidden" id="panel-border" role="tabpanel" aria-labelledby="tab-border" hidden>
+        <h2 class="sr-only">Border</h2>
         <div id="border-app"></div>
       </section>
 
       <!-- Filter Tool -->
-      <section class="tool-panel hidden" id="panel-filter" role="tabpanel">
+      <section class="tool-panel hidden" id="panel-filter" role="tabpanel" aria-labelledby="tab-filter" hidden>
+        <h2 class="sr-only">Filter</h2>
         <div id="filter-app"></div>
       </section>
     </main>

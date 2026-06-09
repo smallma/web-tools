@@ -1,7 +1,8 @@
 (function() {
   var CSS = [
-    '#fl-app{--c-bg:#0d0d12;--c-card:rgba(25,25,38,0.7);--c-border:rgba(255,255,255,0.09);--c-text:#f0f0f5;--c-text-sec:#8888a0;--c-accent:#8b5cf6;--c-accent2:#06b6d4;--c-success:#34d399;--c-font:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--c-mono:"JetBrains Mono","Fira Code",monospace;font-family:var(--c-font);color:var(--c-text);padding:28px 24px;display:flex;flex-direction:column;gap:20px;height:100%;overflow-y:auto}',
+    '#fl-app{--c-bg:#0d0d12;--c-card:rgba(25,25,38,0.7);--c-border:rgba(255,255,255,0.09);--c-text:#f0f0f5;--c-text-sec:#aab0cc;--c-accent:#8b5cf6;--c-accent2:#06b6d4;--c-success:#34d399;--c-font:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--c-mono:"JetBrains Mono","Fira Code",monospace;font-family:var(--c-font);color:var(--c-text);padding:28px 24px;display:flex;flex-direction:column;gap:20px;height:100%;overflow-y:auto}',
     '#fl-app *,*::before,*::after{box-sizing:border-box}',
+    '.fl-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}',
     '#fl-hdr{text-align:center}',
     '#fl-hdr h1{font-size:1.7rem;font-weight:700;background:linear-gradient(130deg,#8b5cf6,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:3px}',
     '#fl-hdr p{font-size:0.85rem;color:var(--c-text-sec)}',
@@ -38,37 +39,40 @@
     '<div class="fl-col">',
     '<div class="fl-section-label">Adjustments</div>',
     '<div class="fl-ctrl">',
-    '<div class="fl-ctrl-row"><label>Blur</label><input type=range id=fl-blur min=0 max=20 step=0.5 value=0><span class=fl-val id=fl-blur-v>0px</span></div>',
-    '<div class="fl-ctrl-row"><label>Bright</label><input type=range id=fl-bright min=0 max=300 value=100><span class=fl-val id=fl-bright-v>100%</span></div>',
-    '<div class="fl-ctrl-row"><label>Contrast</label><input type=range id=fl-contrast min=0 max=300 value=100><span class=fl-val id=fl-contrast-v>100%</span></div>',
-    '<div class="fl-ctrl-row"><label>Grayscale</label><input type=range id=fl-gray min=0 max=100 value=0><span class=fl-val id=fl-gray-v>0%</span></div>',
-    '<div class="fl-ctrl-row"><label>Sepia</label><input type=range id=fl-sepia min=0 max=100 value=0><span class=fl-val id=fl-sepia-v>0%</span></div>',
-    '<div class="fl-ctrl-row"><label>Hue Rotate</label><input type=range id=fl-hue min=0 max=360 value=0><span class=fl-val id=fl-hue-v>0deg</span></div>',
-    '<div class="fl-ctrl-row"><label>Saturate</label><input type=range id=fl-sat min=0 max=300 value=100><span class=fl-val id=fl-sat-v>100%</span></div>',
-    '<div class="fl-ctrl-row"><label>Opacity</label><input type=range id=fl-opacity min=0 max=100 value=100><span class=fl-val id=fl-opacity-v>100%</span></div>',
-    '<div class="fl-ctrl-row"><label>Invert</label><input type=range id=fl-invert min=0 max=100 value=0><span class=fl-val id=fl-invert-v>0%</span></div>',
+    '<div class="fl-ctrl-row"><label for="fl-blur">Blur</label><input type=range id=fl-blur min=0 max=20 step=0.5 value=0 aria-label="模糊程度" aria-valuemin="0" aria-valuemax="20" aria-valuenow="0"><span class=fl-val id=fl-blur-v>0px</span></div>',
+    '<div class="fl-ctrl-row"><label for="fl-bright">Bright</label><input type=range id=fl-bright min=0 max=300 value=100 aria-label="亮度" aria-valuemin="0" aria-valuemax="300" aria-valuenow="100"><span class=fl-val id=fl-bright-v>100%</span></div>',
+    '<div class="fl-ctrl-row"><label for="fl-contrast">Contrast</label><input type=range id=fl-contrast min=0 max=300 value=100 aria-label="對比度" aria-valuemin="0" aria-valuemax="300" aria-valuenow="100"><span class=fl-val id=fl-contrast-v>100%</span></div>',
+    '<div class="fl-ctrl-row"><label for="fl-gray">Grayscale</label><input type=range id=fl-gray min=0 max=100 value=0 aria-label="灰階" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class=fl-val id=fl-gray-v>0%</span></div>',
+    '<div class="fl-ctrl-row"><label for="fl-sepia">Sepia</label><input type=range id=fl-sepia min=0 max=100 value=0 aria-label="棕褐色調" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class=fl-val id=fl-sepia-v>0%</span></div>',
+    '<div class="fl-ctrl-row"><label for="fl-hue">Hue Rotate</label><input type=range id=fl-hue min=0 max=360 value=0 aria-label="色相旋轉" aria-valuemin="0" aria-valuemax="360" aria-valuenow="0"><span class=fl-val id=fl-hue-v>0deg</span></div>',
+    '<div class="fl-ctrl-row"><label for="fl-sat">Saturate</label><input type=range id=fl-sat min=0 max=300 value=100 aria-label="飽和度" aria-valuemin="0" aria-valuemax="300" aria-valuenow="100"><span class=fl-val id=fl-sat-v>100%</span></div>',
+    '<div class="fl-ctrl-row"><label for="fl-opacity">Opacity</label><input type=range id=fl-opacity min=0 max=100 value=100 aria-label="不透明度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span class=fl-val id=fl-opacity-v>100%</span></div>',
+    '<div class="fl-ctrl-row"><label for="fl-invert">Invert</label><input type=range id=fl-invert min=0 max=100 value=0 aria-label="色彩反轉" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class=fl-val id=fl-invert-v>0%</span></div>',
     '</div>',
     '<div class="fl-section-label" style="margin-top:4px">Presets</div>',
     '<div class="fl-presets">',
-    '<button class="fl-preset" data-f="none">Normal</button>',
-    '<button class="fl-preset" data-f="blur:2">Blur</button>',
-    '<button class="fl-preset" data-f="gray:100">Grayscale</button>',
-    '<button class="fl-preset" data-f="sepia:100">Sepia</button>',
-    '<button class="fl-preset" data-f="bright:150 contrast:120">Vivid</button>',
-    '<button class="fl-preset" data-f="hue:180 saturate:200">Neon</button>',
-    '<button class="fl-preset" data-f="bright:80 contrast:140 saturate:120">Dramatic</button>',
-    '<button class="fl-preset" data-f="invert:100">Invert</button>',
+    '<button class="fl-preset" data-f="none" aria-label="預設：Normal，重置所有濾鏡">Normal</button>',
+    '<button class="fl-preset" data-f="blur:2" aria-label="預設：Blur">Blur</button>',
+    '<button class="fl-preset" data-f="gray:100" aria-label="預設：Grayscale">Grayscale</button>',
+    '<button class="fl-preset" data-f="sepia:100" aria-label="預設：Sepia">Sepia</button>',
+    '<button class="fl-preset" data-f="bright:150 contrast:120" aria-label="預設：Vivid">Vivid</button>',
+    '<button class="fl-preset" data-f="hue:180 saturate:200" aria-label="預設：Neon">Neon</button>',
+    '<button class="fl-preset" data-f="bright:80 contrast:140 saturate:120" aria-label="預設：Dramatic">Dramatic</button>',
+    '<button class="fl-preset" data-f="invert:100" aria-label="預設：Invert">Invert</button>',
     '</div>',
     '</div>',
     '<div class="fl-col">',
     '<div class="fl-section-label">預覽（使用內建圖片）</div>',
     '<div class="fl-preview-area">',
-    '<img id="fl-preview-img" src="https://picsum.photos/seed/webtools/400/300" alt="preview" crossorigin="anonymous" onerror="this.src=\'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%238b5cf6%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2240%22%3EWeb Tools%3C/text%3E%3C/svg%3E\'">',
+    '<img id="fl-preview-img" src="https://picsum.photos/seed/webtools/400/300" alt="濾鏡預覽圖片" crossorigin="anonymous" onerror="this.alt=\'濾鏡預覽圖片（載入失敗）\';this.src=\'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%238b5cf6%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2240%22%3EWeb Tools%3C/text%3E%3C/svg%3E\'">',
     '</div>',
     '<div class="fl-section-label">CSS 輸出</div>',
     '<div class="fl-css-output">',
     '<div class="fl-css-code" id="fl-css-code"></div>',
-    '<div class="fl-copy-row"><button class="fl-copy" id="fl-copy-btn">複製</button></div>',
+    '<div class="fl-copy-row">',
+    '<span id="fl-copy-announce" class="fl-sr-only" role="status" aria-live="polite"></span>',
+    '<button class="fl-copy" id="fl-copy-btn">複製</button>',
+    '</div>',
     '</div>',
     '</div>',
     '</div>',
@@ -108,6 +112,17 @@
     $id('fl-opacity-v').textContent = opacity + '%';
     $id('fl-invert-v').textContent = invert + '%';
     $id('fl-css-code').textContent = 'filter:\n  ' + filter + ';';
+
+    // 更新 aria-valuenow
+    $id('fl-blur').setAttribute('aria-valuenow', blur);
+    $id('fl-bright').setAttribute('aria-valuenow', bright);
+    $id('fl-contrast').setAttribute('aria-valuenow', contrast);
+    $id('fl-gray').setAttribute('aria-valuenow', gray);
+    $id('fl-sepia').setAttribute('aria-valuenow', sepia);
+    $id('fl-hue').setAttribute('aria-valuenow', hue);
+    $id('fl-sat').setAttribute('aria-valuenow', sat);
+    $id('fl-opacity').setAttribute('aria-valuenow', opacity);
+    $id('fl-invert').setAttribute('aria-valuenow', invert);
   }
 
   function init() {
@@ -140,10 +155,37 @@
     });
 
     $id('fl-copy-btn').addEventListener('click', function() {
-      navigator.clipboard.writeText('filter: ' + $id('fl-css-code').textContent.replace('filter:\n  ', '') + ';').then(function() {
+      var text = 'filter: ' + $id('fl-css-code').textContent.replace('filter:\n  ', '') + ';';
+      var announce = $id('fl-copy-announce');
+      navigator.clipboard.writeText(text).then(function() {
         $id('fl-copy-btn').classList.add('copied');
         $id('fl-copy-btn').textContent = '已複製!';
-        setTimeout(function() { $id('fl-copy-btn').classList.remove('copied'); $id('fl-copy-btn').textContent = '複製'; }, 1500);
+        announce.textContent = '已複製';
+        setTimeout(function() {
+          $id('fl-copy-btn').classList.remove('copied');
+          $id('fl-copy-btn').textContent = '複製';
+          announce.textContent = '';
+        }, 1500);
+      }).catch(function() {
+        try {
+          var ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.focus();
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          $id('fl-copy-btn').classList.add('copied');
+          $id('fl-copy-btn').textContent = '已複製!';
+          announce.textContent = '已複製';
+          setTimeout(function() {
+            $id('fl-copy-btn').classList.remove('copied');
+            $id('fl-copy-btn').textContent = '複製';
+            announce.textContent = '';
+          }, 1500);
+        } catch (e) {}
       });
     });
 

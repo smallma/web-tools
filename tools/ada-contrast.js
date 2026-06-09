@@ -28,7 +28,7 @@
       margin-bottom: 0.5rem;
     }
     #ada-app header p {
-      color: #94a3b8;
+      color: #aab0cc;
       font-size: 1rem;
     }
     #ada-app .main-grid {
@@ -103,7 +103,7 @@
     #ada-app .slider-group { display: flex; flex-direction: column; gap: 0.5rem; }
     #ada-app .slider-group label {
       font-size: 0.85rem;
-      color: #94a3b8;
+      color: #aab0cc;
       display: flex;
       justify-content: space-between;
     }
@@ -141,7 +141,7 @@
       flex-direction: column;
       gap: 1rem;
     }
-    #ada-app .result-block-title { font-size: 0.9rem; color: #94a3b8; text-align: center; }
+    #ada-app .result-block-title { font-size: 0.9rem; color: #aab0cc; text-align: center; }
     #ada-app .ratio-value { text-align: center; font-size: 2.5rem; font-weight: 700; line-height: 1; transition: color 0.3s; }
     #ada-app .badges { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
     #ada-app .badge {
@@ -180,7 +180,11 @@
     #ada-app .ada-info-footer {
       margin-top: 1rem; background: rgba(0,0,0,0.2);
       border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 12px; padding: 1.5rem; color: #94a3b8;
+      border-radius: 12px; padding: 1.5rem; color: #aab0cc;
+    }
+    #ada-app .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
     }
     #ada-app .ada-info-footer h3 {
       font-size: 1rem; color: #e2e8f0; margin-bottom: 0.75rem; font-weight: 600;
@@ -213,36 +217,36 @@
           <div class="control-block">
             <div class="control-block-title">Background (底色)</div>
             <div class="color-input-wrapper">
-              <input type="color" id="ada-bg-color" value="#ffffff">
-              <input type="text" id="ada-bg-hex" value="#FFFFFF" maxlength="7">
+              <input type="color" id="ada-bg-color" value="#ffffff" aria-label="背景色">
+              <input type="text" id="ada-bg-hex" value="#FFFFFF" maxlength="7" aria-label="背景色 HEX">
             </div>
             <div class="slider-group">
-              <label>Lightness <span id="ada-bg-light-val" style="color:#60a5fa;">100%</span></label>
-              <input type="range" id="ada-bg-slider" class="slider-gradient" min="0" max="100" value="100">
+              <label for="ada-bg-slider">Lightness <span id="ada-bg-light-val" style="color:#60a5fa;">100%</span></label>
+              <input type="range" id="ada-bg-slider" class="slider-gradient" min="0" max="100" value="100" aria-label="背景色亮度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
             </div>
           </div>
 
           <div class="control-block">
             <div class="control-block-title">Object 1 (外層)</div>
             <div class="color-input-wrapper">
-              <input type="color" id="ada-obj1-color" value="#3b82f6">
-              <input type="text" id="ada-obj1-hex" value="#3B82F6" maxlength="7">
+              <input type="color" id="ada-obj1-color" value="#3b82f6" aria-label="物件1 顏色">
+              <input type="text" id="ada-obj1-hex" value="#3B82F6" maxlength="7" aria-label="物件1 HEX">
             </div>
             <div class="slider-group">
-              <label>Lightness <span id="ada-obj1-light-val" style="color:#60a5fa;">50%</span></label>
-              <input type="range" id="ada-obj1-slider" class="slider-gradient" min="0" max="100" value="50">
+              <label for="ada-obj1-slider">Lightness <span id="ada-obj1-light-val" style="color:#60a5fa;">50%</span></label>
+              <input type="range" id="ada-obj1-slider" class="slider-gradient" min="0" max="100" value="50" aria-label="物件1 亮度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
             </div>
           </div>
 
           <div class="control-block">
             <div class="control-block-title">Object 2 (內層/文字)</div>
             <div class="color-input-wrapper">
-              <input type="color" id="ada-obj2-color" value="#000000">
-              <input type="text" id="ada-obj2-hex" value="#000000" maxlength="7">
+              <input type="color" id="ada-obj2-color" value="#000000" aria-label="物件2 顏色">
+              <input type="text" id="ada-obj2-hex" value="#000000" maxlength="7" aria-label="物件2 HEX">
             </div>
             <div class="slider-group">
-              <label>Lightness <span id="ada-obj2-light-val" style="color:#60a5fa;">0%</span></label>
-              <input type="range" id="ada-obj2-slider" class="slider-gradient" min="0" max="100" value="0">
+              <label for="ada-obj2-slider">Lightness <span id="ada-obj2-light-val" style="color:#60a5fa;">0%</span></label>
+              <input type="range" id="ada-obj2-slider" class="slider-gradient" min="0" max="100" value="0" aria-label="物件2 亮度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
             </div>
           </div>
         </div>
@@ -251,19 +255,19 @@
           <div class="two-col-results">
             <div class="result-block">
               <div class="result-block-title">BG vs Obj 1</div>
-              <div class="ratio-value" id="ada-ratio1">1.00 : 1</div>
+              <div class="ratio-value" id="ada-ratio1" role="status" aria-live="polite" aria-atomic="true">1.00 : 1</div>
               <div class="badges" id="ada-badges1"></div>
             </div>
             <div class="result-block">
               <div class="result-block-title">Obj 1 vs Obj 2</div>
-              <div class="ratio-value" id="ada-ratio2">1.00 : 1</div>
+              <div class="ratio-value" id="ada-ratio2" role="status" aria-live="polite" aria-atomic="true">1.00 : 1</div>
               <div class="badges" id="ada-badges2"></div>
             </div>
           </div>
 
           <div class="preview-section">
             <div class="preview-header">Live Preview</div>
-            <div class="preview-box" id="ada-preview-bg">
+            <div class="preview-box" id="ada-preview-bg" role="img" aria-label="對比預覽：底色、物件1、物件2 的即時效果" aria-live="polite">
               <div class="preview-obj1" id="ada-preview-obj1">
                 <div class="preview-obj2" id="ada-preview-obj2">
                   <h2>Contrast Check</h2>
@@ -287,6 +291,7 @@
         <p>* 大字體定義：至少 18pt（約 24px）或 14pt 粗體（約 18.5px）。UI 元件泛指按鈕邊界、輸入框等操作物件。</p>
       </div>
     </div>
+    <div id="ada-copy-announce" class="sr-only" role="status" aria-live="polite"></div>
   `;
 
   // Inject CSS & HTML
@@ -306,7 +311,8 @@
     o2C: $('ada-obj2-color'), o2H: $('ada-obj2-hex'), o2S: $('ada-obj2-slider'), o2L: $('ada-obj2-light-val'),
     r1: $('ada-ratio1'), b1: $('ada-badges1'),
     r2: $('ada-ratio2'), b2: $('ada-badges2'),
-    pBg: $('ada-preview-bg'), pO1: $('ada-preview-obj1'), pO2: $('ada-preview-obj2')
+    pBg: $('ada-preview-bg'), pO1: $('ada-preview-obj1'), pO2: $('ada-preview-obj2'),
+    announce: $('ada-copy-announce')
   };
 
   let hsls = {
@@ -416,6 +422,7 @@
   }
   function hSlider(key, v) {
     els[key+'L'].textContent = v+'%'; hsls[key].l = v;
+    els[key+'S'].setAttribute('aria-valuenow', v);
     let rgb=hslToRgb(hsls[key].h, hsls[key].s, hsls[key].l);
     let hx = rgbToHex(rgb.r,rgb.g,rgb.b);
     els[key+'C'].value=hx; els[key+'H'].value=hx;
