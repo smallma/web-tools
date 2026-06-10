@@ -132,6 +132,48 @@
           <span class="nav-item__label">Unit Converter</span>
           <span class="nav-item__badge">CSS/SI</span>
         </button>
+
+        <div class="sidebar__section-label">AEM</div>
+        <button class="nav-item" data-tool="aem-url-parser" id="tab-aem-url-parser" role="tab" aria-selected="false" aria-controls="panel-aem-url-parser" tabindex="-1">
+          <span class="nav-item__icon">⛓</span>
+          <span class="nav-item__label">URL Parser</span>
+          <span class="nav-item__badge">Sling</span>
+        </button>
+        <button class="nav-item" data-tool="htl-snippet" id="tab-htl-snippet" role="tab" aria-selected="false" aria-controls="panel-htl-snippet" tabindex="-1">
+          <span class="nav-item__icon">◁</span>
+          <span class="nav-item__label">HTL Snippet</span>
+          <span class="nav-item__badge">Sightly</span>
+        </button>
+        <button class="nav-item" data-tool="dialog-xml-gen" id="tab-dialog-xml-gen" role="tab" aria-selected="false" aria-controls="panel-dialog-xml-gen" tabindex="-1">
+          <span class="nav-item__icon">⊞</span>
+          <span class="nav-item__label">Dialog XML Gen</span>
+          <span class="nav-item__badge">cq:dialog</span>
+        </button>
+        <button class="nav-item" data-tool="sling-model-gen" id="tab-sling-model-gen" role="tab" aria-selected="false" aria-controls="panel-sling-model-gen" tabindex="-1">
+          <span class="nav-item__icon">⚙</span>
+          <span class="nav-item__label">Sling Model Gen</span>
+          <span class="nav-item__badge">Java</span>
+        </button>
+        <button class="nav-item" data-tool="jcr-path-validator" id="tab-jcr-path-validator" role="tab" aria-selected="false" aria-controls="panel-jcr-path-validator" tabindex="-1">
+          <span class="nav-item__icon">✓</span>
+          <span class="nav-item__label">JCR Path Validator</span>
+          <span class="nav-item__badge">JCR</span>
+        </button>
+        <button class="nav-item" data-tool="dispatcher-tester" id="tab-dispatcher-tester" role="tab" aria-selected="false" aria-controls="panel-dispatcher-tester" tabindex="-1">
+          <span class="nav-item__icon">⛨</span>
+          <span class="nav-item__label">Dispatcher Tester</span>
+          <span class="nav-item__badge">Filter</span>
+        </button>
+        <button class="nav-item" data-tool="clientlib-builder" id="tab-clientlib-builder" role="tab" aria-selected="false" aria-controls="panel-clientlib-builder" tabindex="-1">
+          <span class="nav-item__icon">◈</span>
+          <span class="nav-item__label">ClientLib Builder</span>
+          <span class="nav-item__badge">CSS/JS</span>
+        </button>
+        <button class="nav-item" data-tool="aem-i18n-gen" id="tab-aem-i18n-gen" role="tab" aria-selected="false" aria-controls="panel-aem-i18n-gen" tabindex="-1">
+          <span class="nav-item__icon">⌖</span>
+          <span class="nav-item__label">i18n Generator</span>
+          <span class="nav-item__badge">i18n</span>
+        </button>
       </nav>
 
       <div class="sidebar__footer">
@@ -270,6 +312,54 @@
         <h2 class="sr-only">Unit Converter</h2>
         <div id="unit-converter-app"></div>
       </section>
+
+      <!-- AEM URL Parser Tool -->
+      <section class="tool-panel hidden" id="panel-aem-url-parser" role="tabpanel" aria-labelledby="tab-aem-url-parser" hidden>
+        <h2 class="sr-only">AEM URL Parser</h2>
+        <div id="aem-url-parser-app"></div>
+      </section>
+
+      <!-- HTL Snippet Generator Tool -->
+      <section class="tool-panel hidden" id="panel-htl-snippet" role="tabpanel" aria-labelledby="tab-htl-snippet" hidden>
+        <h2 class="sr-only">HTL Snippet Generator</h2>
+        <div id="htl-snippet-app"></div>
+      </section>
+
+      <!-- Dialog XML Generator Tool -->
+      <section class="tool-panel hidden" id="panel-dialog-xml-gen" role="tabpanel" aria-labelledby="tab-dialog-xml-gen" hidden>
+        <h2 class="sr-only">Dialog XML Generator</h2>
+        <div id="dialog-xml-gen-app"></div>
+      </section>
+
+      <!-- Sling Model Generator Tool -->
+      <section class="tool-panel hidden" id="panel-sling-model-gen" role="tabpanel" aria-labelledby="tab-sling-model-gen" hidden>
+        <h2 class="sr-only">Sling Model Generator</h2>
+        <div id="sling-model-gen-app"></div>
+      </section>
+
+      <!-- JCR Path Validator Tool -->
+      <section class="tool-panel hidden" id="panel-jcr-path-validator" role="tabpanel" aria-labelledby="tab-jcr-path-validator" hidden>
+        <h2 class="sr-only">JCR Path Validator</h2>
+        <div id="jcr-path-validator-app"></div>
+      </section>
+
+      <!-- Dispatcher Tester Tool -->
+      <section class="tool-panel hidden" id="panel-dispatcher-tester" role="tabpanel" aria-labelledby="tab-dispatcher-tester" hidden>
+        <h2 class="sr-only">Dispatcher Rule Tester</h2>
+        <div id="dispatcher-tester-app"></div>
+      </section>
+
+      <!-- ClientLib Builder Tool -->
+      <section class="tool-panel hidden" id="panel-clientlib-builder" role="tabpanel" aria-labelledby="tab-clientlib-builder" hidden>
+        <h2 class="sr-only">ClientLib Builder</h2>
+        <div id="clientlib-builder-app"></div>
+      </section>
+
+      <!-- AEM i18n Generator Tool -->
+      <section class="tool-panel hidden" id="panel-aem-i18n-gen" role="tabpanel" aria-labelledby="tab-aem-i18n-gen" hidden>
+        <h2 class="sr-only">AEM i18n Generator</h2>
+        <div id="aem-i18n-gen-app"></div>
+      </section>
     </main>
   </div>
 
@@ -294,6 +384,14 @@
   <script src="tools/case-converter.js"></script>
   <script src="tools/word-counter.js"></script>
   <script src="tools/unit-converter.js"></script>
+  <script src="tools/aem-url-parser.js"></script>
+  <script src="tools/htl-snippet.js"></script>
+  <script src="tools/dialog-xml-gen.js"></script>
+  <script src="tools/sling-model-gen.js"></script>
+  <script src="tools/jcr-path-validator.js"></script>
+  <script src="tools/dispatcher-tester.js"></script>
+  <script src="tools/clientlib-builder.js"></script>
+  <script src="tools/aem-i18n-gen.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
